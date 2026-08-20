@@ -61,7 +61,7 @@ Usage:
   node dist/cli.js env audit --scenario <id|path>
   node dist/cli.js env build --scenario <id|path> --out <dir>
   node dist/cli.js env dataset --scenario <id|path> --out <dir> [--allow-dirty]
-  node dist/cli.js env evidence --out <path> [--scenarios <id,id,...>]
+  node dist/cli.js env evidence --out <path> [--scenarios <id,id,...>] [--allow-dirty]
   node dist/cli.js env rollout --scenarios <ids> --sellers <frontier|spec,...> --seeds <n|list> --budget <usd> --out <dir> [--concurrency <n>] [--pack] [--mock] [--resume] [--allow-dirty]
 
 Seller specs: anthropic:<model> · openai:<model> · xai:<model> · gemini:<model>
@@ -69,8 +69,9 @@ Seller specs: anthropic:<model> · openai:<model> · xai:<model> · gemini:<mode
 Flags:
   --pack     prepend the Value Engine system prompt (out-of-box vs +pack track)
   --mock     offline mode: scripted-but-reactive buyer + heuristic judge (no API keys)
-  --allow-dirty  emit rows from a dirty tree anyway (their git.sha will not
-             identify the code that produced them — do not release them)
+  --allow-dirty  emit rows anyway when the tree is dirty, or when git state
+             cannot be determined at all (their git.sha will not identify the
+             code that produced them — do not release them)
 
 calibrate: runs the naive scripted-baseline (must NOT win) and the disciplined
 reference seller against a scenario and reports pass/fail. With
@@ -120,6 +121,9 @@ async function main(): Promise<void> {
     if (sub === 'evidence') {
       const out = flags.get('out');
       if (typeof out !== 'string') usage();
+      // Evidence embeds the rows' provenance.git verbatim, so it is a released
+      // artifact under the same rule as the rows themselves.
+      assertCleanTreeForRelease(gitState(), flags.has('allow-dirty'));
       const ids = flags.has('scenarios')
         ? String(flags.get('scenarios')).split(',').map((s) => s.trim()).filter(Boolean)
         : FLAGSHIP_SCENARIOS;

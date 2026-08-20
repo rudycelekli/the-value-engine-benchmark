@@ -21,11 +21,11 @@ same gates run in CI on every push (`.github/workflows/ci.yml`).
 | 10 | Licensing present, split, and consistent with the dataset preview | **PASS** | Dual-licensed: `LICENSE-CODE` = Apache-2.0 (OSI, patent grant) for `src/`/`scripts/`/`analysis/`/`finetune/`/`validation/`/`scenarios/`; `LICENSE-DATA` = CC BY-NC 4.0 (Rudy M. Celekli / Gradia) for `datasets/`/`results/`/`runs/`/`paper/`/docs; root `LICENSE` states the split. Dataset README, `DATA.md`, and `manifest.json` all agree; no "TBD" remaining in any doc. |
 | 11 | Preview rows carry `judge_type`/`format_retries`/`flags`/`training_ready` | **PASS** | All 66 preview rows annotated; counts training_ready True=44/False=22, flagged=22, heuristic=2, format_retries>0=20; checksum regenerated and verifies. |
 | 12 | `validation/` and `finetune/` scaffolds run to the point that needs humans/compute | **PASS** | `validation/` κ/α + stratified sampler run (frozen 66-id draw, tests green) up to the human-grading step. `finetune/export_sft.py` exports 44 SFT rows; `eval.py` drives the real `env rollout` up to the compute-gated training step. |
-| 13 | Secret scan clean; no file >50 MB; no real `.env` | **PASS** | `scripts/secret-guard.sh` exit 0; no tracked file >50 MB; no real `.env` tracked (`.env.example` only); 73/73 TypeScript + 13/13 Python tests pass. |
+| 13 | Secret scan clean; no file >50 MB; no real `.env` | **PASS** | `scripts/secret-guard.sh` exit 0; no tracked file >50 MB; no real `.env` tracked (`.env.example` only); 77/77 TypeScript + 13/13 Python tests pass. |
 | 14 | PDF recompiled and consistent with the release | **PASS** | `paper/main.pdf` recompiled (tectonic); headline 2970 / 11 frontier / gpt-5.6-sol / SQS 72.5. |
 | 15 | Committed statistics reproduced from the real full dataset, with lineage | **PASS** | `paper-stats.json` regenerated from the 2,970-row `veb-canonical-135.jsonl` (sha256 `00d8bec5…`, 492,346,523 bytes) on a clean tree at `eae720d`: every non-lineage key **identical** to what was already committed. FULL MODE then ran end-to-end (`sha256(full JSONL) == lineage.source_sha256`, then rows / cells_graded / best_model / pack_lift / per-track SQS all `[OK]`). Lineage records both inputs — the graded rollouts, and the provider telemetry export that feeds *only* `latency_reliability` and is not distributed. |
 | 16 | CI actions pinned to immutable references | **PASS** | `actions/checkout`, `actions/setup-node`, `actions/setup-python` pinned to full commit SHAs (`3d3c42e5…` v7.0.1, `82076278…` v7.0.0, `5fda3b95…` v7.0.0), release recorded in a trailing comment. No mutable `@vN` tag can change what executes. |
-| 17 | Dirty-tree emission is refused, not merely discouraged | **PASS** | `assertCleanTreeForRelease` gates the two row-emitting commands (`env rollout`, `env dataset`): a dirty tree exits non-zero with a refusal message. Override is explicit (`--allow-dirty`) and warns that the rows are unreleasable. Covered by 3 unit tests plus an end-to-end CLI test that builds a throwaway dirty repo, so the gate is proven to fire regardless of whether the test tree is clean. |
+| 17 | Unprovable git state is release-ineligible, and the gate fails closed | **PASS** | `assertCleanTreeForRelease` gates all three artifact-emitting commands (`env rollout`, `env dataset`, `env evidence`). Refused: a **dirty tree**, and an **indeterminate** state (`sha: "unknown"` — outside a repo, no git binary, or pre-first-commit). The indeterminate case was a real fail-open defect found in review: `gitState()` returned `{sha: "unknown", dirty: false}`, which reads as clean, so `env rollout` outside a repository emitted a release row. Fixed at the source too — the inner `catch` that defaulted `dirty` to `false` when `git status` failed is gone, so an unanswerable tree surfaces as `UNKNOWN_SHA` instead of as clean. Override is explicit (`--allow-dirty`), warns, and leaves the disqualifying field in the row. 5 unit tests + 3 end-to-end CLI tests that construct the failing conditions (throwaway dirty repo; bare non-repo dir) and assert exit≠0 **and** that no rows were written. |
 
 ## Local gate sweep (verbatim results)
 
@@ -36,7 +36,7 @@ make demo         → won, SQS 90/100, exit 0
 make calibrate    → Floor PASS, Ceiling PASS, Calibration: PASS ✓
 make verify       → PREVIEW MODE, 10/10 invariants [OK]
 make verify       → FULL MODE (with the 470 MB JSONL present), 18/18 [OK]
-npm test          → # pass 73 / # fail 0
+npm test          → # pass 77 / # fail 0
 make pytest       → 13 passed
 secret-guard.sh   → exit 0
 single-grid grep  → CLEAN
@@ -76,4 +76,5 @@ generated artifact has drifted from its generator.
   version, the seed, and the released rows' own digests. Not retroactively
   fixable for this freeze; disclosed rather than papered over. Going forward it
   cannot recur silently: `env rollout` and `env dataset` now refuse to emit from
-  a dirty tree (row 17), and the only way past the gate announces itself.
+  a dirty tree — or from a tree whose state cannot be determined at all (row 17)
+  — and the only way past the gate announces itself.

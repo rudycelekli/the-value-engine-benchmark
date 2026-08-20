@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sha256, taskChecksum, buildEnvProvenance, assertCleanTreeForRelease } from './provenance.js';
+import { sha256, taskChecksum, buildEnvProvenance, assertCleanTreeForRelease, UNKNOWN_SHA } from './provenance.js';
 import type { Scenario } from '../types.js';
 
 function tinyScenario(): Scenario {
@@ -31,6 +31,25 @@ test('assertCleanTreeForRelease refuses to emit from a dirty tree', () => {
   );
 });
 
+test('assertCleanTreeForRelease refuses indeterminate git state', () => {
+  // The fail-open bug: outside a repository gitState() returns
+  // {sha: 'unknown', dirty: false}, which reads as clean. A gate that inspects
+  // only `dirty` emits a row naming no code at all.
+  assert.throws(
+    () => assertCleanTreeForRelease({ sha: UNKNOWN_SHA, dirty: false }),
+    /indeterminate git state/,
+  );
+  assert.throws(() => assertCleanTreeForRelease({ sha: '', dirty: false }), /indeterminate git state/);
+});
+
+test('assertCleanTreeForRelease override on indeterminate state names what is missing', () => {
+  const warnings: string[] = [];
+  assertCleanTreeForRelease({ sha: UNKNOWN_SHA, dirty: false }, true, (m) => warnings.push(m));
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /indeterminate git state/);
+  assert.match(warnings[0], /Do not release these rows/);
+});
+
 test('assertCleanTreeForRelease passes a clean tree silently', () => {
   const warnings: string[] = [];
   assertCleanTreeForRelease({ sha: 'a'.repeat(40), dirty: false }, false, (m) => warnings.push(m));
@@ -41,7 +60,7 @@ test('assertCleanTreeForRelease allows an override but says so loudly', () => {
   const warnings: string[] = [];
   assertCleanTreeForRelease({ sha: 'b'.repeat(40), dirty: true }, true, (m) => warnings.push(m));
   assert.equal(warnings.length, 1);
-  assert.match(warnings[0], /DIRTY tree/);
+  assert.match(warnings[0], /dirty tree \(HEAD=bbbbbbbbbbbb\)/);
   assert.match(warnings[0], /Do not release these rows/);
 });
 

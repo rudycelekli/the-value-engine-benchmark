@@ -87,24 +87,51 @@ test('env dataset refuses to emit from a dirty tree', () => {
     writeFileSync(join(repo, 'uncommitted.txt'), 'dirty\n');
 
     const scenario = join(process.cwd(), 'scenarios', '01-logistics-saas.yaml');
-    let stderr = '';
-    let failed = false;
-    try {
-      execFileSync('node', [CLI, 'env', 'dataset', '--scenario', scenario, '--out', join(repo, 'out')], {
-        cwd: repo,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'pipe'],
-      });
-    } catch (err) {
-      failed = true;
-      stderr = String((err as { stderr?: string }).stderr ?? '');
-    }
+    const { failed, stderr } = runCli(['env', 'dataset', '--scenario', scenario, '--out', join(repo, 'out')], repo);
     assert.ok(failed, 'env dataset should exit non-zero from a dirty tree');
     assert.match(stderr, /refusing to emit released rows from a dirty tree/);
   } finally {
     rmSync(repo, { recursive: true, force: true });
   }
 });
+
+/** Runs the CLI with `cwd` and returns { failed, stderr } instead of throwing. */
+function runCli(args: string[], cwd: string): { failed: boolean; stderr: string } {
+  try {
+    execFileSync('node', [CLI, ...args], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return { failed: false, stderr: '' };
+  } catch (err) {
+    return { failed: true, stderr: String((err as { stderr?: string }).stderr ?? '') };
+  }
+}
+
+// A bare temp dir is not a git repository, so `git rev-parse HEAD` fails and
+// gitState() falls back to {sha: 'unknown', dirty: false} — the fail-open case
+// that once emitted release rows naming no code at all. Both row-emitting
+// commands must refuse it.
+for (const [name, args] of [
+  ['env dataset', ['env', 'dataset', '--scenario', 'SCENARIO', '--out', 'OUT']],
+  [
+    'env rollout',
+    ['env', 'rollout', '--scenarios', 'SCENARIO', '--sellers', 'scripted-disciplined',
+     '--seeds', '1', '--budget', '10', '--out', 'OUT', '--mock'],
+  ],
+] as const) {
+  test(`${name} refuses to emit outside a git repository`, () => {
+    const dir = mkdtempSync(join(tmpdir(), 'veb-no-repo-'));
+    try {
+      const scenario = join(process.cwd(), 'scenarios', '01-logistics-saas.yaml');
+      const concrete = args.map((a) => (a === 'SCENARIO' ? scenario : a === 'OUT' ? join(dir, 'out') : a));
+      const { failed, stderr } = runCli(concrete, dir);
+      assert.ok(failed, `${name} should exit non-zero outside a repository`);
+      assert.match(stderr, /refusing to emit released rows/);
+      assert.match(stderr, /indeterminate git state/);
+      assert.ok(!existsSync(join(dir, 'out', 'dataset.jsonl')), 'no rows may be written');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+}
 
 test('env verify record→replay freezes and reproduces the buyer through the CLI', () => {
   const tdir = mkdtempSync(join(tmpdir(), 'veb-cli-transcript-'));

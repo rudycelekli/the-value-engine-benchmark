@@ -132,14 +132,32 @@ code that produced the row. What is pinned is the scenario world
 (`provenance.taskChecksum`, an sha256 of the canonical scenario JSON), the frozen
 buyer-sim version, the seed, and the released rows themselves.
 
-That rule is now enforced rather than promised: `env rollout` and `env dataset`
-— the two commands that emit released rows — refuse to run from a dirty tree
-and exit non-zero (`src/env/provenance.ts`, `assertCleanTreeForRelease`). The
-override is `--allow-dirty`, which prints a warning naming the rows as
-unreleasable; rows emitted under it still record `dirty: true`, so using it
-leaves the same trace in the data that it does on the console. The
-canonical-135 freeze predates the gate and is not retroactively fixable, so it
-is disclosed instead of papered over.
+That rule is now enforced rather than promised. The three commands that emit
+released artifacts — `env rollout`, `env dataset`, `env evidence` — refuse to
+run and exit non-zero unless the git state actually proves which code produced
+the rows (`src/env/provenance.ts`, `assertCleanTreeForRelease`). Two states fail
+that test:
+
+- a **dirty tree**, where `git.sha` names the checkout the run started from
+  rather than the code that produced the row;
+- an **indeterminate** state — run outside a repository, without a git binary,
+  or before the first commit — where the row would record `sha: "unknown"` and
+  name no code at all.
+
+The second case is a gate the first version of this code got wrong: `gitState()`
+failed open to `{sha: "unknown", dirty: false}`, which reads as clean, so an
+`env rollout` outside a repository emitted a release row anyway. Absence of
+evidence was being recorded as evidence of cleanliness. Both states are now
+refused by default, and each has a unit test plus an end-to-end CLI test that
+builds the failing condition (a throwaway dirty repo; a bare non-repo directory)
+so the gate is proven to fire regardless of the tree the suite runs in.
+
+The override is `--allow-dirty`, which prints a warning naming the rows as
+unreleasable. In both cases the row keeps the very field that makes it
+ineligible — `dirty: true` or `sha: "unknown"` — so using the override leaves
+the same trace in the data that it does on the console. The canonical-135 freeze
+predates the gate and is not retroactively fixable, so it is disclosed instead
+of papered over.
 
 ---
 
