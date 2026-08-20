@@ -13,8 +13,13 @@ separately.
 | `veb-canonical-135.jsonl.gz` | ~121 MB | see `datasets/veb-canonical-135/veb-canonical-135.jsonl.gz.sha256` |
 | `veb-canonical-135-preview.jsonl` | ~9 MB | **included in this repo** |
 
-`manifest.json` also records the canonical full-file digest
-(`00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3`).
+The canonical full-file digest
+(`00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3`) is recorded
+in three places — the `.sha256` sidecar, `manifest.json`, and
+`paper-stats.json`'s `lineage.source_sha256` — and `make verify` fails if any of
+them disagree. That last one is what ties the published statistics to these exact
+bytes: the committed numbers were computed from this file, not from some other
+copy of it.
 
 ## Verifying a download
 

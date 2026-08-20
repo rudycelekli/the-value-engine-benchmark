@@ -1,5 +1,34 @@
 {
   "source": "veb-canonical-135.jsonl",
+  "lineage": {
+    "source_file": "veb-canonical-135.jsonl",
+    "source_sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
+    "source_bytes": 492346523,
+    "sources": [
+      {
+        "role": "graded rollouts \u2014 every rubric, outcome and cost number",
+        "file": "veb-canonical-135.jsonl",
+        "sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
+        "bytes": 492346523,
+        "distribution": "out-of-band (see DATA.md); digest committed in-repo"
+      },
+      {
+        "role": "provider telemetry \u2014 latency_reliability block only",
+        "file": "portkey-full.jsonl.gz",
+        "distribution": "not distributed \u2014 private operational export; this block is not reproducible from the released dataset",
+        "sha256": "43ae1dbf73773cabe206dda742b296559d28c8cbdb8ce4f4fb52f231e52d6f0d",
+        "bytes": 1060170753,
+        "present_at_generation": true
+      }
+    ],
+    "generator": "analysis/analyze-canonical-135.py",
+    "generator_sha256": "4a4024db59a9a483fbe2b89fe5eec6d2567b70d20294651f514b0741cc93c186",
+    "generated_at": "2026-08-20T21:20:06Z",
+    "git": {
+      "sha": "eae720d7fab8ba1fe04500f19f85226f89895df2",
+      "dirty": false
+    }
+  },
   "rows": 2970,
   "roster": [
     "claude-fable-5",

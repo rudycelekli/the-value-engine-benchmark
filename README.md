@@ -78,14 +78,34 @@ make verify      # provenance/roster/checksum invariants over the released previ
 ```
 
 `make verify` runs [`analysis/verify_stats.py`](analysis/verify_stats.py) in one
-of two modes. With only the preview present it runs **PREVIEW MODE**: it checks
-the roster, the grid width, and that the preview digest agrees with *every* place
-that records it (the `.sha256` sidecar **and** `manifest.json`) — that
-cross-check exists because a stale manifest digest once slipped past a
-sidecar-only check. Drop the full `veb-canonical-135.jsonl` into
-`datasets/veb-canonical-135/` and the same command runs **FULL MODE**,
-recomputing every headline number from the rows and diffing against the
-committed `paper-stats.json`.
+of two modes. With only the preview present it runs **PREVIEW MODE** — ten
+invariants over the released artifacts:
+
+- the roster and grid width match the rows themselves;
+- the preview digest agrees with *every* place that records it (the `.sha256`
+  sidecar **and** `manifest.json`) — that cross-check exists because a stale
+  manifest digest once slipped past a sidecar-only check;
+- `paper-stats.json` carries a complete `lineage` block — which file each number
+  was computed from, its sha256 and byte count, the generator and its digest,
+  the generation timestamp, and the git sha/dirty state of the tree it ran in;
+- the **full-dataset** digest likewise agrees across all three places that
+  record it (sidecar, `manifest.json`, `paper-stats.lineage`), so the committed
+  statistics provably describe the same bytes you download;
+- `paper/result-macros.tex` cites the digest of the `paper-stats.json` it was
+  generated from, so a macro that outlived its source fails the gate instead of
+  reaching the paper.
+
+Drop the full `veb-canonical-135.jsonl` into `datasets/veb-canonical-135/` and
+the same command runs **FULL MODE**: it first confirms the file on disk is the
+one the lineage names, then recomputes every headline number from the rows and
+diffs against the committed `paper-stats.json`. The committed statistics in this
+release were produced that way — reproduced key-for-key from the 2,970-row file
+at `00d8bec5…`, on a clean tree, with the lineage block recording it.
+
+One honest exception, recorded in the lineage rather than glossed: the three
+latency/reliability numbers derive from a provider telemetry export that is
+operational data and is **not** distributed. Those three are not reproducible
+from the released dataset; every other number is.
 
 Checksums for both files are committed:
 

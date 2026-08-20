@@ -11,3 +11,7 @@ dist/
 *.local
 runs/
 .superpowers/
+# The full dataset is distributed out-of-band (see DATA.md) and gets dropped in
+# here to run `make verify` in FULL MODE. Its .sha256 sidecars stay tracked.
+datasets/veb-canonical-135/veb-canonical-135.jsonl
+datasets/veb-canonical-135/veb-canonical-135.jsonl.gz

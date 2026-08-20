@@ -2,6 +2,17 @@
 
 Every result macro below is emitted solely from `datasets/veb-canonical-135/paper-stats.json`. No numbers are hand-entered. Re-run `python3 analysis/gen-macros.py` to regenerate.
 
+## Lineage
+
+- Generated from datasets/veb-canonical-135/paper-stats.json (sha256 1ba709865f7e8b25f69c6c8d9ac040835c591a5edbb8e43f824860d47b38dff4),
+- produced 2026-08-20T21:20:06Z by analysis/analyze-canonical-135.py from:
+-   - veb-canonical-135.jsonl (sha256 00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3) — graded rollouts — every rubric, outcome and cost number
+-   - portkey-full.jsonl.gz (sha256 43ae1dbf73773cabe206dda742b296559d28c8cbdb8ce4f4fb52f231e52d6f0d) — provider telemetry — latency_reliability block only
+
+`analysis/verify_stats.py` checks that the digests above still match the files on disk, so a macro that predates the rows it claims to summarize fails the release gate.
+
+The three latency/reliability macros (`resLatencyPfifty`, `resLatencyPninety`, `resReliability`) trace to the provider telemetry export listed above, not to the graded rollouts. That export is operational data and is not distributed, so those three numbers are **not reproducible from the released dataset** — every other macro is.
+
 ## Emitted Macros
 
 | Macro | Value | Source field in paper-stats.json |
