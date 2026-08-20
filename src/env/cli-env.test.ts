@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, existsSync, rmSync, readFileSync } from 'node:fs';
+import { mkdtempSync, existsSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -27,7 +27,10 @@ test('env build writes a Harbor package', () => {
 test('env dataset writes a reward-diverse RLVR JSONL + card', () => {
   const dir = mkdtempSync(join(tmpdir(), 'veb-cli-dataset-'));
   try {
-    const out = execFileSync('node', [CLI, 'env', 'dataset', '--scenario', 'scenarios/01-logistics-saas.yaml', '--out', dir], { encoding: 'utf8' });
+    // --allow-dirty: the row-emitting commands refuse to run from a dirty tree,
+    // and a developer's tree is dirty exactly when they are running the tests.
+    // These rows go to a temp dir and are never released.
+    const out = execFileSync('node', [CLI, 'env', 'dataset', '--scenario', 'scenarios/01-logistics-saas.yaml', '--out', dir, '--allow-dirty'], { encoding: 'utf8' });
     assert.match(out, /RLVR dataset/);
     assert.match(out, /7 rollouts/);
     assert.ok(existsSync(join(dir, 'dataset.jsonl')));
@@ -57,6 +60,7 @@ test('env rollout (mock) writes dataset.jsonl and rollout-report.json', () => {
         '--out',
         dir,
         '--mock',
+        '--allow-dirty',
       ],
       { encoding: 'utf8' },
     );
@@ -66,6 +70,39 @@ test('env rollout (mock) writes dataset.jsonl and rollout-report.json', () => {
     assert.equal(lines.length, 4);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('env dataset refuses to emit from a dirty tree', () => {
+  // Run the CLI with its cwd inside a throwaway repo that has a commit and an
+  // uncommitted file, so `git status --porcelain` is non-empty regardless of
+  // whether the tree this suite runs in happens to be clean.
+  const repo = mkdtempSync(join(tmpdir(), 'veb-dirty-repo-'));
+  try {
+    const git = (...args: string[]): void => {
+      execFileSync('git', args, { cwd: repo, stdio: 'ignore' });
+    };
+    git('init', '-q');
+    git('-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-q', '--allow-empty', '-m', 'base');
+    writeFileSync(join(repo, 'uncommitted.txt'), 'dirty\n');
+
+    const scenario = join(process.cwd(), 'scenarios', '01-logistics-saas.yaml');
+    let stderr = '';
+    let failed = false;
+    try {
+      execFileSync('node', [CLI, 'env', 'dataset', '--scenario', scenario, '--out', join(repo, 'out')], {
+        cwd: repo,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+    } catch (err) {
+      failed = true;
+      stderr = String((err as { stderr?: string }).stderr ?? '');
+    }
+    assert.ok(failed, 'env dataset should exit non-zero from a dirty tree');
+    assert.match(stderr, /refusing to emit released rows from a dirty tree/);
+  } finally {
+    rmSync(repo, { recursive: true, force: true });
   }
 });
 

@@ -130,10 +130,16 @@ development repo while that tree had uncommitted changes, so the recorded
 `git.sha` identifies the checkout the run *started from*, not the exact bytes of
 code that produced the row. What is pinned is the scenario world
 (`provenance.taskChecksum`, an sha256 of the canonical scenario JSON), the frozen
-buyer-sim version, the seed, and the released rows themselves. Future generation
-runs should refuse to emit from a dirty tree; the canonical-135 freeze predates
-that rule and is not retroactively fixable, so it is disclosed instead of
-papered over.
+buyer-sim version, the seed, and the released rows themselves.
+
+That rule is now enforced rather than promised: `env rollout` and `env dataset`
+— the two commands that emit released rows — refuse to run from a dirty tree
+and exit non-zero (`src/env/provenance.ts`, `assertCleanTreeForRelease`). The
+override is `--allow-dirty`, which prints a warning naming the rows as
+unreleasable; rows emitted under it still record `dirty: true`, so using it
+leaves the same trace in the data that it does on the console. The
+canonical-135 freeze predates the gate and is not retroactively fixable, so it
+is disclosed instead of papered over.
 
 ---
 

@@ -21,6 +21,7 @@ import { buildEnvEvidence, FLAGSHIP_SCENARIOS } from './env/evidence.js';
 import { runDifficultyGate } from './env/gate.js';
 import { buildHarborPackage } from './env/harbor.js';
 import { runRolloutSuite } from './env/rollout-suite.js';
+import { assertCleanTreeForRelease, gitState } from './env/provenance.js';
 import { resolveSellers } from './models.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -59,15 +60,17 @@ Usage:
   node dist/cli.js env gate  --scenario <id|path>
   node dist/cli.js env audit --scenario <id|path>
   node dist/cli.js env build --scenario <id|path> --out <dir>
-  node dist/cli.js env dataset --scenario <id|path> --out <dir>
+  node dist/cli.js env dataset --scenario <id|path> --out <dir> [--allow-dirty]
   node dist/cli.js env evidence --out <path> [--scenarios <id,id,...>]
-  node dist/cli.js env rollout --scenarios <ids> --sellers <frontier|spec,...> --seeds <n|list> --budget <usd> --out <dir> [--concurrency <n>] [--pack] [--mock] [--resume]
+  node dist/cli.js env rollout --scenarios <ids> --sellers <frontier|spec,...> --seeds <n|list> --budget <usd> --out <dir> [--concurrency <n>] [--pack] [--mock] [--resume] [--allow-dirty]
 
 Seller specs: anthropic:<model> · openai:<model> · xai:<model> · gemini:<model>
               · scripted-baseline · scripted-disciplined · frontier (suite: top-2 per provider)
 Flags:
   --pack     prepend the Value Engine system prompt (out-of-box vs +pack track)
   --mock     offline mode: scripted-but-reactive buyer + heuristic judge (no API keys)
+  --allow-dirty  emit rows from a dirty tree anyway (their git.sha will not
+             identify the code that produced them — do not release them)
 
 calibrate: runs the naive scripted-baseline (must NOT win) and the disciplined
 reference seller against a scenario and reports pass/fail. With
@@ -134,6 +137,7 @@ async function main(): Promise<void> {
     if (sub === 'rollout') {
       const out = flags.get('out');
       if (typeof out !== 'string') usage();
+      assertCleanTreeForRelease(gitState(), flags.has('allow-dirty'));
       const scenarioIds = String(flags.get('scenarios') ?? '')
         .split(',')
         .map((s) => s.trim())
@@ -238,6 +242,7 @@ async function main(): Promise<void> {
     if (sub === 'dataset') {
       const out = flags.get('out');
       if (typeof out !== 'string') usage();
+      assertCleanTreeForRelease(gitState(), flags.has('allow-dirty'));
       const card = await packageDataset({ scenario, runsDir, outDir: out });
       console.log(`\n▶ RLVR dataset ${card.scenario_id} → ${out}/dataset.jsonl (${card.count} rollouts)`);
       console.log(`  buyer_sim=${card.task.buyer_sim} task_checksum=${card.task.task_checksum.slice(0, 12)}… reward min=${card.reward.min} mean=${card.reward.mean} max=${card.reward.max}`);

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sha256, taskChecksum, buildEnvProvenance } from './provenance.js';
+import { sha256, taskChecksum, buildEnvProvenance, assertCleanTreeForRelease } from './provenance.js';
 import type { Scenario } from '../types.js';
 
 function tinyScenario(): Scenario {
@@ -22,6 +22,27 @@ test('sha256 is stable and hex', () => {
 
 test('taskChecksum is deterministic for identical scenarios', () => {
   assert.equal(taskChecksum(tinyScenario()), taskChecksum(tinyScenario()));
+});
+
+test('assertCleanTreeForRelease refuses to emit from a dirty tree', () => {
+  assert.throws(
+    () => assertCleanTreeForRelease({ sha: 'a'.repeat(40), dirty: true }),
+    /refusing to emit released rows from a dirty tree/,
+  );
+});
+
+test('assertCleanTreeForRelease passes a clean tree silently', () => {
+  const warnings: string[] = [];
+  assertCleanTreeForRelease({ sha: 'a'.repeat(40), dirty: false }, false, (m) => warnings.push(m));
+  assert.deepEqual(warnings, []);
+});
+
+test('assertCleanTreeForRelease allows an override but says so loudly', () => {
+  const warnings: string[] = [];
+  assertCleanTreeForRelease({ sha: 'b'.repeat(40), dirty: true }, true, (m) => warnings.push(m));
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /DIRTY tree/);
+  assert.match(warnings[0], /Do not release these rows/);
 });
 
 test('buildEnvProvenance captures seed + buyer-sim + injected generatedAt', () => {
