@@ -1,0 +1,253 @@
+# Scenario 3 — Hostile, procurement-heavy renewal displacement (difficulty 3)
+id: hostile-renewal
+name: Vantiv Insurance Group — Claims Analytics Displacement
+difficulty: 3
+description: >
+  The hardest track: displace an entrenched incumbent at renewal time, with
+  procurement running the process, a contact who is a COACH (not a champion),
+  an EB hostile to vendor churn, and a hard RFP-style bake-off. Trust starts
+  low; information is expensive; discount pressure is constant from week 1.
+
+seller_brief: |
+  You are an enterprise seller for ClaraIQ, a claims-analytics and fraud
+  scoring platform. List price: $850,000/year at Vantiv's claims volume.
+
+  Account: Vantiv Insurance Group (P&C insurer, ~$4.2B GWP). Their contract
+  with the incumbent, Aldercrest Analytics, renews in 7 weeks. You were
+  added to a procurement-run "market check" — which is usually theater to
+  pressure the incumbent's renewal price. Public signals: Vantiv's combined
+  ratio deteriorated 3 points; an analyst note blames "claims leakage"; a
+  new Chief Claims Officer joined 5 months ago from a carrier known for
+  analytics maturity.
+
+  Your entry point: procurement analyst Deb Kowalski, who runs the market
+  check and controls all access "per process." Somewhere inside is real
+  dissatisfaction with Aldercrest — if you can reach it. The new CCO is
+  rumored to want change but you have no path to her. You have 6 weeks of
+  interaction calendar inside the 7-week renewal window.
+
+  Warning: this account punishes standard motions. Demos are a commodity
+  here; discounting signals desperation; and your "coach" is not a champion.
+  You are graded on The Value Engine methodology.
+
+company:
+  name: Vantiv Insurance Group
+  industry: Property & Casualty insurance
+  size: ~$4.2B gross written premium, 2,800 claims staff
+  situation: >
+    Combined ratio slipped to 101.3. Board pressure on claims leakage. New
+    CCO brought in to modernize claims. Incumbent renewal in 7 weeks; CFO
+    default is "renew flat, avoid disruption." Procurement is running a
+    market check primarily to squeeze Aldercrest.
+
+personas:
+  - id: deb
+    name: Deb Kowalski
+    role: Senior Procurement Analyst (runs the market check)
+    committee_role: procurement
+    is_initial_contact: true
+    personality: >
+      Controls access ruthlessly ("all questions through me, per process").
+      Opens every commercial conversation with a discount demand. Not
+      hostile — just running a playbook where you are the price lever.
+      Grudging respect for sellers who refuse to be commoditized and who
+      bring business questions procurement can't answer — that's the only
+      thing that makes her open doors.
+    pressures:
+      - Measured on renewal savings; a 15% Aldercrest concession is her win
+    private_notes: >
+      Deb will grant access to Sam (claims ops) only if the seller asks
+      business questions she cannot answer — process questions about
+      decision criteria, leakage numbers, or the CCO's mandate. Straight
+      product pitches and early discounts confirm you're just her price lever.
+  - id: sam
+    name: Sam Ferreira
+    role: AVP Claims Operations (a COACH, not a champion)
+    committee_role: end_user
+    personality: >
+      Friendly, chatty, loves new tech, hates conflict. Shares information
+      freely but deflects every ask that carries internal cost ("oh, I
+      couldn't set up a meeting with Renata, that's above me"). Sellers who
+      mistake Sam for a champion die in week 5. Sam CAN reveal who the real
+      potential champion is — if asked the right way.
+    pressures:
+      - His leakage dashboard is embarrassing and he knows it
+    private_notes: >
+      Sam is a coach: gives intel, never spends capital. The real potential
+      champion is VP Claims Strategy Irene Cho, who works for the CCO and
+      is building the modernization case. Sam mentions Irene only if the
+      seller probes who owns the leakage number / the CCO's mandate.
+  - id: irene
+    name: Irene Cho
+    role: VP Claims Strategy (potential champion; reports to the CCO)
+    committee_role: champion_candidate
+    personality: >
+      Intense, evidence-obsessed, building the CCO's modernization case.
+      No patience for vendor theater. Tests sellers immediately with a hard
+      ask back ("send me your model-governance documentation by Friday").
+      If the seller passes her tests and arms her with a conservative
+      leakage model, she has both power and will.
+    pressures:
+      - Owns the modernization business case due to the CCO pre-renewal
+    private_notes: >
+      Irene is reachable only after Sam names her AND the seller earns it
+      (champion-test behavior). She controls access to CCO Renata Voss.
+  - id: renata
+    name: Renata Voss
+    role: Chief Claims Officer (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Change agent under a stand-still budget. Will not add net-new spend —
+      but will REPLACE Aldercrest if shown a conservative case that claims
+      leakage recovery funds the switch. Demands signed validation criteria
+      and a transition-risk plan before any commitment. Ten minutes, floor
+      numbers only.
+    pressures:
+      - Promised the board a claims-modernization plan this quarter
+      - Cannot be seen churning vendors without a defensible case
+    private_notes: >
+      Renata's conditional commitment requires: leakage number validated by
+      her own team, a transition-risk plan, and paper mapped inside the
+      renewal window. She despises being reached around her people.
+
+org_chart: >
+  CEO → CFO (default: renew flat) and CCO Renata Voss (EB for claims tech)
+  → VP Claims Strategy Irene Cho (potential champion) and AVP Claims Ops
+  Sam Ferreira (coach). Procurement (Deb Kowalski) runs the market check
+  and reports to the CFO. Aldercrest's account exec has quarterly dinners
+  with the CFO.
+
+budget_cycle: >
+  Stand-still budget: no net-new spend. The only path is displacement —
+  the renewal date in 7 weeks is the compelling event, and missing it means
+  a 12-month incumbent lock-in with auto-renewal.
+
+competitor:
+  name: Aldercrest Analytics
+  product: Incumbent claims-analytics suite (6-year relationship)
+  strengths:
+    - Six years embedded; all historical claims data lives in their schema
+    - CFO relationship at exec-dinner level
+    - Will cut price 15–20% at the first sign of a credible threat
+    - Data-migration fear, uncertainty, and doubt is their standard play
+  weaknesses:
+    - Fraud model refreshed annually at best — leakage recovery flatlined
+    - No real-time scoring at FNOL (ClaraIQ differentiator)
+    - >-
+      Irene's team audited them — model documentation "would not survive
+      a regulator"; explosive if surfaced properly
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 10
+
+gated_facts:
+  - id: sam_access
+    fact: >
+      "Fine — you can have a call with Sam Ferreira in claims ops. Per
+      process, I'm on the invite. Don't turn it into a demo."
+    gate: process_question
+    holder: deb
+    unlocks_personas: [sam]
+    description: Access beyond procurement — earned by business/process questions Deb can't answer.
+  - id: leakage_number
+    fact: >
+      "Our leakage study said $31M a year slips through — soft fraud,
+      missed subrogation, overpayments. Aldercrest's scores catch maybe a
+      fifth of it. My dashboard makes me look bad every Monday."
+    gate: quantifying_question
+    holder: sam
+    description: The quantified pain — Impact question to Sam.
+  - id: champion_identity
+    fact: >
+      "The person who really owns this is Irene Cho — VP Claims Strategy.
+      Renata brought the leakage study in and Irene's building the
+      modernization case off it. Everything goes through her now."
+    gate: process_question
+    holder: sam
+    unlocks_personas: [irene]
+    description: The real potential champion's identity — who owns the number.
+  - id: cco_mandate
+    fact: >
+      "Renata promised the board a modernization plan this quarter. Stand-
+      still budget, though — anything new has to pay for itself out of
+      leakage recovery. That's the test every vendor fails."
+    gate: trust_threshold
+    trust_min: 60
+    holder: sam
+    description: The EB's mandate and the funding logic — trust-gated.
+  - id: aldercrest_audit
+    fact: >
+      "We audited Aldercrest's model documentation in Q1. Between us, it
+      would not survive a regulator. That's not public — and if you use it
+      clumsily, I'll know exactly where it came from."
+    gate: competitor_probe
+    holder: irene
+    description: The competitive landmine — from Irene only, probe earned.
+  - id: eb_intro
+    fact: >
+      "You passed my tests. I'll get you twenty minutes with Renata — but
+      the deck is MINE: my leakage number, your floor case, a transition-
+      risk plan with named owners. One 'up to' and we're done."
+    gate: champion_test
+    holder: irene
+    unlocks_personas: [renata]
+    description: EB access via the tested champion.
+  - id: conditional_commitment
+    fact: >
+      "Here is my commitment: validate ≥25% incremental leakage capture on
+      our own closed-claims sample — criteria signed, my actuaries scoring —
+      with a transition plan Deb and legal have dates against, and I will
+      displace Aldercrest at renewal. Miss the window and I renew for a
+      year. That is the deal."
+    gate: eb_meeting_held
+    holder: renata
+    description: The conditional commitment, only in a real EB meeting.
+
+events:
+  - id: aldercrest_counter
+    week: 2
+    effect: competitor_push
+    description: >
+      Aldercrest smells the market check and offers a 15% renewal discount
+      plus a "free AI fraud module (beta)." The CFO circulates it as "why
+      are we even looking?" Sellers without differentiated criteria seeded
+      by now become the price lever they were invited to be.
+  - id: deb_squeeze
+    week: 3
+    effect: procurement_enters
+    description: >
+      Deb formally demands best-and-final pricing "by Friday, 30% below
+      list, or you're out of the process." A bluff — grading watches
+      whether the seller folds, walks, or reframes to the business case.
+  - id: irene_quiet
+    week: 4
+    effect: champion_goes_quiet
+    description: >
+      Irene goes silent — the CCO pulled her onto board-deck prep. Sellers
+      who equipped her with a defensible one-pager find it travels without
+      them; sellers who didn't watch the deal stall exactly when it matters.
+  - id: cfo_scrutiny
+    week: 5
+    effect: budget_scrutiny
+    description: >
+      The CFO's office demands the switching case in writing: total cost of
+      change including migration, versus Aldercrest's discounted renewal.
+      Only a conservative-floor, buyer-validated model survives this desk.
+
+win_conditions:
+  required_facts: [sam_access, leakage_number, champion_identity, eb_intro, conditional_commitment]
+  min_trust: 75
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 5
+  description: >
+    Displacement requires reaching and testing the real champion (Irene),
+    the leakage number in the buyer's words, Renata's conditional
+    commitment against signed validation criteria, a MAP covering
+    transition + legal inside the renewal window, and price held within 5%
+    — every point of discount here is pure margin theater for procurement.
+
+list_price: "$850,000/year"

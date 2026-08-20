@@ -1,0 +1,42 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We introduced the Value Engine Benchmark, an environment for evaluating---and
+training---LLM agents on strategically non-cooperative, multi-touch enterprise-sales
+negotiation. VEB departs from prior agentic benchmarks in three ways: it makes the
+counterpart a committee of stochastic personas with gated private information, so
+discovery must be \emph{earned}; it makes the reward an auditable, turn-cited
+qualification scorecard rather than a scalar, so credit is assigned to process and
+price integrity rather than to lucky closes; and it builds a methodology-controlled
+paired track into its core, so the effect of encoding a selling methodology can be
+estimated near-causally with the model held fixed. Because the buyer is re-sampled
+per seed, VEB simultaneously resists frozen-replay gaming and yields the
+seed-matched win/loss pairs that preference-based post-training consumes, making it
+usable as both a leaderboard and a verifiable RL environment. We paired the
+automated judge with a first-class human-expert validation protocol---rubric-anchored,
+LLM-accelerated, with reported inter-rater agreement---so the benchmark's scores
+are defensible rather than merely automated. We hope VEB helps the community move
+from measuring whether agents produce sales-shaped text to measuring whether they
+actually sell: earning the meeting, quantifying the pain in the buyer's own words,
+and defending value with integrity.
+
+\subsection{What's next}
+\label{sec:whatsnext}
+Four extensions are already scaffolded by the current release. First, the
+\textbf{human-expert validation study} ($\kappa$, $\alpha$): the frozen grid and a
+stratified sample manifest are fixed, and the pre-registered expert-agreement
+addendum will be published against them without re-running the benchmark. Second, a
+\textbf{multi-methodology track}: the pack mechanism already injects one selling
+philosophy as a matched control, and scenario admission (Section~\ref{sec:limitations})
+is currently certified against that single methodology; the natural next step is to
+calibrate scenarios against several distinct philosophies so the pack lift is
+measured against rivals rather than against a bare baseline. Third,
+\textbf{RL fine-tuning}: because the reward is dense and non-degenerate
+(Section~\ref{sec:distribution}) and the buyer is re-sampled per seed, the
+seed-matched win/loss pairs are directly consumable by preference-based
+post-training; we are using the two open-weight endpoints (kimi-k3, inkling) as the
+base policies for an on-environment fine-tuning study, with the hardened judge as an
+adversarial reward model to guard against reward hacking. Fourth,
+\textbf{sim-to-real and modality}: establishing that VEB performance transfers to
+live selling, and extending beyond the current English, text-only, single-seller
+setting to voice, multilingual, and multi-seller team dynamics.

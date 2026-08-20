@@ -1,0 +1,127 @@
+\section{Introduction}
+\label{sec:intro}
+
+The frontier of LLM capability has moved from answering questions to
+\emph{acting}: browsing, coding, operating tools, and holding extended
+conversations to accomplish goals. A rapidly maturing benchmark ecosystem has
+tracked this shift---SWE-bench for software engineering
+\citep{jimenez2024swebench}, WebArena and GAIA for web and general assistant
+tasks \citep{zhou2024webarena,mialon2023gaia}, $\tau$-bench for tool-agent
+dialogue with simulated users \citep{yao2024taubench}, and AgentBench as a broad
+multi-environment suite \citep{liu2023agentbench}. These benchmarks share a
+common shape: an agent pursues a task in an environment that is either
+cooperative (a user who wants to be helped) or static (a codebase, a website),
+and success is a verifiable end state.
+
+A large and economically consequential class of real deployments does not fit
+this shape. When an agent negotiates, sells, mediates, or advocates, its
+counterpart is \emph{strategically non-cooperative}: the counterpart holds
+private information, has goals only partly aligned with the agent's, and reveals
+value only in response to well-earned trust. Success is not a single verifiable
+state but a \emph{trajectory of earned commitments}---eliciting a quantified
+pain, earning access to the person who controls the budget, and holding price
+against pressure. Evaluating agents in this regime raises three difficulties
+that existing benchmarks largely sidestep:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Partial information and gated disclosure.} The environment must
+  withhold facts until the agent earns them through the right kind of question,
+  not merely by asking. A benchmark that hands over the answer on request cannot
+  measure discovery skill.
+  \item \textbf{Process-quality credit, not just outcome.} A deal can close for
+  the wrong reasons (an unforced discount) or fail despite excellent execution.
+  A scalar win/loss reward conflates skill with luck and rewards value-destroying
+  shortcuts. Credit must be assigned to the \emph{process}, and that assignment
+  must be auditable.
+  \item \textbf{Attribution of methodology.} Practitioners care whether a given
+  \emph{selling methodology} improves outcomes. Isolating a methodology's effect
+  requires holding the model, scenario, and counterpart fixed while varying only
+  the method---a controlled comparison rarely built into agentic benchmarks.
+\end{enumerate}
+
+\paragraph{The Value Engine Benchmark.}
+We address these difficulties with VEB, an environment for multi-touch
+enterprise-sales negotiation. Each of the \numScenarios{} scenarios instantiates
+a realistic B2B deal: a buying committee of LLM-simulated personas (a champion, an
+economic buyer, technical gatekeepers, procurement), each with a personality,
+private notes, and \emph{gated facts} that unlock only under the correct
+conversational move (e.g., a quantifying question, a champion test). The agent
+operates a bounded calendar of calls and asynchronous touches, faces a genuine
+compelling event (a deadline that makes inaction costly), and must navigate an
+incumbent competitor and mid-cycle pressure events. Scenarios span
+\numIndustries{} industries---from freight logistics to a post-breach retailer
+under litigation---and three difficulty tiers calibrated by the number of gates,
+the hostility of the committee, and the tightness of the price ceiling.
+
+VEB makes two contributions beyond scenario design.
+
+\textbf{(i) Evidence-graded rewards.} Rather than emitting a scalar, VEB's LLM
+judge produces a structured qualification scorecard grounded in an established
+enterprise-sales rubric: a full MEDDPICC assessment, a Three-Whys root-cause
+analysis, a Deal Value Index (DVI), and a price-integrity score. Every element of
+the scorecard must cite a verbatim, turn-indexed quote from the transcript. This
+turns the reward into an \emph{audit trail}: a human reviewer can check any
+sub-score against the evidence the judge cited. From this scorecard we compose a
+single Sale Quality Score (SQS) that rewards process quality and price integrity,
+not merely closing.
+
+\textbf{(ii) Methodology-controlled tracks.} Every scenario is evaluated in a
+matched pair: an \emph{out-of-box} (OOB) track, in which the seller agent
+receives only the deal brief, and a \emph{pack} track, in which the identical
+model additionally receives an explicit sales methodology as a system prompt.
+Because the model, scenario, seeds, and simulated buyer are held fixed across the
+pair, the difference in outcomes is a near-causal estimate of the methodology's
+lift. To our knowledge VEB is the first agentic benchmark to build methodology
+attribution into its core design.
+
+\paragraph{Stochastic buyers and matched pairs.}
+The simulated buyer is re-sampled for every seed (the seed \emph{is} the label),
+and cell scores are averaged over seeds. This has two consequences. It resists
+\emph{frozen-replay gaming}, in which an agent overfits a single deterministic
+interlocutor. And it produces seed-controlled \emph{matched win/loss pairs}: for
+a fixed scenario and model, two seeds may diverge only in the buyer's stochastic
+choices, isolating the trajectory decisions that flipped the outcome. Such pairs
+are precisely the substrate that preference-based post-training---DPO
+\citep{rafailov2023dpo}, reward modeling \citep{ouyang2022instructgpt}, and
+process reward models \citep{lightman2023letsverify}---consumes. VEB is therefore
+dual-use: a leaderboard \emph{and} a verifiable RL environment.
+
+\paragraph{Human-in-the-loop validation.}
+An LLM-graded benchmark is only as trustworthy as the agreement between its judge
+and expert humans. We contribute a validation protocol in which domain reviewers
+audit a stratified sample of judge scorecards using rubric-anchored,
+LLM-accelerated tooling: the accelerator surfaces the judge's cited evidence and
+proposes a rubric-scored draft, and the human reviewer confirms, corrects, or
+overrides each sub-score. We pre-register this judge--human agreement protocol and
+treat its inter-rater agreement as a first-class result rather than an afterthought;
+the human study is forthcoming, and the grid released here is licensed by the
+inter-panel calibration already in hand (Section~\ref{sec:validation}).
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{An environment} for strategically non-cooperative, multi-touch
+  negotiation: \numScenarios{} scenarios, \numIndustries{} industries, three
+  difficulty tiers, stochastic LLM buying committees with gated disclosure, and
+  a bounded multi-week action space (Section~\ref{sec:environment}).
+  \item \textbf{An evidence-graded reward}: a turn-cited, auditable qualification
+  scorecard (MEDDPICC/Three-Whys/DVI/price integrity) composed into a Sale
+  Quality Score that credits process over outcome (Section~\ref{sec:grading}).
+  \item \textbf{A methodology-controlled evaluation}: matched OOB/pack tracks
+  over shared seeds giving a near-causal methodology-lift estimate
+  (Sections~\ref{sec:environment},~\ref{sec:experiments}).
+  \item \textbf{A human-expert validation protocol} with rubric-anchored
+  LLM accelerators; the pre-registered agreement study ($\kappa$, $\alpha$) is
+  forthcoming against the frozen grid (Section~\ref{sec:validation}).
+  \item \textbf{A released dataset} of \gridCellsTotal{} graded trajectories
+  across \numModels{} frontier models, structured for both leaderboard use and
+  preference-based post-training (Sections~\ref{sec:experiments},~\ref{sec:results}).
+  \item \textbf{An enrichment corpus}: an orthogonal layer of \numAiFeatures{}
+  evidence-cited behavioral features (15 scored by a cost-reduced cross-family
+  ensemble, 2 deterministic), the ensemble calibrated against a frontier reference panel at
+  $r=\resPanelPearson{}$, turning the graded grid into a densely labeled,
+  reusable research and post-training corpus (Section~\ref{sec:enrichment}).
+  \item \textbf{A Value Frontier}: rather than a single ranking, the Pareto
+  surface over sale quality, per-deal cost measured exactly from token usage,
+  and latency, so the efficient models---not merely the strongest---are visible
+  to a deploying team (Section~\ref{sec:frontier}).
+\end{enumerate}

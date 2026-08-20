@@ -1,0 +1,33 @@
+\begin{abstract}
+LLM agents are increasingly deployed in high-stakes, multi-turn interactions with
+counterparts whose goals are only partially aligned with the agent's, yet most
+agentic benchmarks test single-shot task completion against cooperative
+environments. We introduce the \textbf{Value Engine Benchmark (VEB)}, an
+evidence-graded, methodology-controlled environment for evaluating LLM agents on
+\emph{persuasion under partial information}: multi-touch enterprise-sales
+negotiation against a stochastic, LLM-simulated buying committee with gated
+private facts, an economic-buyer access gate, and a competitor. Two design
+choices distinguish VEB. First, grading is \emph{evidence-graded}: an LLM judge
+emits a structured qualification scorecard in which every claim must cite a
+verbatim, turn-indexed transcript quote, making rewards auditable. Second, VEB
+is \emph{methodology-controlled}: every scenario runs as a matched pair---a bare
+seller and the same seller augmented with an explicit sales methodology---giving
+a near-causal, seed-paired estimate of methodology lift. We release the
+environment, \gridCellsTotal{} graded trajectories across \numModels{} frontier model
+endpoints on
+\numScenarios{} scenarios, and an enrichment corpus of \numAiFeatures{}
+evidence-cited behavioral features per trajectory, whose cost-reduced grading
+ensemble agrees with a frontier reference panel at $r=\resPanelPearson{}$ on
+\resPanelCalibN{} doubly graded trajectories; a pre-registered human-expert
+validation study ($\kappa$, $\alpha$) is forthcoming against the same frozen grid.
+We find the methodology pack lifts clean-win rate by \resPackLiftOverall{}\,pp
+pooled, concentrated in winnable deals, and that the strongest agent
+(\resBestModel{}) is also the cheapest per closed deal---a $>200\times$ cost spread
+with no quality trade-off. Re-grading the full grid under a hardened,
+deterministic-override judge moves mean SQS by only \resHardenedMeanDelta{} points
+and leaves the top of the leaderboard unchanged, evidence that the ranking tracks
+transcript evidence rather than judge latitude. Finally, the per-rollout reward is
+non-degenerate (mean normalized entropy \resDistMeanEntropy{}), so VEB doubles as a
+verifiable reinforcement-learning environment for training negotiation-capable
+agents.
+\end{abstract}

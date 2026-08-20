@@ -1,0 +1,28 @@
+The Value Engine Benchmark — © 2026 Rudy M. Celekli / Gradia.
+
+This repository is dual-licensed. Which license applies depends on what you
+are using.
+
+CODE — Apache License 2.0. See LICENSE-CODE.
+  Applies to: src/, scripts/, analysis/, finetune/, validation/ (the .py and
+  .ts sources), scenarios/, Makefile, package.json, tsconfig.json, and the
+  GitHub Actions workflows. Commercial use permitted. Includes an express
+  patent grant.
+
+DATA, PAPER, AND DOCS — Creative Commons Attribution-NonCommercial 4.0
+International (CC BY-NC 4.0). See LICENSE-DATA.
+  Applies to: datasets/ (including the released preview JSONL and every
+  artifact derived from benchmark rollouts), results/, runs/, paper/, and the
+  Markdown documentation. Noncommercial use only. Commercial licensing of the
+  full dataset is negotiated separately — see DATA.md.
+
+Where a file could be read as falling under both, the code license governs the
+executable content and the data license governs the benchmark rollouts, grades,
+and prose.
+
+Rationale: code carries an OSI-approved license because reproducibility norms
+(and anyone who wants to run this environment) expect one, while the graded
+rollout corpus remains noncommercial.
+
+Model outputs contained in the dataset remain subject to the terms of the
+provider that produced them.

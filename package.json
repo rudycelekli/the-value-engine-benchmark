@@ -1,0 +1,23 @@
+{
+  "name": "the-value-engine-benchmark",
+  "version": "1.0.0",
+  "description": "The Value Engine Benchmark — a runnable, evidence-graded enterprise-sales negotiation environment.",
+  "license": "CC-BY-NC-4.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "bench": "node --enable-source-maps dist/cli.js bench",
+    "calibrate": "node --enable-source-maps dist/cli.js calibrate",
+    "suite": "node --enable-source-maps dist/cli.js suite",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0",
+    "tsx": "^4.16.0"
+  }
+}

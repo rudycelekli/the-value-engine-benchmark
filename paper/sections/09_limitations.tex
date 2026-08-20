@@ -1,0 +1,84 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{Simulated buyers are not human buyers.} VEB's committee is
+LLM-simulated. This buys control, reproducibility, and matched pairs, but a
+simulated buyer may be exploitable in ways a human is not, or may reward
+rhetorical patterns a real executive would resist. We mitigate with
+personality-grounded personas, private notes hidden from the seller, gated
+disclosure that requires earned moves, and stochastic re-sampling; we do not claim
+that VEB performance transfers one-to-one to live selling. Establishing
+sim-to-real transfer is important future work.
+
+\paragraph{Conflict of interest, stated plainly.} VEB is built by the authors of
+the sales methodology it evaluates, and the methodology-pack track tests that same
+methodology. A skeptical reader should treat the \emph{existence} of a pack lift as
+a claim made by an interested party, and we have designed the benchmark so that the
+claim does not have to be taken on trust: the grid, transcripts, scorecards, seeds,
+and scoring code are all released; the lift is computed by deterministic,
+inspectable math over evidence-cited scorecards; and the results themselves are not
+flattering marketing---the pack \emph{hurts} some models (Table~\ref{tab:lift}
+shows a negative mid-tier lift), helps only where behavioral markers move, and the
+headline pooled effect is small. We report what the data shows, including where it
+undercuts the sales pitch. Independent replication is the real remedy, and the
+release is structured to make replication cheap: every number in this paper can be
+recomputed from the published artifacts without contacting us.
+
+\paragraph{Wins concentrate on few behaviors.} Our own analysis
+(Section~\ref{sec:analysis}) shows that reaching the economic buyer and holding
+price predict most clean wins. This is consistent with how the underlying
+methodology says enterprise deals work, but it also means the leaderboard partially
+measures whether a model happens to trigger the specific behaviors the simulator
+rewards. We surface this rather than hide it: the behavioral decomposition
+(Figure~\ref{fig:behavior}) lets a reader separate ``executes the rewarded
+behaviors'' from ``scores well,'' and the failure-mode audit trail shows
+\emph{which} behaviors gate which outcomes. Whether those gates match live buying
+committees is exactly the sim-to-real question above.
+
+\paragraph{Scenario admission is a selection effect on the pack lift.} Scenario
+calibration (Section~\ref{sec:environment}) admits a scenario only if a
+disciplined reference seller \emph{executing the methodology under test} can win
+it. This guarantees every deal is winnable, but it also means the pack track is
+evaluated exclusively on terrain the methodology is certified to clear: by
+construction there can be no scenario where following the methodology is the
+wrong strategy. The measured pack lift is therefore an estimate of ``does
+injecting the methodology help on methodology-winnable deals,'' not ``does the
+methodology beat alternatives on arbitrary deals.'' A symmetric design would
+calibrate scenarios against several distinct selling philosophies; we flag this
+as the natural extension for the multi-methodology track already implied by the
+pack mechanism.
+
+\paragraph{Rubric commitment.} The grading rubric encodes one particular
+enterprise-sales methodology. A model tuned to a different but effective selling
+philosophy could be under-credited. We regard this as a scoped design decision:
+VEB measures competence \emph{against a specified, published standard}, and the
+standard is transparent and auditable rather than implicit in an opaque reward.
+
+\paragraph{Judge model and correlated error.} The automated judge is itself an
+LLM and can share blind spots with the models it grades, especially same-family
+models (self-preference). Our quote-or-abstain constraint, deterministic roll-up,
+and the forthcoming human validation with a blind arbitration subset are designed to
+bound this risk, though they do
+not eliminate it; residual judge--model correlation is reported, not assumed away.
+As a direct probe we re-grade the entire grid under a hardened judge that
+reconstructs the objective dimensions deterministically from the event log
+(Section~\ref{sec:hardened}); mean SQS moves only \resHardenedMeanDelta{}~points and
+the top of the board is unchanged, but this bounds rather than eliminates the shared-
+prior concern, since both judges are still LLMs on the subjective dimensions.
+
+\paragraph{Validation sample size.} Human expert review is expensive, so
+validated agreement is estimated on a stratified sample, not the whole grid.
+Agreement statistics therefore carry sampling uncertainty, which we report with
+confidence intervals; rare strata (e.g., hard-tier wins) have the widest
+intervals.
+
+\paragraph{Coverage.} \numScenarios{} scenarios across \numIndustries{} industries
+is broad but finite, and each scenario, once public, can in principle be studied
+and overfit. The stochastic buyer and per-seed re-sampling raise the cost of
+overfitting but do not make the environment adversarially unforgeable; we treat
+periodic scenario refresh as part of the benchmark's maintenance.
+
+\paragraph{English, text-only, and single-seller.} The current release is
+English-language, text-channel, and evaluates a single seller agent against the
+committee. Voice, multilingual selling, and multi-seller team dynamics are out of
+scope for this version.

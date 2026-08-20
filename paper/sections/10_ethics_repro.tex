@@ -1,0 +1,54 @@
+\section{Ethics and Broader Impact}
+\label{sec:ethics}
+
+VEB evaluates and can help train agents that persuade. Persuasion capability is
+dual-use: the same competence that makes an agent a disciplined enterprise seller
+could be directed at manipulation. We take several positions to keep the work on
+the constructive side of that line. First, the benchmark rewards \emph{value
+integrity}, not persuasion at any cost: the scoring actively penalizes
+value-destroying closes, invented evidence, and coercive discounting, and it
+credits earning informed, stakeholder-validated commitments. An agent that
+manipulates rather than qualifies scores poorly by construction. Second, all
+personas and companies are fictional composites; no real individuals, accounts, or
+proprietary deal data are used. Third, the environment models a consented,
+professional B2B context (a buyer who solicited a vendor conversation), not
+deceptive targeting of unwilling parties. We nonetheless acknowledge that
+persuasion-capable agents warrant care in deployment, and we encourage downstream
+users to pair capability evaluation with manipulation-resistance and honesty
+evaluations.
+
+We also note a positive impact: an auditable, evidence-cited grading standard for
+sales agents makes their behavior \emph{inspectable}. A buyer-facing organization
+can ask whether an AI seller cited real customer words, earned the right meetings,
+and defended value honestly---rather than trusting a black-box close rate.
+
+\section{Reproducibility}
+\label{sec:repro}
+
+We release the artifacts required to reproduce every number in this paper:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Environment.} All \numScenarios{} scenario specifications, the
+  seller/buyer interfaces, the calendar and gating machinery, and the event
+  scripts.
+  \item \textbf{Grading.} The full scorecard schema, the deterministic DVI/SQS
+  scoring functions, the judge prompt, and the quote-or-abstain guardrails, held
+  in version-controlled sync with the methodology reference workbook.
+  \item \textbf{Data.} The \gridCellsTotal{}-cell graded dataset with per-cell
+  seeds, transcripts, scorecards, outcomes, costs, and provenance, structured for
+  both leaderboard analysis and preference-pair extraction.
+  \item \textbf{Validation.} The stratified sampling code, frozen sample
+  identifiers, the review instrument and rubric anchors, and the agreement-metric
+  computation.
+  \item \textbf{Infrastructure.} The concurrency, retry/backoff, and re-grade
+  procedures (Appendix~\ref{app:infra}), so the grid can be regenerated under
+  provider rate limits.
+\end{itemize}
+
+Every seed is recorded, grading math is deterministic given the judge's atomic
+field scores, and the \SI{1.7}{\percent} heuristic-fallback rows are flagged in the
+release so they can be excluded or re-graded offline from persisted transcripts. The
+environment, the \gridCellsTotal{} graded trajectories, the enrichment corpus, and
+the live metrics are published at the public benchmark page,
+\url{https://thevalueengine.ai/benchmark}; an archival DOI and the final data
+license are assigned at camera-ready.

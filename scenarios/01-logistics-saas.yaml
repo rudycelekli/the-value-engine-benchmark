@@ -1,0 +1,201 @@
+# Scenario 1 — Mid-market logistics SaaS sale (difficulty 1)
+id: logistics-saas
+name: Corvid Freight — Fleet Visibility Platform
+difficulty: 1
+description: >
+  Mid-market logistics company bleeding money on detention fees and manual
+  track-and-trace. Warm-ish inbound: the VP of Operations downloaded a
+  whitepaper. One approval layer above the contact. Friendly but busy buyer.
+
+seller_brief: |
+  You are an enterprise seller for RouteLens, a fleet-visibility and
+  exception-management SaaS (real-time ELD/telematics ingestion, predictive
+  ETAs, automated detention documentation). List price: $180,000/year for
+  Corvid's fleet size.
+
+  Account: Corvid Freight, a mid-market regional carrier (~640 trucks,
+  ~$210M revenue, Midwest US). Public signals: they posted three "logistics
+  analyst" job openings mentioning "manual track-and-trace"; their CEO told a
+  trade magazine that "detention and dwell are eating the industry alive."
+
+  Your entry point: Maya Okafor, VP of Operations, downloaded your detention
+  whitepaper last week and accepted a first call. You have a 6-week window;
+  their budget cycle closes at quarter end. You know Trakonic (the incumbent
+  telematics vendor) is trying to upsell them a visibility module.
+
+  You may make calls, send emails, request meetings, and plan privately
+  between touches. Win a signed deal graded on The Value Engine methodology:
+  evidence-based discovery, quantified pain, Economic Buyer access, a Mutual
+  Action Plan, and price integrity.
+
+company:
+  name: Corvid Freight
+  industry: Regional trucking & logistics
+  size: 640 trucks, ~$210M annual revenue, ~1,400 employees
+  situation: >
+    Growing but margin-squeezed. Detention fees and empty miles are up 18%
+    YoY. Ops team drowning in check calls. CFO has frozen headcount; any new
+    spend needs a hard business case before the fiscal-year budget locks in
+    six weeks.
+
+personas:
+  - id: maya
+    name: Maya Okafor
+    role: VP of Operations
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Pragmatic, warm but time-poor. Answers direct questions honestly;
+      shuts down when pitched at. Respects sellers who do their homework.
+      Will become a genuine champion if the seller helps her build a case
+      she can defend to the CFO.
+    pressures:
+      - Detention fees up 18% YoY and she owns the number
+      - Headcount frozen; her team runs 200+ manual check calls per day
+      - CEO quoted publicly on detention — board is watching
+    private_notes: >
+      She has a standing Friday 1:1 with CFO Dan Whitfield. She got burned
+      last year sponsoring a TMS add-on that under-delivered, so she will not
+      walk anything upstairs without numbers she believes.
+  - id: dan
+    name: Dan Whitfield
+    role: CFO (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Skeptical, numbers-first, allergic to vendor decks. Opens with "whose
+      number is this?" Will give a conditional commitment if shown a
+      conservative, customer-validated model with a payback under 12 months.
+    pressures:
+      - Margin compression; board wants 2 points of operating margin back
+      - Budget lock in 6 weeks — anything not in the plan waits 12 months
+    private_notes: >
+      Dan only takes vendor meetings that Maya explicitly sponsors. He
+      respects a conservative floor number and dismisses "up to" claims.
+
+org_chart: >
+  CEO (public detention quote) → CFO Dan Whitfield (EB, owns all new spend)
+  → VP Ops Maya Okafor (initial contact) → 4 ops managers, ~40 dispatchers.
+  IT reports to the CFO; security review is lightweight (2 weeks).
+
+budget_cycle: >
+  Fiscal year closes in 6 weeks. New spend must be in the plan before budget
+  lock or it waits a full year — a genuine compelling event if the seller
+  surfaces it.
+
+competitor:
+  name: Trakonic
+  product: Incumbent ELD/telematics vendor upselling a "Visibility+" module
+  strengths:
+    - Already installed in every cab; zero new hardware
+    - Procurement relationship and MSA already in place
+    - Cheaper sticker price (~$95k/year for the module)
+  weaknesses:
+    - Visibility+ has no automated detention documentation (RouteLens differentiator)
+    - Their predictive ETAs are batch, not real-time
+    - Ops team distrusts Trakonic support (3-week ticket backlogs)
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 8
+
+gated_facts:
+  - id: pain_number
+    fact: >
+      "We paid $2.3M in detention fees last year, and I'd guess a third of it
+      was documentable and disputable if we had the data. That's my number —
+      I report it to Dan monthly."
+    gate: quantifying_question
+    holder: maya
+    description: The quantified pain — only released after a genuine Impact question.
+  - id: check_call_cost
+    fact: >
+      "My team makes about 200 check calls a day. Call it 30 dispatcher-hours
+      daily just asking 'where's the truck?' — that's four full-time people."
+    gate: quantifying_question
+    holder: maya
+    description: Second quantified pain row.
+  - id: eb_identity
+    fact: >
+      "Anything over $50k goes through our CFO, Dan Whitfield. He's tough —
+      last vendor that showed him an 'up to 10x ROI' slide got walked out."
+    gate: process_question
+    holder: maya
+    description: EB identity + decision process, released on a process question.
+  - id: budget_lock
+    fact: >
+      "Honestly, if this isn't in the budget before we lock the plan — call
+      it six weeks from now — it's a next-fiscal-year conversation."
+    gate: process_question
+    holder: maya
+    description: The compelling event (Why Now raw material).
+  - id: eb_intro
+    fact: >
+      "Okay. I'll put you in front of Dan — I have a Friday 1:1 with him.
+      But I'm co-presenting, and we lead with MY detention number, not your
+      deck."
+    gate: champion_test
+    holder: maya
+    unlocks_personas: [dan]
+    description: EB introduction — earned only by a champion-test ask.
+  - id: trakonic_play
+    fact: >
+      "Trakonic's rep took our fleet director to a Bears game and quoted
+      $95k. Dan likes that number. What Dan doesn't know yet is their ETAs
+      are batch — my team tested it."
+    gate: competitor_probe
+    holder: maya
+    description: Competitive intel, released when the seller maps alternatives.
+  - id: conditional_commitment
+    fact: >
+      "If a pilot on our Chicago lanes proves you can document and dispute
+      detention at even half the rate you claim, I'll approve it in this
+      budget cycle. Put that in writing."
+    gate: eb_meeting_held
+    holder: dan
+    description: The EB's conditional commitment — only in a real EB meeting.
+
+events:
+  - id: maya_quiet
+    week: 3
+    effect: champion_goes_quiet
+    description: >
+      Maya goes quiet — a derailment on a customer lane consumes her week.
+      Emails go unanswered; a scheduled call gets cut short. Sellers who
+      panic-pitch lose trust; sellers who send something useful (e.g. a
+      one-page draft she can use internally) recover.
+  - id: procurement_discount
+    week: 4
+    effect: procurement_enters
+    description: >
+      Procurement analyst Rita Sandoval enters, anchoring on Trakonic's $95k
+      and demanding 30% off. Price-integrity test: defend value / trade
+      concessions, never gift the discount.
+    persona:
+      id: rita
+      name: Rita Sandoval
+      role: Procurement Analyst
+      committee_role: procurement
+      personality: >
+        Professional discount-hunter. Anchors low, cites the competitor,
+        respects a seller who holds the value line and offers structured
+        trades (multi-year, case study rights) instead of naked discounts.
+      pressures:
+        - Measured on savings-vs-list
+      private_notes: >
+        Authorized to accept up to 10% with trade; anything beyond needs Dan.
+
+win_conditions:
+  required_facts: [pain_number, eb_identity, eb_intro, conditional_commitment]
+  min_trust: 65
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 10
+  description: >
+    A signed deal requires quantified pain in Maya's words, a real EB meeting
+    with Dan's conditional commitment, a MAP with buyer-acknowledged dates
+    inside the budget window, and a discount no greater than 10% (traded, not
+    gifted).
+
+list_price: "$180,000/year"

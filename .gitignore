@@ -1,0 +1,13 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+.DS_Store
+node_modules/
+dist/
+.env
+*.local
+runs/
+.superpowers/

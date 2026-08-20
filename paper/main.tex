@@ -1,0 +1,87 @@
+%==============================================================================
+%  The Value Engine Benchmark (VEB)
+%  An evidence-graded, methodology-controlled environment for evaluating
+%  LLM agents on multi-touch enterprise-sales negotiation.
+%
+%  Target venue: NeurIPS Datasets & Benchmarks Track (preprint on arXiv first).
+%  This file is the assembly point. Prose lives in sections/*.tex.
+%  Numeric results are threaded through macros in macros.tex so that a single
+%  data refresh updates every table, figure, and inline number coherently.
+%==============================================================================
+\documentclass{article}
+
+% ---- Venue style -------------------------------------------------------------
+% At submission, drop the official NeurIPS Datasets & Benchmarks .sty into this
+% directory. Until then we fall back to a neutral article base so the repo always
+% compiles. \IfFileExists keeps the same main.tex working in both modes.
+\IfFileExists{neurips_2024.sty}{%
+  \usepackage[preprint]{neurips_2024}%
+}{%
+  \usepackage[margin=1in]{geometry}%
+  \usepackage{natbib}%
+  \usepackage{titlesec}%
+}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{siunitx}
+\usepackage{enumitem}
+
+\graphicspath{{figures/}}
+
+% ---- Draft-status flag -------------------------------------------------------
+% \drafttrue shows TODO/placeholder callouts; \draftfalse hides them for a clean build.
+\newif\ifdraft
+\draftfalse
+
+\newcommand{\TODO}[1]{\ifdraft\textcolor{red}{\textbf{[TODO: #1]}}\fi}
+\newcommand{\NUM}[1]{\textcolor{blue}{\underline{#1}}} % provisional number, styled distinctly
+
+\input{macros}
+
+\title{The Value Engine Benchmark: An Evidence-Graded, \\
+Methodology-Controlled Environment for Multi-Touch \\
+Enterprise-Sales Negotiation}
+
+\author{%
+  Rudy M.\ Celekli \\
+  The Value Engine \\
+  \url{https://thevalueengine.ai}, \url{https://gradiahq.com} \\
+}
+
+\begin{document}
+\maketitle
+
+\input{sections/00_abstract}
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_environment}
+\input{sections/04_grading}
+\input{sections/04b_enrichment}
+\input{sections/05_validation}
+\input{sections/06_experiments}
+\input{sections/07_results}
+\input{sections/07b_value_frontier}
+\input{sections/08_analysis}
+\input{sections/09_limitations}
+\input{sections/10_ethics_repro}
+\input{sections/11_conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\input{sections/A_appendix}
+
+\end{document}

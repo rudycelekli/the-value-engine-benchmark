@@ -1,0 +1,174 @@
+\section{Infrastructure and Concurrency Procedure}
+\label{app:infra}
+
+Both the buyer simulation and the LLM judge run on frontier endpoints, so the grid
+throughput is bounded by shared provider capacity and every cell touches the same
+endpoint family for both simulation and grading. We document the procedure so the
+grid can be regenerated under real rate limits. All provider traffic---seller,
+buyer, and judge---is routed through a single Portkey gateway, which normalizes
+authentication, applies per-provider rate policies, and records token usage. The
+frozen grid used the single-judge default \texttt{anthropic:claude-sonnet-4-6} at
+temperature $0$; the offline reliability panel (Section~\ref{sec:validation})
+additionally routes to per-provider judges through the same gateway.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Concurrency management.} Runs are throttled to stay below the
+  endpoint's stable-concurrency ceiling; oversubscription triggers provider
+  overload responses that are handled by exponential backoff with retry, never by
+  dropping data. Across the frozen run, \num{38192} scored seller calls completed
+  at a \SI{92.44}{\percent} first-attempt reliability rate (Section~\ref{sec:experiments}).
+  \item \textbf{Data integrity under retries.} Transcripts are persisted before
+  grading; a failed judge call flags a heuristic fallback for that row rather than
+  emitting a fabricated score, and flagged rows are re-graded offline from the
+  persisted transcript.
+  \item \textbf{Merge and dedup.} Because a rollout run regenerates a full
+  track cross-product, incremental additions are merged by unique cell id with
+  deduplication, so re-runs never double-count. The frozen grid is keyed
+  \texttt{<scenario>·<provider>:<model>[·pack]·s<seed>}, giving exactly
+  $9\times15\times11\times2=2{,}970$ unique cells.
+\end{itemize}
+
+\section{Scenario Catalog}
+\label{app:scenarios}
+
+Table~\ref{tab:scenario_catalog} lists the nine environments; Table~\ref{tab:scenario_detail}
+adds the structural parameters that set each scenario's difficulty: the size of the
+buying committee (distinct personas the seller must navigate), the number of gated
+facts that are revealed only in exchange for genuine discovery, the number of
+required facts that must be surfaced to fund the deal, and the win-gate structure.
+Every scenario requires both a held economic-buyer (EB) meeting and a
+buyer-confirmed Mutual Action Plan (MAP) to clear.
+
+\begin{table}[t]
+  \centering
+  \caption{Scenario structural parameters. ``Committee'' is the number of distinct
+  buyer personas; ``Gated'' is the number of facts released only for real discovery;
+  ``Req.\ facts'' is the number of facts required to fund the deal. All nine
+  scenarios require a held EB meeting and a confirmed MAP.}
+  \label{tab:scenario_detail}
+  \small
+  \begin{tabular}{llccccc}
+    \toprule
+    ID & Tier & Committee & Gated & Req.\ facts & EB & MAP \\
+    \midrule
+    logistics-saas      & d1 & 2 & 7 & 4 & \checkmark & \checkmark \\
+    dtc-martech         & d1 & 2 & 4 & 3 & \checkmark & \checkmark \\
+    hrtech-scaleup      & d1 & 2 & 4 & 3 & \checkmark & \checkmark \\
+    field-services      & d1 & 2 & 4 & 3 & \checkmark & \checkmark \\
+    enterprise-bank     & d2 & 4 & 7 & 4 & \checkmark & \checkmark \\
+    healthcare-medtech  & d2 & 4 & 7 & 4 & \checkmark & \checkmark \\
+    manufacturing-mes   & d2 & 4 & 7 & 4 & \checkmark & \checkmark \\
+    hostile-renewal     & d3 & 4 & 7 & 5 & \checkmark & \checkmark \\
+    cybersecurity-ciso  & d3 & 4 & 7 & 4 & \checkmark & \checkmark \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\input{tables/scenario_catalog}
+
+\section{Rubric Anchors}
+\label{app:rubric}
+
+The judge scores against fixed anchors, given identically to the LLM judge and to
+human reviewers. The eight MEDDPICC letters each use a $0$--$3$ evidence scale:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+  \item \textbf{0 --- unknown:} no evidence in the transcript.
+  \item \textbf{1 --- assumed:} the seller asserts it, but it is unconfirmed by the
+  buyer.
+  \item \textbf{2 --- confirmed by one source:} a single buyer stakeholder confirms
+  it, with a transcript citation.
+  \item \textbf{3 --- confirmed by multiple stakeholders with evidence:} corroborated
+  across stakeholders with a quantified or documented basis.
+\end{itemize}
+
+Every score above $0$ requires at least one verbatim transcript citation
+(\texttt{turnIndex} + quote $\le 160$ chars); an uncited score is reduced to $0$ by
+the harness. The three categorical pillars use ordered states:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+  \item \textbf{EB engagement:} \texttt{never\_met} $<$ \texttt{meeting\_scheduled}
+  $<$ \texttt{attended\_with\_conditional\_commitment}.
+  \item \textbf{Champion:} \texttt{none} $<$ \texttt{coach\_only} $<$
+  \texttt{untested\_champion} $<$ \texttt{tested\_champion}.
+  \item \textbf{MAP:} scored as \texttt{map\_dates\_confirmed\_pct} ($0$--$100$),
+  the fraction of plan dates the buyer explicitly acknowledged.
+\end{itemize}
+
+The 3~Whys (why anything / why us / why now) each require the buyer's own words:
+\texttt{customer\_words} is true only with a verbatim buyer quote,
+\texttt{named\_owner} requires a named person owning the driver, and
+\texttt{number\_attached} requires a number in the buyer's words. Price integrity is
+scored $0$--$1$ ($1$ = discount held or traded for concessions; $0$ = gifted).
+
+\section{Judge Prompt}
+\label{app:judgeprompt}
+
+The judge receives the following system prompt (failure-mode catalog abbreviated),
+followed by a user message containing the scenario header, deterministic outcome
+facts, and the full transcript:
+
+\begin{quote}\footnotesize\ttfamily\raggedright\sloppy
+You are the judge for The Value Engine Benchmark --- an evidence-graded
+enterprise-sales benchmark. Grade the SELLER only. Rules of evidence:\\[2pt]
+- MEDDPICC letters 0--3: 0 unknown; 1 assumed; 2 confirmed by one source; 3
+confirmed by multiple stakeholders with evidence. EVERY score above 0 requires at
+least one transcript citation \{"turnIndex": n, "quote": "verbatim $\le$160 chars"\}
+from a REAL turn index. No citation $\rightarrow$ score 0.\\[2pt]
+- 3 Whys: customer\_words is true ONLY with a verbatim buyer quote. named\_owner
+requires a named person owning the pain/driver. number\_attached requires a number
+in the buyer's words. Quote or it didn't happen.\\[2pt]
+- Conditional commitment before proof: did the EB state a commitment conditioned on
+validation criteria BEFORE any proof/POV was delivered? Cite it.\\[2pt]
+- MAP: buyer-confirmed dates only. Estimate map\_dates\_confirmed\_pct (0--100).\\[2pt]
+- Price integrity: discount conceded vs value defended. Score 0--1.\\[2pt]
+- Buyer turns are ground truth; seller internal notes are intent, not evidence.\\[2pt]
+Respond ONLY with JSON [schema for meddpicc, threeWhys, ebEngagement,
+mapDatesConfirmedPct, champion, conditionalCommitmentBeforeProof, priceIntegrity,
+failureModes, notes]. Failure modes: from the catalog below, list every mode you can
+PROVE from the transcript; each fired mode REQUIRES at least one citation --- uncited
+modes are discarded; an empty list is valid.
+\end{quote}
+
+\section{Model Roster}
+\label{app:models}
+
+Table~\ref{tab:roster} lists the \numModels{} frontier endpoints evaluated in the
+canonical grid, with provider and
+list token pricing (USD per million tokens) used for the cost-per-deal computation.
+All models route through Portkey. The two open-weight endpoints ($\dagger$,
+\texttt{kimi-k3} and \texttt{inkling}) are shown for reference as the held-out
+open-weight fine-tuning arm and are \emph{not} part of the \numModels{}-model canonical
+grid. \texttt{gpt-5.5-pro} is intentionally excluded from
+the roster (off-benchmark reference only).
+
+\begin{table}[t]
+  \centering
+  \caption{Model roster and list token pricing (USD per million input/output
+  tokens). Pricing for \texttt{gpt-5.6-sol} and \texttt{grok-4.5} carries the
+  provider's adjacent-tier list price pending published rates. The two open-weight
+  endpoints ($\dagger$) are priced at their hosted-inference list rate: kimi-k3 at
+  Moonshot's official list, inkling at a Together AI serverless estimate pending
+  published rates.}
+  \label{tab:roster}
+  \small
+  \begin{tabular}{llcc}
+    \toprule
+    Model & Provider & \$/Mtok in & \$/Mtok out \\
+    \midrule
+    claude-opus-4-8            & Anthropic & 15.00 & 75.00 \\
+    claude-opus-4-6            & Anthropic & 15.00 & 75.00 \\
+    claude-fable-5             & Anthropic & 15.00 & 75.00 \\
+    claude-sonnet-4-6          & Anthropic &  3.00 & 15.00 \\
+    gpt-5.6-sol                & OpenAI    &  1.25 & 10.00 \\
+    gpt-5.5                    & OpenAI    &  1.25 & 10.00 \\
+    grok-4.20-0309-reasoning   & xAI       &  3.00 & 15.00 \\
+    grok-4.3                   & xAI       &  3.00 & 15.00 \\
+    grok-4.5                   & xAI       &  3.00 & 15.00 \\
+    gemini-3.1-pro-preview     & Google    &  2.00 & 12.00 \\
+    gemini-3.5-flash           & Google    &  0.30 &  2.50 \\
+    kimi-k3$^\dagger$          & Moonshot AI        &  3.00 & 15.00 \\
+    inkling$^\dagger$          & Thinking Machines  &  0.60 &  0.60 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,0 +1,66 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Agentic task benchmarks.}
+A first generation of agentic benchmarks measures task completion in cooperative
+or static environments. SWE-bench evaluates code-patch generation against real
+GitHub issues with executable test oracles \citep{jimenez2024swebench}; WebArena
+and GAIA measure web navigation and general assistant competence
+\citep{zhou2024webarena,mialon2023gaia}; AgentBench aggregates many such
+environments \citep{liu2023agentbench}. These provide \emph{verifiable} success
+signals but assume the environment is not an adversary. VEB retains verifiability
+of \emph{sub-goals} (a fact is disclosed or it is not; an economic-buyer meeting
+is earned or it is not) while making the counterpart strategically
+non-cooperative.
+
+\paragraph{Simulated-user and tool-agent dialogue.}
+$\tau$-bench pairs a tool-using agent with an LLM-simulated user and grades the
+final database state against a policy \citep{yao2024taubench}, and ALFWorld and
+related work embed agents in simulated worlds \citep{shridhar2021alfworld}. VEB
+shares the simulated-interlocutor design but differs in two ways: the interlocutor
+is a \emph{committee} of personas with conflicting incentives and gated private
+knowledge, and grading targets the \emph{quality of the persuasion process}, not
+only a terminal state.
+
+\paragraph{Negotiation, persuasion, and social simulation.}
+Prior work studies LLMs in bargaining and dialogue games---deal-or-no-deal
+negotiation \citep{lewis2017dealornodeal}, diplomacy-style strategic play
+\citep{fair2022diplomacy}, and persuasion dialogue \citep{wang2019persuasion}.
+More recently, NegotiationArena evaluates LLM-vs-LLM bargaining across structured
+negotiation games \citep{bianchi2024negotiationarena}, and Sotopia evaluates
+social intelligence in open-ended goal-driven interactions between LLM agents
+\citep{zhou2024sotopia}. These typically involve short horizons or a single
+negotiation surface (price, or a scalar social goal). VEB embeds price within a
+full qualification process---discovery, stakeholder mapping, access, and mutual
+planning---over a multi-week horizon, and it grades against a professional sales
+rubric rather than a single utility.
+
+\paragraph{Sales-domain agent benchmarks.}
+Closest in domain is CRMArena \citep{huang2025crmarena}, which evaluates agents
+on realistic CRM \emph{operational} tasks (case routing, analytics, policy
+compliance) inside a simulated Salesforce org. CRMArena tests the back-office of
+selling---working the system of record---whereas VEB tests the front-office: the
+live, adversarial conversation with a buying committee. The two are complementary,
+and neither subsumes the other: an agent could ace CRM workflows yet fail to earn
+an economic-buyer meeting, or vice versa.
+
+\paragraph{LLM-as-judge and its validation.}
+Using strong LLMs to grade open-ended outputs is now standard
+\citep{zheng2023judge}, with known biases (position, verbosity, self-preference)
+and a corresponding need for human calibration. VEB adopts LLM grading but
+constrains it: the judge must cite verbatim, turn-indexed evidence for every
+sub-score, converting grading into an auditable scorecard. We pair this with an
+explicit human-expert validation protocol whose pre-registered inter-rater
+agreement study is forthcoming (Section~\ref{sec:validation}), following best
+practice for defensible LLM-graded benchmarks.
+
+\paragraph{Preference-based post-training.}
+Reinforcement learning from human (or AI) feedback aligns models to preferences
+\citep{ouyang2022instructgpt,bai2022constitutional}; DPO learns directly from
+preference pairs without an explicit reward model \citep{rafailov2023dpo}; and
+process reward models supervise intermediate reasoning steps
+\citep{lightman2023letsverify}. VEB is designed to \emph{produce} the data these
+methods need: its seed-matched win/loss pairs and turn-level, evidence-cited
+scorecards constitute preference pairs and process labels over a verifiable
+environment, making VEB usable not only for evaluation but for training
+negotiation-capable agents.

@@ -1,0 +1,202 @@
+\section{The VEB Environment}
+\label{sec:environment}
+
+VEB models a B2B enterprise-sales engagement as a partially observable,
+multi-agent sequential decision problem. A single \emph{seller} agent (the system
+under test) interacts over a bounded calendar with a \emph{buying committee} of
+LLM-simulated personas, each holding private information that the seller must earn
+through skilled discovery. This section specifies the scenario schema, the action
+space, the disclosure mechanics, the win conditions, and the two design axes that
+make VEB a controlled experiment rather than a demo.
+
+\subsection{Scenario schema}
+\label{sec:schema}
+Each scenario is a declarative specification (a versioned YAML file) with the
+following components:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Seller brief and account.} The product, list price, and public
+  signals the seller may legitimately know (press, hiring pages, review trends),
+  plus the entry point (which persona opened the door and why).
+  \item \textbf{Personas.} A buying committee, each with a \texttt{committee\_role}
+  (champion candidate, economic buyer, technical gatekeeper, procurement), a
+  \texttt{personality}, \texttt{pressures}, and \texttt{private\_notes} visible
+  only to the simulator. Exactly one persona is the \texttt{economic\_buyer} who
+  can commit budget.
+  \item \textbf{Org chart and budget cycle.} The approval topology and the
+  \emph{compelling event}---an operational or fiscal deadline that makes inaction
+  costly (a peak season, a capital-planning lock, an auto-renewing incumbent
+  contract).
+  \item \textbf{Competitor.} An incumbent or status-quo alternative with explicit
+  \texttt{strengths} and \texttt{weaknesses}, so competitive handling can be
+  graded against ground truth rather than vibes.
+  \item \textbf{Gated facts.} The private facts that constitute the deal's
+  substance, each with a \texttt{gate} specifying the conversational move that
+  unlocks it (Section~\ref{sec:gates}).
+  \item \textbf{Events.} Scripted mid-cycle perturbations (internal
+  discount pressure, a procurement entrance, a champion going dark) fired on
+  specific weeks to test composure under pressure.
+  \item \textbf{Win conditions.} The machine-checkable bar for a clean win
+  (Section~\ref{sec:wincond}).
+\end{itemize}
+
+\subsection{Scenario construction and calibration}
+\label{sec:construction}
+Scenarios enter the library through a construction pipeline designed so that a
+scenario is admitted only if it is \emph{provably winnable but not trivially so},
+and only if its deal logic is internally coherent. This is what lets us treat the
+declarative win predicate (Section~\ref{sec:wincond}) as ground truth rather than
+an aspiration. A candidate scenario---hand-authored or procedurally generated from
+an industry, motion, and difficulty target---must clear three gates before it can
+score any model:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Schema and internal consistency (deterministic).} Beyond schema
+  validity we run structural checks that catch the ways a generated deal can be
+  quietly broken: every gated fact's holder must be a real persona; at least one
+  pain must be earnable through a \texttt{quantifying\_question} gate; scripted
+  perturbations must fire inside the calendar; and difficulty-appropriate event
+  pressure must actually be present (a difficulty-$3{+}$ deal must stack multiple
+  events including internal discount pressure). These checks are pure functions of
+  the specification and run with no model calls.
+  \item \textbf{Reachability.} Because access to facts and to the economic buyer is
+  gated behind unlock chains, a naively generated scenario can be
+  \emph{unwinnable}---a required fact or the budget holder sitting behind a gate no
+  legal move opens. We statically trace the unlock graph and reject any scenario in
+  which a \texttt{required\_fact} holder or the required economic buyer is
+  unreachable, so ``the deal is impossible'' can never masquerade as ``the model
+  failed.''
+  \item \textbf{Solvability calibration (reference sellers).} Finally we calibrate
+  the deal against two scripted reference sellers run offline. A deliberately weak
+  \emph{baseline} seller must \emph{not} win (if it does, the scenario is too easy
+  and is rejected), while a \emph{disciplined} reference seller that executes the
+  methodology correctly must win (if it cannot, the scenario is likely unwinnable).
+  A scenario is admitted only when it sits between these two references: hard enough
+  to punish sloppiness, fair enough to reward skill.
+\end{enumerate}
+
+An optional LLM self-critique pass flags softer coherence issues (a persona whose
+stated pressures contradict the org chart, say) for human review, but it never
+gates admission on its own---the load-bearing gates are all deterministic or
+reference-seller-checked. This calibrate-before-admit discipline is the reason a
+``won/lost'' label in VEB is a statement about the seller, not about a lucky or
+broken scenario.
+
+\subsection{Action space and calendar}
+\label{sec:actions}
+The seller acts over a multi-week calendar (typically six weeks) with a fixed
+number of interaction slots per week and a per-call turn budget. Within this
+budget the seller may place calls, send emails, request meetings, and---crucially
+---\emph{plan privately} between touches, producing internal artifacts (a value
+model, a stakeholder map, a mutual action plan) that are graded even when never
+sent. The calendar imposes genuine opportunity cost: a slot spent on the eager
+champion is a slot not spent earning the economic-buyer meeting, and the
+compelling-event clock advances regardless. This converts the task from
+single-turn persuasion into resource-constrained sequential planning.
+
+\subsection{Gated disclosure}
+\label{sec:gates}
+The defining mechanic of VEB is that \emph{facts are earned, not asked for}. Each
+gated fact carries a \texttt{gate} type---for example \texttt{quantifying\_question}
+(the seller must drive to a quantified impact, not merely acknowledge a pain),
+\texttt{process\_question} (elicit the real decision process and its owners),
+\texttt{champion\_test} (make an ask with internal cost, such as an EB
+introduction), \texttt{competitor\_probe} (map alternatives before a landmine is
+revealed), and \texttt{eb\_meeting\_held} (a commitment available only inside a
+real economic-buyer meeting). A gate that unlocks the economic buyer's persona
+(\texttt{unlocks\_personas}) makes stakeholder access itself a gated achievement:
+the seller cannot talk to the budget holder until it has earned the introduction
+in the correct way. Simply requesting a fact does not release it; the simulator
+releases it only when the seller executes the qualifying move, mirroring how real
+buyers reward earned trust. This is what lets VEB measure discovery \emph{skill}
+rather than discovery \emph{effort}.
+
+\subsection{Win conditions}
+\label{sec:wincond}
+Each scenario declares a machine-checkable win bar with several conjuncts: a set
+of \texttt{required\_facts} that must have been elicited (in the buyer's own
+words), a minimum trust threshold (\texttt{min\_trust}), whether a real
+economic-buyer meeting was held (\texttt{requires\_eb\_meeting}), whether a mutual
+action plan with customer-confirmed dates exists (\texttt{requires\_map}), and a
+maximum discount the seller may concede while still counting as a disciplined
+close (\texttt{max\_discount\_pct}). The last conjunct is essential: it encodes
+that \emph{closing by gifting margin is not winning}. In several scenarios the
+buyer is explicitly written to read a large unprompted discount as a signal of
+weak value, so an agent that reflexively discounts under pressure both violates
+the price ceiling and erodes trust. Because these conditions are declarative and
+evidence-checkable, the ``won/lost'' label is not a matter of judge opinion---it
+is a predicate over the transcript and final state.
+
+\subsection{Design axis I: difficulty tiers}
+\label{sec:tiers}
+Scenarios are stratified into three difficulty tiers, calibrated by the number of
+gates, the hostility and size of the committee, the presence of veto-holding
+gatekeepers, and the tightness of the price ceiling.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Tier 1 (easy, $n{=}\numTierEasy$).} Warm, winnable deals: an
+  eager champion one step from a decisive owner-buyer, budget in hand, only a weak
+  status-quo incumbent, and a genuine but friendly deadline. The test is
+  \emph{disciplined closing}---earning the buyer meeting and holding price rather
+  than fumbling a gimme or buying the yes with a discount. Examples span DTC
+  wellness martech, HR/people-analytics, and field-service dispatch.
+  \item \textbf{Tier 2 (mid, $n{=}\numTierMid$).} Deals with a real gauntlet: a
+  skeptical champion, a technical or security gatekeeper who can veto, an
+  economic buyer who wants proof before committing capital, and an entrenched
+  incumbent. Examples include a regulated bank under a consent order and an
+  auto-parts manufacturer with an OT/IT security divide.
+  \item \textbf{Tier 3 (hard, $n{=}\numTierHard$).} Adversarial, high-stakes
+  deals where urgency is a trap. Example: a national retailer six weeks after a
+  credential-stuffing breach, where the motivated CISO does \emph{not} control
+  budget, a cost-allergic CFO runs a spend freeze, legal gates on a
+  data-processing agreement, and the incumbent contract auto-renews inside the
+  window. Fear-selling and discounting are actively penalized; only a
+  conservative, quantified case with price integrity clears the bar
+  (\texttt{min\_trust}~75, \texttt{max\_discount\_pct}~5).
+\end{itemize}
+
+Together the tiers give the benchmark discrimination at both ends: an easy tier
+that exposes models which cannot execute fundamentals even when handed a winnable
+deal, and a hard tier that separates genuine strategic competence from
+sales-shaped text.
+
+\subsection{Design axis II: industry diversity}
+\label{sec:industries}
+The \numScenarios{} scenarios span \numIndustries{} distinct industries---freight
+logistics, commercial banking, P\&C insurance, non-profit healthcare, omnichannel
+retail, tier-1 automotive manufacturing, DTC wellness, B2B software/people
+analytics, and residential home services. Each carries vertical-specific
+constraints (regulatory consent orders, OT network safety, breach litigation,
+seasonal peaks) that a competent seller must respect. This diversity guards
+against a benchmark that rewards a single memorized script and probes whether an
+agent can transfer disciplined process across domains.
+
+\subsection{Design axis III: methodology-controlled tracks}
+\label{sec:tracks}
+Every scenario is evaluated in two tracks that differ in exactly one thing. In
+the \textbf{out-of-box (OOB)} track the seller model receives only the deal brief
+and the environment interface. In the \textbf{pack} track the identical model,
+under identical seeds against the identical stochastic buyer, additionally
+receives the Value Engine sales methodology as a system prompt. Because
+everything except the presence of the methodology is held fixed, the paired
+difference in outcomes is a near-causal estimate of \emph{methodology lift}. This
+directly answers a question practitioners actually ask---does encoding a selling
+methodology change agent \emph{behavior}, or only its vocabulary?---and it is, to
+our knowledge, novel among agentic benchmarks. We stress that the pack is not
+expected to be free lift: a system prompt that says ``use MEDDPICC'' does not by
+itself create MEDDPICC behavior, and the paired design is precisely what
+distinguishes the two.
+
+\subsection{Stochastic buyers and matched pairs}
+\label{sec:stochastic}
+The simulated committee is instantiated by a language model whose sampling is
+keyed to a per-cell seed; the seed is the label, and a cell's score is averaged
+over \numSeeds{} seeds. Two properties follow. First, \textbf{robustness to
+frozen-replay gaming}: because the interlocutor is re-sampled rather than replayed
+from a fixed script, an agent cannot overfit a single deterministic buyer, and
+reported scores reflect expected performance against a distribution of buyer
+behaviors. Second, \textbf{matched win/loss pairs}: holding scenario, model, and
+track fixed, two seeds can diverge only in the buyer's stochastic choices,
+isolating the trajectory decisions that flipped the outcome. These pairs are the
+natural unit of preference learning (Section~\ref{sec:related}) and make VEB a
+data \emph{generator}, not just a scoreboard.

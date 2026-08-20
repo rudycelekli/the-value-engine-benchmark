@@ -1,0 +1,364 @@
+{
+  "source": "veb-canonical-135.jsonl",
+  "rows": 2970,
+  "roster": [
+    "claude-fable-5",
+    "claude-opus-4-6",
+    "claude-opus-4-8",
+    "claude-sonnet-4-6",
+    "gemini-3.1-pro-preview",
+    "gemini-3.5-flash",
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "grok-4.20-0309-reasoning",
+    "grok-4.3",
+    "grok-4.5"
+  ],
+  "grid": {
+    "scenarios": 9,
+    "seeds": 15,
+    "models": 11,
+    "tracks": 2,
+    "per_model_per_track": 135,
+    "per_model": 270
+  },
+  "cells_graded": 2970,
+  "per_model": {
+    "claude-fable-5": {
+      "n": 270,
+      "mean_sqs": 65.9,
+      "mean_dvi": 72.63,
+      "win_rate_pct": 4.07,
+      "cleared_rate_pct": 4.07,
+      "mean_discount_pct": 6.912,
+      "cost_total_usd": 6376.21,
+      "deals_won": 11,
+      "cost_per_deal_usd": 579.6551,
+      "cost_per_cleared_usd": 579.6551,
+      "cost_per_run_usd": 23.6156
+    },
+    "claude-opus-4-6": {
+      "n": 270,
+      "mean_sqs": 52.77,
+      "mean_dvi": 56.18,
+      "win_rate_pct": 4.44,
+      "cleared_rate_pct": 4.07,
+      "mean_discount_pct": 11.734,
+      "cost_total_usd": 3947.77,
+      "deals_won": 12,
+      "cost_per_deal_usd": 328.9805,
+      "cost_per_cleared_usd": 358.8878,
+      "cost_per_run_usd": 14.6214
+    },
+    "claude-opus-4-8": {
+      "n": 270,
+      "mean_sqs": 63.43,
+      "mean_dvi": 67.05,
+      "win_rate_pct": 5.93,
+      "cleared_rate_pct": 5.93,
+      "mean_discount_pct": 6.259,
+      "cost_total_usd": 4799.41,
+      "deals_won": 16,
+      "cost_per_deal_usd": 299.9633,
+      "cost_per_cleared_usd": 299.9633,
+      "cost_per_run_usd": 17.7756
+    },
+    "claude-sonnet-4-6": {
+      "n": 270,
+      "mean_sqs": 55.81,
+      "mean_dvi": 62.27,
+      "win_rate_pct": 3.7,
+      "cleared_rate_pct": 3.7,
+      "mean_discount_pct": 13.538,
+      "cost_total_usd": 798.54,
+      "deals_won": 10,
+      "cost_per_deal_usd": 79.8541,
+      "cost_per_cleared_usd": 79.8541,
+      "cost_per_run_usd": 2.9576
+    },
+    "gemini-3.1-pro-preview": {
+      "n": 270,
+      "mean_sqs": 56.72,
+      "mean_dvi": 66.68,
+      "win_rate_pct": 6.3,
+      "cleared_rate_pct": 5.56,
+      "mean_discount_pct": 17.127,
+      "cost_total_usd": 623.03,
+      "deals_won": 17,
+      "cost_per_deal_usd": 36.6491,
+      "cost_per_cleared_usd": 41.5356,
+      "cost_per_run_usd": 2.3075
+    },
+    "gemini-3.5-flash": {
+      "n": 270,
+      "mean_sqs": 53.54,
+      "mean_dvi": 62.94,
+      "win_rate_pct": 10.74,
+      "cleared_rate_pct": 10.37,
+      "mean_discount_pct": 23.122,
+      "cost_total_usd": 106.58,
+      "deals_won": 29,
+      "cost_per_deal_usd": 3.6753,
+      "cost_per_cleared_usd": 3.8065,
+      "cost_per_run_usd": 0.3948
+    },
+    "gpt-5.5": {
+      "n": 270,
+      "mean_sqs": 68.66,
+      "mean_dvi": 74.06,
+      "win_rate_pct": 30.37,
+      "cleared_rate_pct": 29.63,
+      "mean_discount_pct": 7.96,
+      "cost_total_usd": 306.22,
+      "deals_won": 82,
+      "cost_per_deal_usd": 3.7344,
+      "cost_per_cleared_usd": 3.8278,
+      "cost_per_run_usd": 1.1341
+    },
+    "gpt-5.6-sol": {
+      "n": 270,
+      "mean_sqs": 72.52,
+      "mean_dvi": 77.51,
+      "win_rate_pct": 42.22,
+      "cleared_rate_pct": 41.85,
+      "mean_discount_pct": 8.326,
+      "cost_total_usd": 270.95,
+      "deals_won": 114,
+      "cost_per_deal_usd": 2.3768,
+      "cost_per_cleared_usd": 2.3978,
+      "cost_per_run_usd": 1.0035
+    },
+    "grok-4.20-0309-reasoning": {
+      "n": 270,
+      "mean_sqs": 55.19,
+      "mean_dvi": 61.87,
+      "win_rate_pct": 4.44,
+      "cleared_rate_pct": 4.44,
+      "mean_discount_pct": 14.922,
+      "cost_total_usd": 450.83,
+      "deals_won": 12,
+      "cost_per_deal_usd": 37.5688,
+      "cost_per_cleared_usd": 37.5688,
+      "cost_per_run_usd": 1.6697
+    },
+    "grok-4.3": {
+      "n": 270,
+      "mean_sqs": 51.17,
+      "mean_dvi": 50.42,
+      "win_rate_pct": 0.37,
+      "cleared_rate_pct": 0.37,
+      "mean_discount_pct": 9.367,
+      "cost_total_usd": 205.84,
+      "deals_won": 1,
+      "cost_per_deal_usd": 205.8352,
+      "cost_per_cleared_usd": 205.8352,
+      "cost_per_run_usd": 0.7624
+    },
+    "grok-4.5": {
+      "n": 270,
+      "mean_sqs": 60.83,
+      "mean_dvi": 64.13,
+      "win_rate_pct": 3.33,
+      "cleared_rate_pct": 3.33,
+      "mean_discount_pct": 6.989,
+      "cost_total_usd": 569.7,
+      "deals_won": 9,
+      "cost_per_deal_usd": 63.2996,
+      "cost_per_cleared_usd": 63.2996,
+      "cost_per_run_usd": 2.11
+    }
+  },
+  "best_model": {
+    "model": "gpt-5.6-sol",
+    "mean_sqs": 72.52
+  },
+  "tracks": {
+    "oob": {
+      "n": 1485,
+      "mean_sqs": 59.08,
+      "win_rate_pct": 9.02,
+      "cleared_rate_pct": 8.75,
+      "mean_discount_pct": 11.15
+    },
+    "pack": {
+      "n": 1485,
+      "mean_sqs": 60.29,
+      "win_rate_pct": 12.05,
+      "cleared_rate_pct": 11.85,
+      "mean_discount_pct": 11.806
+    }
+  },
+  "pack_lift": {
+    "sqs_points": 1.21,
+    "win_rate_pp": 3.03,
+    "cleared_rate_pp": 3.1
+  },
+  "tier_lift": {
+    "easy": {
+      "oob_sqs": 63.34,
+      "pack_sqs": 66.57,
+      "sqs_lift": 3.23,
+      "oob_win_pct": 16.21,
+      "pack_win_pct": 21.21,
+      "win_lift_pp": 5.0
+    },
+    "mid": {
+      "oob_sqs": 56.79,
+      "pack_sqs": 55.7,
+      "sqs_lift": -1.1,
+      "oob_win_pct": 4.65,
+      "pack_win_pct": 4.85,
+      "win_lift_pp": 0.2
+    },
+    "hard": {
+      "oob_sqs": 53.97,
+      "pack_sqs": 54.63,
+      "sqs_lift": 0.65,
+      "oob_win_pct": 1.21,
+      "pack_win_pct": 4.55,
+      "win_lift_pp": 3.33
+    }
+  },
+  "cost_per_deal": {
+    "min": 2.3768,
+    "max": 579.6551,
+    "by_model": {
+      "claude-fable-5": 579.6551,
+      "claude-opus-4-6": 328.9805,
+      "claude-opus-4-8": 299.9633,
+      "claude-sonnet-4-6": 79.8541,
+      "gemini-3.1-pro-preview": 36.6491,
+      "gemini-3.5-flash": 3.6753,
+      "gpt-5.5": 3.7344,
+      "gpt-5.6-sol": 2.3768,
+      "grok-4.20-0309-reasoning": 37.5688,
+      "grok-4.3": 205.8352,
+      "grok-4.5": 63.2996
+    }
+  },
+  "cost_per_run": {
+    "min": 0.3948,
+    "max": 23.6156,
+    "by_model": {
+      "claude-fable-5": 23.6156,
+      "claude-opus-4-6": 14.6214,
+      "claude-opus-4-8": 17.7756,
+      "claude-sonnet-4-6": 2.9576,
+      "gemini-3.1-pro-preview": 2.3075,
+      "gemini-3.5-flash": 0.3948,
+      "gpt-5.5": 1.1341,
+      "gpt-5.6-sol": 1.0035,
+      "grok-4.20-0309-reasoning": 1.6697,
+      "grok-4.3": 0.7624,
+      "grok-4.5": 2.11
+    }
+  },
+  "frontier": {
+    "members": [
+      "gpt-5.6-sol"
+    ],
+    "efficiency_leader": "gpt-5.6-sol",
+    "sqs_per_usd_per_deal": 30.512
+  },
+  "behavioral": {
+    "claude-fable-5": {
+      "eb_attended_pct": 40.0,
+      "map_pct": 60.0,
+      "price_integrity": 0.797
+    },
+    "claude-opus-4-6": {
+      "eb_attended_pct": 13.3,
+      "map_pct": 27.7,
+      "price_integrity": 0.669
+    },
+    "claude-opus-4-8": {
+      "eb_attended_pct": 24.4,
+      "map_pct": 44.8,
+      "price_integrity": 0.804
+    },
+    "claude-sonnet-4-6": {
+      "eb_attended_pct": 25.9,
+      "map_pct": 37.7,
+      "price_integrity": 0.676
+    },
+    "gemini-3.1-pro-preview": {
+      "eb_attended_pct": 37.8,
+      "map_pct": 38.9,
+      "price_integrity": 0.525
+    },
+    "gemini-3.5-flash": {
+      "eb_attended_pct": 34.8,
+      "map_pct": 37.8,
+      "price_integrity": 0.439
+    },
+    "gpt-5.5": {
+      "eb_attended_pct": 58.5,
+      "map_pct": 60.7,
+      "price_integrity": 0.727
+    },
+    "gpt-5.6-sol": {
+      "eb_attended_pct": 71.9,
+      "map_pct": 64.4,
+      "price_integrity": 0.755
+    },
+    "grok-4.20-0309-reasoning": {
+      "eb_attended_pct": 23.7,
+      "map_pct": 42.6,
+      "price_integrity": 0.603
+    },
+    "grok-4.3": {
+      "eb_attended_pct": 5.2,
+      "map_pct": 22.0,
+      "price_integrity": 0.741
+    },
+    "grok-4.5": {
+      "eb_attended_pct": 25.2,
+      "map_pct": 52.4,
+      "price_integrity": 0.801
+    }
+  },
+  "failure_modes": {
+    "modes": [
+      "no-pain-owner-identified",
+      "shallow-implication",
+      "never-reached-eb",
+      "meeting-waste",
+      "discount-beyond-tolerance",
+      "price-panic-under-procurement"
+    ],
+    "by_tier": {
+      "easy": {
+        "no-pain-owner-identified": 78.0,
+        "shallow-implication": 66.8,
+        "never-reached-eb": 70.4,
+        "meeting-waste": 67.2,
+        "discount-beyond-tolerance": 28.7,
+        "price-panic-under-procurement": 18.7
+      },
+      "mid": {
+        "no-pain-owner-identified": 90.2,
+        "shallow-implication": 80.9,
+        "never-reached-eb": 73.1,
+        "meeting-waste": 55.8,
+        "discount-beyond-tolerance": 77.6,
+        "price-panic-under-procurement": 72.8
+      },
+      "hard": {
+        "no-pain-owner-identified": 93.9,
+        "shallow-implication": 82.6,
+        "never-reached-eb": 90.2,
+        "meeting-waste": 49.8,
+        "discount-beyond-tolerance": 69.4,
+        "price-panic-under-procurement": 33.0
+      }
+    }
+  },
+  "latency_reliability": {
+    "scope": "11-model roster (gpt-5.5-pro excluded)",
+    "n_calls": 38192,
+    "reliability_pct": 92.44,
+    "p50_s": 5.75,
+    "p90_s": 14.32,
+    "p95_s": 19.52
+  }
+}

@@ -1,0 +1,273 @@
+# Scenario 5 — Cybersecurity platform sale into a breached enterprise (difficulty 3)
+# Urgency is real but a trap: the CISO has will and pain but NOT the budget; the
+# CFO EB is post-breach cost-allergic; a security architect can veto on
+# integration risk; legal owns a DPA gate; and the incumbent SIEM is entrenched
+# with a renewal about to auto-lock. Fear closes nothing here — a defensible,
+# floor-based case does.
+id: cybersecurity-ciso
+name: Aperture Retail — Identity Threat Detection Platform
+difficulty: 3
+description: >
+  A national retailer six weeks after a credential-stuffing breach. The CISO is
+  motivated but budget-constrained and politically exposed; the CFO controls a
+  post-incident spend freeze; a security architect guards integration risk;
+  legal gates on data processing; and the incumbent SIEM renews — auto-locking —
+  inside the window. Breach urgency tempts fear-selling; grading rewards a
+  conservative, quantified case and price integrity.
+
+seller_brief: |
+  You are an enterprise seller for Sentinel Grid, an identity-threat-detection
+  and response platform (real-time credential-abuse detection, session anomaly
+  scoring, automated containment, full investigation lineage). List price:
+  $980,000/year at Aperture's identity volume.
+
+  Account: Aperture Retail, a national omnichannel retailer (~1,800 stores,
+  ~$14B revenue, ~40M loyalty accounts). Public signals: a breach-disclosure
+  filing six weeks ago confirmed a large-scale credential-stuffing incident
+  affecting loyalty accounts; a class-action was filed; the board created a
+  cyber sub-committee; they are hiring "identity security engineers."
+
+  Your entry point: Dana Reyes, CISO, took a first call — she is under intense
+  pressure and knows exactly what she lacks. But post-breach she does NOT
+  control net-new budget: a spend freeze runs through the CFO, Owen Trask, who
+  is fighting to protect margin and is wary of "buying our way out of
+  headlines." A security architect, Victor Salinas, can veto on integration and
+  false-positive risk; legal (Priya Anand) owns a data-processing/DPA gate that
+  takes weeks; and the incumbent SIEM, Fortalis, renews in 7 weeks on an
+  auto-locking contract. You have a 6-week interaction window.
+
+  Warning: this account punishes fear-selling and demos. Urgency is real but
+  leading with it burns trust; discounting under breach pressure signals
+  desperation; and the CISO is a champion-in-waiting, not a budget owner. You
+  are graded on The Value Engine methodology.
+
+company:
+  name: Aperture Retail
+  industry: Omnichannel retail (post-breach, under litigation)
+  size: ~1,800 stores, ~$14B revenue, ~40M loyalty accounts
+  situation: >
+    Six weeks after a credential-stuffing breach: class-action filed, a new
+    board cyber sub-committee reviewing spend monthly, and a CFO-run
+    post-incident freeze on discretionary budget. The incumbent SIEM contract
+    auto-renews in 7 weeks. Leadership is split between "spend to fix it" and
+    "don't panic-buy under a headline."
+
+personas:
+  - id: dana
+    name: Dana Reyes
+    role: Chief Information Security Officer
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Sharp, exhausted, politically exposed by the breach. Knows precisely what
+      identity-layer coverage she lacks. Guarded with vendors circling blood in
+      the water; opens up to genuinely diagnostic questions and shuts down on a
+      fear pitch. A true champion in the making — she has will, but her power
+      depends on the seller handing her a case she can take to a hostile CFO.
+    pressures:
+      - Personally accountable to the board cyber sub-committee for the fix
+      - No net-new budget authority under the CFO's post-incident freeze
+      - The incumbent SIEM auto-renews in 7 weeks and boxes in her stack
+    private_notes: >
+      Dana will not burn credibility introducing Owen unless the seller equips
+      her with a conservative, quantified case (breach exposure, dwell time,
+      analyst load). She is wary that vendors want to exploit the breach; a
+      seller who leans on fear loses her immediately.
+  - id: victor
+    name: Victor Salinas
+    role: Principal Security Architect
+    committee_role: technical_gatekeeper
+    personality: >
+      Skeptical engineer who has killed two tools on false-positive rates and
+      integration debt. Requires a scoped, time-boxed proof of value against his
+      own telemetry before he blesses anything. Rewards sellers who speak
+      integration, signal fidelity, and containment safety — not dashboards.
+    pressures:
+      - Owns SOC alert quality; a noisy tool worsens the breach cleanup
+      - Distrusts "rip and replace" pitches mid-incident
+  - id: owen
+    name: Owen Trask
+    role: Chief Financial Officer (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Margin-first, board-facing, allergic to panic spend. Opens with "what does
+      inaction actually cost, in numbers I can defend?" Will fund a conditional
+      commitment ONLY against a conservative exposure model and a scoped POV with
+      signed success criteria — never against fear or a headline. Ten minutes,
+      floor numbers only.
+    pressures:
+      - Post-breach freeze he personally owns; every dollar is board-visible
+      - Litigation reserve already dents the quarter
+      - Wary of "we bought our way out of a breach" optics
+    private_notes: >
+      Owen only meets vendors the CISO AND the architect both sponsor. He
+      dismisses "up to" risk-reduction claims and respects a conservative floor
+      and a scoped, criteria-signed proof.
+  - id: priya
+    name: Priya Anand
+    role: Associate General Counsel, Privacy
+    committee_role: technical_gatekeeper
+    personality: >
+      Privacy-and-contracts absolutist. A data-processing agreement, sub-processor
+      review, and breach-context data handling take weeks and cannot be
+      compressed — only started earlier. Rewards sellers who bring the DPA, data
+      map, and sub-processor list proactively, mid-litigation especially.
+    pressures:
+      - Active class-action makes every new data flow legally radioactive
+
+org_chart: >
+  Board Cyber Sub-committee → CEO → CFO Owen Trask (EB, owns the spend freeze)
+  → CISO Dana Reyes (contact). Reporting to Dana: Principal Security Architect
+  Victor Salinas and the SOC. Parallel: Associate GC Privacy Priya Anand (DPA
+  gate). Incumbent Fortalis's account team briefs procurement on the auto-renewal.
+
+budget_cycle: >
+  A CFO-run post-incident spend freeze: no net-new security budget without
+  Owen's explicit sign-off against a defensible case. The incumbent SIEM
+  auto-renews in 7 weeks — the compelling event and the trap: miss it and the
+  stack locks for another year. Legal DPA + architect POV must run in parallel
+  from mid-cycle or closing in the window is physically impossible.
+
+competitor:
+  name: Fortalis
+  product: Incumbent SIEM/log platform pitching an "identity analytics" add-on at renewal
+  strengths:
+    - Embedded as the system of record; all detections route through it today
+    - Auto-renewal in 7 weeks; procurement's path of least resistance
+    - Will cut price hard and dangle a "free identity module beta" at first threat
+    - Zero new legal/security paper — already cleared
+  weaknesses:
+    - The identity add-on is roadmap vaporware — it did not catch this breach
+    - No real-time credential-abuse detection or automated containment (Sentinel Grid differentiators)
+    - Architect Victor already logged its identity signals as low-fidelity
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 10
+
+gated_facts:
+  - id: breach_exposure
+    fact: >
+      "Here's what I actually own: ~40M loyalty accounts exposed, and our
+      forensics put attacker dwell at 51 days before we caught it. Loaded
+      incident cost so far is tracking past $22M with the class-action reserve,
+      and my SOC is drowning — 90%-plus of identity alerts are false positives.
+      Those are my numbers, not a vendor slide."
+    gate: quantifying_question
+    holder: dana
+    description: The quantified pain — released only on a genuine Impact question, not a fear pitch.
+  - id: analyst_load
+    fact: >
+      "I have eleven analysts doing the work of twenty. Two gave notice this
+      month. Every hour on false positives is an hour not closing the breach —
+      that's the doom loop the board doesn't see."
+    gate: quantifying_question
+    holder: dana
+    description: Second value-model row — SOC analyst load.
+  - id: decision_process
+    fact: >
+      "Post-breach, I don't hold the purse — Owen Trask, our CFO, runs the
+      freeze and signs. But the real gates are Victor, my architect, who needs a
+      scoped POV on his telemetry, and legal — Priya — on a DPA. Weeks each, and
+      Fortalis auto-renews in seven. Everyone starts the paper too late."
+    gate: process_question
+    holder: dana
+    unlocks_personas: [victor, priya]
+    description: EB identity + the POV/DPA gauntlet + the renewal clock — on a process question.
+  - id: renewal_trap
+    fact: >
+      "The thing nobody's saying out loud: if I don't have a signed alternative
+      before the Fortalis renewal locks, I'm stuck with the tool that missed
+      this breach for another year. That's the clock."
+    gate: process_question
+    holder: dana
+    description: The compelling event — the auto-renewal lock.
+  - id: fortalis_gap
+    fact: >
+      "Between us: Fortalis's 'identity analytics' is a slideware roadmap — it
+      did not flag the credential stuffing, and Victor scored its identity
+      signals as noise. Procurement loves them because renewal is easy. If you
+      weaponize that clumsily it'll look like mudslinging, and I'll deny I said it."
+    gate: competitor_probe
+    holder: dana
+    description: Competitive landmine — released when the seller maps alternatives.
+  - id: eb_intro
+    fact: >
+      "Fine — you've earned a shot at Owen. But on my terms: Victor has to
+      validate the POV plan first, we present MY exposure and dwell numbers with
+      a conservative case, and if there's a single fear-based 'up to' slide I
+      pull the meeting. Pre-brief Victor or it's dead."
+    gate: champion_test
+    holder: dana
+    unlocks_personas: [owen]
+    description: EB access — earned by a champion-test ask with real internal cost.
+  - id: conditional_commitment
+    fact: >
+      "Here is my commitment: a 45-day POV scoped by Victor on our live identity
+      telemetry, success criteria signed by both sides — measurable
+      credential-abuse detection and false-positive reduction — with Priya's DPA
+      running in parallel. Clear that on a conservative exposure model and I will
+      fund it out of the incident budget before the Fortalis renewal. Not a dollar
+      on fear. Put it in writing."
+    gate: eb_meeting_held
+    holder: owen
+    description: The EB's conditional commitment — only inside a real EB meeting.
+
+events:
+  - id: incident_fire_drill
+    week: 2
+    effect: data_breach_fire_drill
+    description: >
+      A secondary alert spike pulls Dana into an incident-response war room; she
+      goes dark for a week and email is triaged by her chief of staff. Sellers
+      who switch to a concise, useful async artifact (a one-page POV scoping
+      draft) survive; sellers who chase with "just checking in" lose patience and trust.
+  - id: legal_dpa
+    week: 4
+    effect: security_review
+    description: >
+      Legal opens the data-processing review — DPA, sub-processor list, breach-
+      context data-handling. Mid-litigation it cannot be compressed. Only sellers
+      who anticipated it and brought the packet keep the renewal-window timeline alive.
+  - id: fortalis_counter
+    week: 5
+    effect: competitor_price_drop
+    description: >
+      Fortalis, smelling the threat, slashes its renewal 25% and dangles a "free
+      identity module beta," and procurement circulates it as "why are we even
+      looking?" Sellers who seeded differentiated criteria (real-time detection,
+      containment, signal fidelity) survive; sellers without a competition
+      strategy become the price lever.
+    persona:
+      id: gwyn
+      name: Gwyn Mercer
+      role: Director, IT Procurement
+      committee_role: procurement
+      personality: >
+        Renewal-driven, measured on savings-vs-list, uses the incumbent as a
+        club. Anchors on Fortalis's cut price and demands 30% off Sentinel Grid.
+        Respects a seller who reframes to cost-of-inaction and holds the value
+        line with structured trades; punishes naked discounting by demanding more.
+      pressures:
+        - Post-breach CFO mandate to hold total security spend flat
+      private_notes: >
+        Authorized to 8% with a multi-year term; the Fortalis comparison omits
+        real-time detection and containment and Gwyn privately knows it.
+
+win_conditions:
+  required_facts: [breach_exposure, decision_process, eb_intro, conditional_commitment]
+  min_trust: 75
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 5
+  description: >
+    A funded deal requires the breach-exposure and dwell numbers in Dana's own
+    words (earned by diagnosis, not fear), the POV + DPA gauntlet mapped AND
+    started in parallel (the MAP must carry architect-POV and legal-DPA dates
+    inside the renewal window), Owen's conditional commitment against signed POV
+    criteria on a conservative model, and price held within 5% — under breach
+    pressure every point of discount reads as desperation.
+
+list_price: "$980,000/year"

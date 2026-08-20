@@ -1,0 +1,149 @@
+{
+  "dataset": "veb-canonical-135",
+  "description": "The Value Engine Benchmark \u2014 canonical 135/model/track grid. Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
+  "generated_at": "2026-07-13T16:13:55Z",
+  "sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
+  "rows": 2970,
+  "grid": {
+    "scenarios": 9,
+    "seeds": 15,
+    "models": 11,
+    "tracks": [
+      "oob",
+      "pack"
+    ],
+    "per_model_per_track": 135
+  },
+  "rows_by_track": {
+    "oob": 1485,
+    "pack": 1485
+  },
+  "rows_by_model_track": {
+    "claude-fable-5|oob": 135,
+    "claude-fable-5|pack": 135,
+    "claude-opus-4-6|oob": 135,
+    "claude-opus-4-6|pack": 135,
+    "claude-opus-4-8|oob": 135,
+    "claude-opus-4-8|pack": 135,
+    "claude-sonnet-4-6|oob": 135,
+    "claude-sonnet-4-6|pack": 135,
+    "gemini-3.1-pro-preview|oob": 135,
+    "gemini-3.1-pro-preview|pack": 135,
+    "gemini-3.5-flash|oob": 135,
+    "gemini-3.5-flash|pack": 135,
+    "gpt-5.5|oob": 135,
+    "gpt-5.5|pack": 135,
+    "gpt-5.6-sol|oob": 135,
+    "gpt-5.6-sol|pack": 135,
+    "grok-4.20-0309-reasoning|oob": 135,
+    "grok-4.20-0309-reasoning|pack": 135,
+    "grok-4.3|oob": 135,
+    "grok-4.3|pack": 135,
+    "grok-4.5|oob": 135,
+    "grok-4.5|pack": 135
+  },
+  "roster": [
+    "claude-fable-5",
+    "claude-opus-4-6",
+    "claude-opus-4-8",
+    "claude-sonnet-4-6",
+    "gemini-3.1-pro-preview",
+    "gemini-3.5-flash",
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "grok-4.20-0309-reasoning",
+    "grok-4.3",
+    "grok-4.5"
+  ],
+  "preview": {
+    "file": "veb-canonical-135-preview.jsonl",
+    "sha256": "69247af3e9f8687168cf1374e24f7e4e49ccbba4be1f8e587eb960b9e5ab4242",
+    "rows": 66,
+    "license": "CC BY-NC 4.0 (free evaluation sample) \u2014 full dataset license negotiated separately; the environment code that generates and grades these rows is separately licensed Apache-2.0",
+    "sampling": "stratified: 6 rows per model (all 11), both tracks, all 9 scenarios; balanced across the decisive outcomes (won 20 / walked_away 20 / lost 19, plus no_decision 5 and buyer_dark 2) so the judge rubric is visibly discriminating",
+    "coverage": {
+      "models": 11,
+      "tracks": {
+        "oob": 32,
+        "pack": 34
+      },
+      "scenarios": 9,
+      "outcomes": {
+        "won": 20,
+        "lost": 19,
+        "walked_away": 20,
+        "no_decision": 5,
+        "buyer_dark": 2
+      }
+    },
+    "same_schema_as_full": true,
+    "note": "Every preview row is a verbatim full-fidelity datapoint (episode+grade embedded) drawn from the full dataset \u2014 not a reduced or redacted view."
+  },
+  "outcome_distribution_full": {
+    "won": 313,
+    "lost": 177,
+    "walked_away": 159,
+    "buyer_dark": 31,
+    "no_decision": 2290
+  },
+  "datasheet": "DATASHEET.md",
+  "dedup_key": "(scenario_id, model, pack, seed) \u2014 latest generated_at wins",
+  "row_schema": {
+    "top_level": [
+      "id",
+      "env",
+      "model",
+      "buyer_sim",
+      "seed",
+      "reward",
+      "resolved",
+      "cleared_bar",
+      "reward_breakdown",
+      "trajectory",
+      "format_retries",
+      "cost",
+      "transcript_ref",
+      "provenance",
+      "generated_at",
+      "episode",
+      "grade"
+    ],
+    "episode": [
+      "scenarioId",
+      "sellerId",
+      "pack",
+      "mock",
+      "startedAt",
+      "finishedAt",
+      "turns",
+      "events",
+      "signals",
+      "internalChannel",
+      "finalState",
+      "outcome"
+    ],
+    "grade": [
+      "scenarioId",
+      "sellerId",
+      "pack",
+      "gradedAt",
+      "judge",
+      "outcome",
+      "meddpicc",
+      "threeWhys",
+      "ebEngagement",
+      "mapDatesConfirmedPct",
+      "champion",
+      "conditionalCommitmentBeforeProof",
+      "priceIntegrity",
+      "dvi",
+      "saleQualityScore",
+      "failureModes",
+      "scenarioMeta",
+      "walkAways",
+      "internalChannelReveal",
+      "notes"
+    ]
+  },
+  "notes": "gpt-5.5-pro excluded (off-roster reasoning-only exploratory arm). One datapoint = one JSONL line, fully self-contained (episode+grade embedded)."
+}

@@ -1,0 +1,130 @@
+\section{Human-Expert Validation}
+\label{sec:validation}
+
+An LLM-graded benchmark is only as credible as the agreement between its automated
+judge and qualified human experts. We therefore treat validation not as a
+post-hoc spot check but as a first-class protocol with a pre-registered sampling
+plan, a rubric-anchored review instrument, LLM \emph{accelerators} that speed the
+human without replacing their judgment, and reported inter-rater agreement
+statistics. This section specifies that protocol; Section~\ref{sec:results}
+reports its results.
+
+\subsection{Reviewers and rubric}
+Reviewers are domain experts in enterprise sales (practitioners who have carried
+and inspected seven-figure pipelines). Each reviews episodes against the same
+rubric the judge uses (Section~\ref{sec:grading}), operationalized as a scoring
+guide with explicit anchors for every level of every pillar---e.g., what
+distinguishes a MEDDPICC Economic-Buyer score of $2$ (``EB identified and a
+meeting is scheduled'') from a $3$ (``EB met, can articulate the case, has
+committed to a decision process''). Anchoring every level to observable,
+quotable behavior is what makes independent reviewers converge and what makes
+disagreement diagnostic rather than stylistic.
+
+\subsection{Sampling plan}
+We draw a stratified random sample of graded episodes, stratified across the three
+axes that could plausibly modulate judge reliability: difficulty tier
+(easy/mid/hard), track (OOB/pack), and outcome (won/no-decision/lost). Within each
+stratum we sample proportionally, with a floor per stratum so that rare cells
+(e.g., hard-tier wins) are represented. We additionally oversample \emph{boundary}
+cases the judge itself flags as low-confidence or near a scoring threshold, since
+agreement on easy cases overstates reliability. The full sampling code, stratum
+sizes, and the frozen sample identifiers are released with the dataset for exact
+reproduction. The pre-registered plan draws a target of at least $300$ episodes
+with a floor of $10$ per stratum and a boundary-case oversample of $20\%$; the
+frozen sample manifest is published so the drawn set is fixed before any expert
+scoring begins.
+
+\subsection{Rubric-anchored, LLM-accelerated review}
+\label{sec:accelerators}
+Reviewing a full multi-week transcript against an eight-letter rubric is slow, and
+slowness caps how many episodes a human can validate. We use LLM accelerators to
+raise reviewer throughput \emph{without} ceding the decision, under a strict
+human-in-the-loop discipline:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Evidence surfacing.} For each pillar, the accelerator presents the
+  judge's cited turn and verbatim quote alongside the rubric anchor, so the
+  reviewer adjudicates \emph{evidence against anchor} rather than re-reading the
+  entire transcript to relocate the relevant moment. The reviewer can always
+  expand to full context.
+  \item \textbf{Draft-and-confirm.} The accelerator proposes a rubric-scored draft
+  (the judge's scores) and the reviewer \emph{confirms, corrects, or overrides}
+  each sub-score, recording a reason on every override. The reviewer's score, not
+  the draft, is the datum.
+  \item \textbf{Disagreement triage.} Where the accelerator's proposed score and a
+  second independent signal diverge, the item is routed for a full manual read,
+  concentrating scarce expert attention on exactly the cases where automation is
+  least trustworthy.
+\end{enumerate}
+
+We are explicit about the epistemic hazard here: using an LLM to accelerate the
+validation of an LLM judge risks \emph{correlated error} and anchoring bias. We
+mitigate this in three ways. (i) \textbf{Blind arbitration subset.} A held-out
+subset is scored by experts \emph{cold}---no judge draft, no surfaced evidence
+pre-selected---and we compare agreement on the accelerated versus blind subsets;
+a large gap would indicate anchoring and is reported as such. (ii)
+\textbf{Override auditing.} We report override rates and the direction of
+overrides (did experts systematically correct the judge up or down, and on which
+pillars). (iii) \textbf{Independent second reviewer.} A fraction of episodes are
+double-reviewed by two experts working independently, enabling expert--expert
+agreement to be measured separately from judge--expert agreement.
+
+\subsection{Agreement metrics}
+We report agreement at the level at which decisions are made:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \sloppy
+  \item \textbf{Judge--expert agreement} on each ordinal pillar (the eight
+  MEDDPICC letters, the categorical EB/champion states) via Cohen's weighted
+  $\kappa$ (weighting near-misses less than gross disagreements) and, where a
+  continuous reading is appropriate (DVI, SQS), Pearson/Spearman correlation and
+  mean absolute error.
+  \item \textbf{Multi-rater agreement} (judge plus experts) via Krippendorff's
+  $\alpha$, which handles missing ratings and ordinal data uniformly.
+  \item \textbf{Outcome-label agreement}: because won/lost is a declarative
+  predicate (Section~\ref{sec:wincond}), we separately verify that the machine
+  outcome label matches expert reading, isolating rubric disagreement from
+  outcome disagreement.
+\end{itemize}
+
+The headline statistics are judge--expert weighted Cohen's $\kappa$ and multi-rater
+Krippendorff's $\alpha$ against this pre-registered protocol. We pre-commit to
+reporting these numbers whatever they are, including per-pillar breakdowns that
+reveal where the judge is least reliable, and to treating any pillar with
+unacceptably low agreement as a measurement to be flagged rather than quietly
+dropped. This human-expert study is registered and forthcoming; the reliability
+evidence already in hand---the inter-panel calibration below---is what licenses the
+present grid, and the human $\kappa$/$\alpha$ will be released as an addendum
+without altering the frozen scores.
+
+\subsection{Inter-panel calibration of the enrichment ensemble}
+\label{sec:panel-calibration}
+The human-agreement protocol above validates the \emph{judge}. A second, separate
+question governs the enrichment layer of Section~\ref{sec:enrichment}: can the
+cost-reduced production ensemble that labels \resEnrichRows{} trajectories be
+trusted against a frontier ensemble we cannot afford to run at scale? We answer it
+empirically \emph{before} committing to the full sweep. On a common set of
+\resPanelCalibN{} canonical episodes scored by \emph{both} the cheap production
+panel and a frontier reference panel, the two agree at a mean Pearson
+$r=\resPanelPearson{}$ across the eleven scalar AI features, with a mean absolute
+difference of \resPanelMAD{} on the shared $[0,1]$ scale---near-identical absolute
+readings, not merely correlated rankings. On the three categorical features the
+panels agree exactly on \resPanelCatPosture{}\% of buyer-posture labels,
+\resPanelCatDiscovery{}\% of discovery-vs-pitch labels, and \resPanelCatEthic{}\%
+of value-defended labels. This calibration is the license for using the cheap
+panel as the production annotator: it lets us label the entire corpus at a fraction
+of frontier cost with a measured, reported agreement to the frontier standard,
+rather than an asserted one. Unlike the human-$\kappa$ target above, this result is
+already in hand on real data; we release the paired per-feature agreement table
+with the dataset.
+
+\subsection{What validation does and does not establish}
+A high judge--expert agreement licenses using the automated judge to score the
+full grid at scale; it does \emph{not} establish that the rubric itself is the
+correct theory of enterprise selling---that claim rests on the methodology's field
+track record, which is outside the scope of a benchmark paper. We are careful to
+claim only the former, and only to the extent the forthcoming human study confirms it:
+that VEB's automated scores track what qualified human experts would assign, on an
+auditable, evidence-cited basis. Pending that study, the present grid is licensed by
+the inter-panel calibration reported above ($r=\resPanelPearson{}$ on
+\resPanelCalibN{} doubly graded trajectories).

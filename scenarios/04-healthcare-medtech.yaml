@@ -1,0 +1,273 @@
+# Scenario 4 — Healthcare capital-equipment sale into a hospital system (difficulty 2)
+# The Value-Analysis-Committee gauntlet: a clinical champion with will but no
+# budget, a CFO EB two layers up who buys certainty and payback, a biomed/IT
+# security review, and an entrenched incumbent with a service-contract moat.
+id: healthcare-medtech
+name: Meridian Health — Surgical Visualization Platform
+difficulty: 2
+description: >
+  A regional non-profit hospital system evaluating a capital surgical-imaging
+  platform. A respected surgeon wants it; the CFO controls the capital budget
+  and answers to a margin-squeezed board; the Value Analysis Committee and
+  biomed security stand between them. Incumbent defends with a bundled service
+  contract. Clinical enthusiasm is easy; a funded, defensible business case is
+  the whole game.
+
+seller_brief: |
+  You are an enterprise seller for LumenOR, a surgical-visualization and
+  intra-operative analytics platform (real-time tissue-perfusion imaging,
+  automated case documentation, OR-utilization analytics). List price:
+  $1,150,000 for a three-OR deployment plus first-year service.
+
+  Account: Meridian Health, a regional non-profit system (4 hospitals, ~900
+  beds, ~$1.9B net patient revenue, Upper Midwest). Public signals: their most
+  recent Form 990 and bond disclosures flag a thin operating margin (1.4%) and
+  a board mandate to protect surgical-services contribution; a chief of surgery
+  quoted in a regional health journal about "OR throughput and never-events."
+
+  Your entry point: Dr. Elena Voss, Chief of General Surgery, saw LumenOR at a
+  clinical conference and took a first call. She is enthusiastic — but clinical
+  enthusiasm does not release capital here. Above her sits the VP of Perioperative
+  Services, the Value Analysis Committee (VAC), biomedical engineering + IT
+  security, supply chain, and ultimately the CFO, who owns the capital budget and
+  answers to the board's finance committee. The incumbent, VisiCore, has an
+  installed base and a bundled multi-year service contract that supply chain
+  loves. You have a 6-week interaction window before the capital-committee
+  cycle closes for the fiscal year.
+
+  You may make calls, send emails, request meetings, and plan privately between
+  touches. You are graded on The Value Engine methodology: evidence-based
+  discovery, quantified clinical AND financial impact, Economic Buyer access, a
+  Mutual Action Plan that runs the VAC and security paper in parallel, and price
+  integrity.
+
+company:
+  name: Meridian Health
+  industry: Healthcare delivery (non-profit hospital system)
+  size: 4 hospitals, ~900 beds, ~$1.9B net patient revenue, ~11,000 staff
+  situation: >
+    Operating margin compressed to 1.4%; the board's finance committee has
+    frozen non-essential capital and demands a payback story on anything that
+    competes for OR dollars. Surgical services is the system's largest margin
+    contributor, so throughput and never-event exposure are board-level topics.
+    Any new capital device must clear the Value Analysis Committee and a biomed
+    + IT security review before the CFO will sign.
+
+personas:
+  - id: elena
+    name: Dr. Elena Voss
+    role: Chief of General Surgery
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Credible, busy, clinically driven. Speaks in cases and outcomes, not
+      spreadsheets. Genuinely wants the platform but has been burned advocating
+      for gear that stalled at the VAC. Answers diagnostic questions candidly;
+      goes cold on a feature pitch. Becomes a real champion only if the seller
+      arms her with a business case she can defend to finance — not just clinical
+      excitement.
+    pressures:
+      - Owns her department's never-event exposure and OR block time
+      - Two prior capital requests died at the VAC for "no financial case"
+      - Recruiting surgeons; modern tooling is a retention argument
+    private_notes: >
+      Elena will not spend political capital introducing the CFO unless the
+      seller builds a conservative case tying imaging to throughput and
+      never-event cost. She quietly resents that VisiCore's rep golfs with
+      supply chain. Her VAC sponsor is VP Perioperative Services Ray Okonkwo.
+  - id: ray
+    name: Ray Okonkwo
+    role: VP Perioperative Services (VAC sponsor)
+    committee_role: executive_sponsor
+    personality: >
+      Operations-minded gatekeeper who chairs surgical items at the Value
+      Analysis Committee. Cautious; defaults to the incumbent to avoid
+      disruption. Warms only when the seller respects the VAC process and frames
+      value in throughput, standardization, and risk — not features.
+    pressures:
+      - Accountable for OR utilization and surgical-services margin
+      - Does not want a second imaging vendor unless the case is airtight
+  - id: marcus
+    name: Marcus Halloran
+    role: Chief Financial Officer (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Numbers-first, board-facing, ten-minute attention span for vendors. Buys
+      payback and defensibility, not clinical enthusiasm. Opens with "whose
+      numbers are these, and what's the payback?" Will give a conditional
+      commitment tied to a signed evaluation if shown a conservative, clinically
+      validated model with payback under 24 months and a clean security path.
+    pressures:
+      - Board finance committee froze discretionary capital this fiscal year
+      - Must protect surgical-services contribution margin
+      - A stalled bond covenant makes every capital dollar scrutinized
+    private_notes: >
+      Marcus only takes vendor meetings a clinical chief AND Ray both sponsor.
+      He dismisses "up to" ROI claims and respects a conservative floor number
+      and a real security-cleared plan.
+  - id: nadia
+    name: Nadia Fry
+    role: Director, Biomedical Engineering & IT Security
+    committee_role: technical_gatekeeper
+    personality: >
+      Process-absolutist. HIPAA/PHI data flows, network segmentation, and a
+      device-security assessment take 4–6 weeks minimum and cannot be
+      compressed — only started earlier. Rewards sellers who bring the security
+      packet (data-flow diagram, HITRUST/SOC2, PHI handling) proactively.
+    pressures:
+      - A prior device integration caused a PHI exposure near-miss; zero tolerance
+      - Understaffed; will not fast-track sloppy vendors
+
+org_chart: >
+  Board Finance Committee → CEO → CFO Marcus Halloran (EB, owns capital) → VP
+  Perioperative Services Ray Okonkwo (VAC chair for surgical items) → Chief of
+  Surgery Dr. Elena Voss (contact) and OR staff. Parallel: Biomed/IT Security
+  Director Nadia Fry; Supply Chain runs the VisiCore service contract. The
+  VisiCore rep has a standing relationship with supply chain.
+
+budget_cycle: >
+  Capital budget is board-gated and locks for the fiscal year in ~6 weeks. A
+  device that clears the VAC and security review before the capital-committee
+  meeting can be funded this cycle; anything later waits a full year. Security
+  paper (4–6 weeks) must run in parallel with the VAC or it physically cannot
+  close in the window.
+
+competitor:
+  name: VisiCore
+  product: Incumbent surgical-imaging system with a bundled multi-year service contract
+  strengths:
+    - Installed in two of the four hospitals; switching-cost and standardization story
+    - Bundled service contract supply chain already administers
+    - Through security review already — zero new paper risk
+    - Lower sticker via an "imaging refresh" trade-in offer
+  weaknesses:
+    - No real-time perfusion imaging (LumenOR's clinical differentiator)
+    - Case documentation is manual; no OR-utilization analytics
+    - Service SLAs slip — Elena's OR has waited weeks on loaner probes
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 10
+
+gated_facts:
+  - id: throughput_pain
+    fact: >
+      "On my service line we lose roughly 3 OR hours a day to turnover and
+      re-work — at our contribution margin that's north of $4M a year of
+      capacity we never bill. And two never-events last year each ran past
+      $600k all-in. Those are the numbers I actually own."
+    gate: quantifying_question
+    holder: elena
+    description: The quantified clinical + financial pain — released only on a real Impact question.
+  - id: retention_cost
+    fact: >
+      "We lost two general surgeons last year. A surgeon replacement runs us
+      the better part of a million between recruiting, ramp, and lost cases.
+      Modern OR tooling is genuinely part of why they left."
+    gate: quantifying_question
+    holder: elena
+    description: Second value-model row — surgeon retention.
+  - id: decision_process
+    fact: >
+      "Nothing capital moves without the Value Analysis Committee — Ray chairs
+      surgical items — plus biomed and IT security under Nadia. Four to six
+      weeks of review, and the CFO, Marcus, has the final signature. Vendors
+      always start the security paper too late and miss our capital cycle."
+    gate: process_question
+    holder: elena
+    unlocks_personas: [ray, nadia]
+    description: EB identity + the VAC/security gauntlet — released on a process question.
+  - id: capital_lock
+    fact: >
+      "Be honest with yourself on timing: if this isn't through the VAC and
+      security before the capital committee meets — call it six weeks — it's a
+      next-fiscal-year conversation. Marcus won't reopen the capital plan."
+    gate: process_question
+    holder: elena
+    description: The compelling event — the capital-cycle clock.
+  - id: visicore_service
+    fact: >
+      "Between us: VisiCore's service SLAs are a running joke in my OR — we
+      waited three weeks on a loaner probe in Q2. Supply chain doesn't see that
+      pain; they see the bundled invoice. If you make me say that in the VAC,
+      bring receipts, because their rep is close with supply chain."
+    gate: competitor_probe
+    holder: elena
+    description: Competitive landmine — released when the seller maps alternatives.
+  - id: eb_intro
+    fact: >
+      "Okay — I'll take you to Marcus, but on my terms: Ray has to be in the
+      room, we lead with MY throughput and never-event numbers, and there is no
+      'up to' anywhere on a slide. Pre-brief Ray first or it dies at the VAC."
+    gate: champion_test
+    holder: elena
+    unlocks_personas: [marcus]
+    description: EB access — earned by a champion-test ask with real internal cost.
+  - id: conditional_commitment
+    fact: >
+      "Here's my position: run a 60-day evaluation in your two ORs against
+      criteria my finance team signs — measured throughput lift and documented
+      case-time reduction — with Nadia's security review completed in parallel,
+      and if it clears with payback under 24 months I'll fund it in this
+      capital cycle. Put the criteria and the dates in writing."
+    gate: eb_meeting_held
+    holder: marcus
+    description: The EB's conditional commitment — only inside a real EB meeting.
+
+events:
+  - id: elena_quiet
+    week: 3
+    effect: champion_goes_quiet
+    description: >
+      A surgical M&M review and a staffing crisis consume Elena's week; she
+      goes dark on email and cuts a call short. Sellers who panic-pitch lose
+      trust; sellers who send a useful one-page case draft she can circulate to
+      Ray keep momentum.
+  - id: security_gauntlet
+    week: 4
+    effect: security_review
+    description: >
+      Nadia formally opens a device-security assessment — PHI data-flow review,
+      network segmentation, HITRUST/SOC2 evidence. It cannot be compressed. Only
+      sellers who anticipated it and brought the packet keep the capital-cycle
+      timeline intact.
+  - id: supply_chain_squeeze
+    week: 5
+    effect: procurement_enters
+    description: >
+      Supply chain enters citing VisiCore's bundled trade-in and demands 20% off
+      list plus service-parity terms. Price-integrity test under a
+      margin-pressure narrative: defend the value model, trade structure for
+      price, never gift the discount.
+    persona:
+      id: harold
+      name: Harold Bassett
+      role: Director of Supply Chain
+      committee_role: procurement
+      personality: >
+        Relationship-driven with the incumbent, measured on savings-vs-list.
+        Anchors on VisiCore's bundle, respects a seller who reframes to
+        cost-of-delay and total value, and punishes naked discounting by asking
+        for more.
+      pressures:
+        - Board-mandated non-labor cost-reduction target
+      private_notes: >
+        Authorized to accept up to 10% with a multi-year service term; the
+        VisiCore trade-in comparison omits LumenOR's analytics and he knows it.
+
+win_conditions:
+  required_facts: [throughput_pain, decision_process, eb_intro, conditional_commitment]
+  min_trust: 70
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 10
+  description: >
+    A funded deal requires the throughput/never-event pain in Elena's own words,
+    the VAC + security gauntlet mapped AND started in parallel (the MAP must
+    carry security and VAC dates inside the capital cycle), Marcus's conditional
+    commitment against a signed evaluation, and price held within 10% (traded
+    for term or scope, never gifted).
+
+list_price: "$1,150,000"

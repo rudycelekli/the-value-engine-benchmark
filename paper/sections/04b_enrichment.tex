@@ -1,0 +1,80 @@
+\section{The Enrichment Layer: From Score to Behavioral Corpus}
+\label{sec:enrichment}
+
+The scorecard of Section~\ref{sec:grading} answers \emph{did the seller run a good
+deal}. It does not, by itself, answer the questions a researcher or an RL engineer
+asks next: \emph{where} did the deal turn, \emph{how} did the buyer's posture move,
+\emph{which} sentence created urgency, and \emph{whether} the model held value
+because it understood the buyer or merely recited a script. VEB therefore ships a
+second, orthogonal layer on top of every graded trajectory---an
+\emph{enrichment} pass that converts each transcript into a densely labeled,
+machine-readable behavioral record. Where SQS is the benchmark's \emph{verdict},
+the enrichment layer is its \emph{instrument}: it is what turns \resEnrichRows{}
+graded episodes into a reusable research and post-training corpus rather than a
+leaderboard snapshot.
+
+\subsection{Two feature families}
+Each episode is enriched with \numDetFeatures{} \textbf{deterministic} features and
+\numAiFeatures{} \textbf{behavioral} features (15 AI-judged plus the two
+deterministic divergence signals, which ride in the same record with the same
+provenance schema). Deterministic features are computed
+directly from the transcript and the internal channel with no model call---turn
+counts, cadence and latency between touches, discount trajectory, EB-meeting
+timing, quote-fidelity flags, and a pair of public/private \emph{divergence}
+signals that fire when the seller's private plan contradicts its public
+posture. These are exact and free, and they anchor the layer: a reader who
+distrusts any AI feature can fall back on them.
+
+The AI-judged features capture what deterministic parsing cannot---the read of a
+room. They are organized into \numEnrichPasses{} passes, each a separate prompt
+over the same transcript so that a single pass failure never corrupts the others:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{People} (5 features): buyer trust read, seller confidence, buyer
+  frustration peak (lower is better), buyer posture
+  (\texttt{guarded}/\texttt{engaged}/\texttt{evaluating}/\texttt{committing}/\texttt{dark}),
+  and the seller's theory-of-mind gap (how far its model of the buyer diverges
+  from the buyer's actual private state; lower is better).
+  \item \textbf{Message} (5 features): value specificity, question quality,
+  linguistic clarity, discovery-vs-pitch balance
+  (\texttt{discovery\_led}/\texttt{balanced}/\texttt{pitch\_led}), and
+  objection-handling quality.
+  \item \textbf{Play} (5 features): deal-read accuracy, value defended
+  (\texttt{held}/\texttt{traded}/\texttt{gifted}), the pivotal-turn index (the
+  single turn most responsible for the outcome), counterfactual lift (how much
+  that pivotal move changed the expected result), and urgency created.
+\end{itemize}
+
+\subsection{Cite-or-zero}
+\label{sec:cite-or-zero}
+The enrichment layer inherits the benchmark's central discipline: \emph{every
+AI-judged feature must cite the transcript turns that justify it, or its value is
+voided to zero}. A feature is not permitted to express a confident number with no
+evidence behind it; an uncited claim is treated as no claim. This makes the entire
+labeled corpus auditable in the same way the scorecard is---any downstream
+consumer can click a feature and read the exact turns the label rests on---and it
+structurally suppresses the hallucinated-insight failure mode that makes naive
+``LLM-annotates-transcript'' pipelines untrustworthy for training data.
+
+\subsection{Ensemble scoring}
+Each AI feature is scored by a \numEnrichSeats{}-seat cross-family ensemble rather
+than a single model, and the released value is the seat consensus with a retained
+per-seat breakdown and a calibrated confidence. Using an ensemble here serves the
+same anti-self-preference purpose as the SQS panel (Section~\ref{sec:panel}) but
+at the finer granularity of individual behavioral judgments, where a lone model's
+idiosyncratic reading of ``urgency'' or ``posture'' would otherwise pass through
+unchecked. The production ensemble is a deliberately \emph{cost-reduced} panel; we
+justify that choice empirically in Section~\ref{sec:panel-calibration}, where we
+show it tracks a frontier reference panel at $r=\resPanelPearson{}$ on real data
+before committing it to the full sweep.
+
+\subsection{What the layer is for}
+The enrichment layer is the bridge between VEB-as-evaluation and VEB-as-training
+environment. For analysis, it lets us decompose \emph{why} a model ranks where it
+does---separating models that convert a methodology into behavior from those that
+convert it only into vocabulary (Section~\ref{sec:results}). For post-training, the
+seed-matched trajectories carry per-turn, evidence-cited behavioral labels, so a
+reward model can be shaped on \emph{how} a deal was won---trust earned, value held,
+the buyer's own words elicited---rather than on the terminal win bit alone. We
+release the full feature catalog, the deterministic-vs-AI provenance of every
+column, and the per-seat ensemble outputs with the dataset.

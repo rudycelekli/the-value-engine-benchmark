@@ -1,0 +1,23 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  build-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: "22" }
+      - uses: actions/setup-python@v6
+        with: { python-version: "3.12" }
+      - run: pip install pytest
+      - run: npm ci && npm run build
+      - run: npm test
+      - run: make demo
+      - run: make calibrate
+      - run: make pytest
+      - run: python3 analysis/verify_stats.py
+      - run: bash scripts/secret-guard.sh
+      # The Python suite mutates generated artifacts (gen-macros rewrites
+      # paper/result-macros.tex). If a run leaves the tree dirty, a committed
+      # artifact is stale relative to its generator -- fail rather than drift.
+      - run: git diff --exit-code

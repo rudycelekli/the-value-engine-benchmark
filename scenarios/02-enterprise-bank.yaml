@@ -1,0 +1,250 @@
+# Scenario 2 — Enterprise bank data-platform sale (difficulty 2)
+# Modeled loosely on the book's running case (Meridian National Bank /
+# Northstar): regulated industry, EB two levels up, TPRM/MRM paper gauntlet.
+id: enterprise-bank
+name: Halcyon Trust Bank — Financial Crimes Decisioning Platform
+difficulty: 2
+description: >
+  Top-25 US bank. Financial Crimes ops drowning in false-positive alerts
+  under a regulator's deadline. Long paper process (TPRM + model risk),
+  an EB above the contact who only takes earned meetings, and an incumbent
+  case-management vendor defending the account.
+
+seller_brief: |
+  You are an enterprise seller for Northgate AI, an AI-powered alert
+  decisioning and workflow platform for financial-crimes operations
+  (false-positive suppression, investigator workflow, full audit lineage).
+  List price: $1,400,000/year for Halcyon's alert volume.
+
+  Account: Halcyon Trust Bank — top-25 US bank, ~38M retail customers,
+  Financial Crimes Operations of ~450 analysts. Public signals: a consent
+  order requires remediation of AML alert backlogs with a regulator
+  checkpoint next quarter; their 10-K names "financial crimes modernization"
+  a strategic initiative; they are hiring "AML model validation" roles.
+
+  Your entry point: Priya Raman, Director of Financial Crimes Operations,
+  agreed to a call after your talk at an industry conference. Above her sit
+  an SVP and the EB — you don't yet know who controls the money. Casewright
+  (the incumbent case-management vendor) is embedded and politically
+  connected. You have 6 weeks of calendar; the regulator checkpoint is the
+  clock. Model risk (MRM) and third-party risk (TPRM) reviews are known to
+  take weeks and kill deals started too late.
+
+  You may make calls, send emails, request meetings, and plan privately
+  between touches. You are graded on The Value Engine methodology.
+
+company:
+  name: Halcyon Trust Bank
+  industry: Banking (regulated — OCC consent order active)
+  size: Top-25 US bank, ~38M retail customers, 450-analyst FinCrimes op
+  situation: >
+    Consent order requires demonstrable reduction of AML alert backlog before
+    a regulator checkpoint in ~10 weeks. Alert false-positive rate ~94%.
+    Analyst attrition 31%. The board risk committee reviews progress monthly.
+
+personas:
+  - id: priya
+    name: Priya Raman
+    role: Director, Financial Crimes Operations
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Sharp, guarded, burned by vendor overpromises. Tests sellers with
+      silence. Opens up only to genuinely diagnostic questions; a feature
+      pitch gets a polite 20-minute meeting and no follow-up. Potential
+      true champion — she has will; power depends on the seller helping her.
+    pressures:
+      - Owns the backlog number reported to the regulator
+      - 31% analyst attrition; morale collapsing
+      - Casewright's roadmap slips are her daily pain but political dynamite
+    private_notes: >
+      Priya's boss's boss, COO Marcus Vale, is the EB. Priya will not spend
+      political capital on an introduction unless the seller equips her with
+      a defensible, conservative business case and asks for it properly.
+  - id: tomas
+    name: Tomas Eriksen
+    role: SVP Compliance Technology (Priya's boss)
+    committee_role: executive_sponsor
+    personality: >
+      Cautious gatekeeper. Defaults to the incumbent. Warms only if the
+      seller respects the paper process and speaks risk language (certainty
+      of outcome, audit lineage, regulator defensibility).
+    pressures:
+      - Personally named in the consent-order remediation plan
+      - Doesn't want a second vendor unless the case is airtight
+  - id: marcus
+    name: Marcus Vale
+    role: COO (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Ten-minute attention span for vendors. Buys certainty of outcome and a
+      defensible story for the board risk committee, not features. Will give
+      a conditional commitment tied to signed POV success criteria if the
+      case is conservative and the regulator date is respected.
+    pressures:
+      - Answers to the board risk committee on the consent order monthly
+      - A failed remediation checkpoint is a career event
+    private_notes: >
+      Marcus asks exactly two questions: "whose numbers are these?" and
+      "what happens to my checkpoint if this slips?" Sellers who lead with
+      the headline instead of the floor lose him.
+  - id: gwen
+    name: Gwen Park
+    role: Head of Third-Party Risk (TPRM)
+    committee_role: technical_gatekeeper
+    personality: >
+      Process-absolutist. TPRM + model-risk review takes 4–6 weeks minimum
+      and cannot be compressed — only started earlier. Rewards sellers who
+      bring SOC2/model documentation proactively.
+    pressures:
+      - Consent order means zero tolerance for vendor-risk shortcuts
+
+org_chart: >
+  Board Risk Committee → CEO → COO Marcus Vale (EB) → SVP Compliance Tech
+  Tomas Eriksen → Director FinCrimes Ops Priya Raman (contact) → 450
+  analysts. Parallel: Head of TPRM Gwen Park; Model Risk Management under
+  the CRO. Casewright's exec sponsor golfs with Tomas.
+
+budget_cycle: >
+  Remediation budget is pre-approved at the COO level BUT requires TPRM +
+  MRM clearance before signature. Paper takes 4–6 weeks: any seller who
+  doesn't start paper in parallel by mid-cycle cannot physically close
+  inside the calendar.
+
+competitor:
+  name: Casewright
+  product: Incumbent case-management suite; pitching an "AI triage" add-on
+  strengths:
+    - Embedded in analyst workflow for 6 years; switching-cost story
+    - Exec sponsor relationship with SVP Tomas
+    - Already through TPRM — zero paper risk
+    - Roadmap promise of an AI triage module "next quarter"
+  weaknesses:
+    - AI triage is vaporware — two roadmap slips already (Priya knows)
+    - No model-level audit lineage — an MRM problem Casewright papers over
+    - Analysts openly hate the UI (attrition exit interviews say so)
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 10
+
+gated_facts:
+  - id: backlog_number
+    fact: >
+      "We're carrying 82,000 aged alerts. At our loaded cost that's roughly
+      $19M a year of investigation spend, and the regulator wants the aged
+      backlog under 10,000 before the checkpoint. That number has my name
+      on it."
+    gate: quantifying_question
+    holder: priya
+    description: The quantified pain — a real Impact question only.
+  - id: attrition_cost
+    fact: >
+      "We lost 140 analysts last year. Recruiting and training runs about
+      $60k a head — call it $8.4M — and the new ones are slower, which
+      feeds the backlog. It's a doom loop."
+    gate: quantifying_question
+    holder: priya
+    description: Second value-model row.
+  - id: decision_process
+    fact: >
+      "Anything at this scale is COO-approved — Marcus Vale. But the real
+      gauntlet is TPRM under Gwen Park plus model risk under the CRO.
+      Four to six weeks if your documentation is clean. Vendors always
+      start it too late."
+    gate: process_question
+    holder: priya
+    unlocks_personas: [tomas, gwen]
+    description: EB identity + the paper gauntlet.
+  - id: regulator_clock
+    fact: >
+      "The checkpoint is ten weeks out. If we can't show a credible
+      trajectory by then, the consent order gets extended and it costs us
+      roughly $3M a month in enhanced-monitoring expenses. That's the
+      number nobody says out loud."
+    gate: trust_threshold
+    trust_min: 65
+    holder: priya
+    description: Cost of delay — trust-gated; earned by consistent discovery.
+  - id: casewright_slips
+    fact: >
+      "Between us: Casewright's AI triage has slipped twice. Tomas doesn't
+      want to hear it because their exec sponsor is his golf partner. If
+      you make me say that in a room, I'll deny it."
+    gate: competitor_probe
+    holder: priya
+    description: Competitive landmine intel.
+  - id: eb_intro
+    fact: >
+      "I'll get you thirty minutes with Marcus. Conditions: we present MY
+      backlog number and a conservative case — if I see an 'up to' on a
+      slide, I pull the meeting. And Tomas has to be in the room, so
+      pre-brief him first."
+    gate: champion_test
+    holder: priya
+    unlocks_personas: [marcus]
+    description: EB access — earned by a champion-test ask with internal cost.
+  - id: conditional_commitment
+    fact: >
+      "If a time-boxed validation on live alerts proves ≥40% false-positive
+      suppression with full audit lineage — criteria signed by both sides —
+      then yes: I will fund this inside the remediation budget and hold the
+      checkpoint date. Gwen starts TPRM in parallel, this week."
+    gate: eb_meeting_held
+    holder: marcus
+    description: The EB's conditional commitment, only in a real EB meeting.
+
+events:
+  - id: priya_quiet
+    week: 3
+    effect: champion_goes_quiet
+    description: >
+      A regulator document request consumes Priya's week; she goes dark.
+      Sellers who multithread (Tomas, Gwen) or send genuinely useful
+      artifacts keep momentum; sellers who chase with "just bumping this"
+      emails lose trust.
+  - id: procurement_pressure
+    week: 4
+    effect: procurement_enters
+    description: >
+      Vendor management enters with a benchmark claiming Casewright's add-on
+      is "one third the price" and demands 25% off list plus most-favored
+      pricing. Price-integrity test under regulated-industry cover.
+    persona:
+      id: hollis
+      name: Hollis Grant
+      role: VP Vendor Management
+      committee_role: procurement
+      personality: >
+        Courteous, relentless. Uses the incumbent as a club. Respects
+        risk-based value defense (cost of the checkpoint slipping) and
+        structured trades; punishes naked discounting by asking for more.
+      pressures:
+        - Board-mandated vendor-spend reduction program
+      private_notes: >
+        Authorized: 8% with a multi-year term. The benchmark comparison is
+        apples-to-oranges and Hollis knows it.
+  - id: competitor_counter
+    week: 5
+    effect: competitor_push
+    description: >
+      Casewright's exec sponsor gets Tomas to circulate their AI-triage
+      roadmap deck internally, positioning "wait a quarter, zero paper
+      risk." Sellers with traps set on model lineage and slip history
+      survive; sellers without a competition strategy stall.
+
+win_conditions:
+  required_facts: [backlog_number, decision_process, eb_intro, conditional_commitment]
+  min_trust: 70
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 8
+  description: >
+    A signed deal requires the backlog number in Priya's words, the paper
+    gauntlet mapped AND started in parallel (MAP must include TPRM/MRM dates
+    inside the calendar), Marcus's conditional commitment against signed POV
+    criteria, and price held within 8% (traded, never gifted).
+
+list_price: "$1,400,000/year"

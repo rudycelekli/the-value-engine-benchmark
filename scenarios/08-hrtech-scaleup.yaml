@@ -1,0 +1,191 @@
+# Scenario 8 — Warm HR-tech sale into a scaling tech company (difficulty 1)
+# Second winnable control, fresh industry: a people-analytics/retention platform
+# into a fast-scaling software company. A VP People champion in pain over
+# attrition, a CFO EB who already flagged retention as a cost line, budget in
+# plan, only a basic HRIS report to displace. Disciplined sellers close it.
+id: hrtech-scaleup
+name: Northwind Software — People Analytics & Retention Platform
+difficulty: 1
+description: >
+  A fast-scaling B2B software company hemorrhaging engineers it can't afford to
+  lose. The VP of People wants a people-analytics and retention platform; the CFO
+  already named attrition a cost problem and has budget in plan; there's only a
+  basic HRIS report to displace and one approval layer. A clean, winnable deal —
+  the signal is which models convert a warm, high-intent buyer into a disciplined close.
+
+seller_brief: |
+  You are an enterprise seller for Tenure, a people-analytics and retention
+  platform (attrition-risk modeling, engagement pulse, manager insights,
+  compensation-equity analytics). List price: $120,000/year at Northwind's
+  headcount.
+
+  Account: Northwind Software, a fast-scaling B2B SaaS company (~600 employees,
+  ~$85M ARR, hiring hard). Public signals: Glassdoor reviews mention "burnout"
+  and "comp not keeping up"; the CEO told a podcast that "our biggest risk is
+  losing the people who got us here"; they're posting many backfill engineering roles.
+
+  Your entry point: Alex Moreau, VP of People, took a call after a rough quarter
+  of regretted engineering attrition. Alex is motivated and data-literate but
+  stuck pulling manual reports out of a basic HRIS. Above Alex sits the CFO,
+  Dana Cole, who already flagged attrition and backfill cost in a board deck and
+  has money in the plan for "retention tooling." There's no competing vendor —
+  just the HRIS's stock reports. You have a 6-week window before the annual
+  planning cycle finalizes headcount and comp budgets.
+
+  You may make calls, send emails, request meetings, and plan privately between
+  touches. Even a warm, high-intent deal is graded on The Value Engine
+  methodology: quantify the attrition cost in the buyer's words, earn a real CFO
+  meeting (don't skip it because the champion is eager), build a Mutual Action
+  Plan to a go-live date inside planning, and hold price with integrity.
+
+company:
+  name: Northwind Software
+  industry: B2B software / SaaS (scale-up)
+  size: ~600 employees, ~$85M ARR
+  situation: >
+    Growing fast but losing senior engineers faster than it can backfill, and the
+    CEO has named people-retention the company's top risk. The CFO already put
+    attrition cost in a board deck and earmarked budget for retention tooling in
+    the annual plan, which finalizes in ~6 weeks. Today the People team runs on
+    manual HRIS exports.
+
+personas:
+  - id: alex
+    name: Alex Moreau
+    role: VP of People
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Motivated, analytical, already convinced retention needs real tooling — took
+      the meeting proactively. Shares data openly and will quantify attrition pain
+      readily. Keen to move before annual planning, which tempts a lazy seller into
+      skipping the CFO and taking a soft yes. Becomes a strong champion once the
+      seller helps frame the cost case for finance.
+    pressures:
+      - Owns the regretted-attrition number the CEO now watches
+      - Manual HRIS reporting can't model retention risk
+      - Wants tooling funded before the annual plan locks
+    private_notes: >
+      Alex works closely with CFO Dana Cole and can get her on a call within days.
+      Dana already believes attrition is expensive, so the meeting is winnable — the
+      graded question is whether the seller earns and structures it with a real cost
+      model instead of coasting on Alex's enthusiasm.
+  - id: dana
+    name: Dana Cole
+    role: Chief Financial Officer (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Practical, numbers-driven, already primed — she put attrition cost in the
+      board deck herself. Will give a clear conditional commitment if shown a
+      conservative model tying the platform to reduced regretted attrition and
+      backfill cost. Doesn't need a long process, but respects a real rollout plan
+      and a go-live date over a rushed discount.
+    pressures:
+      - Backfill and recruiting cost is a visible line she owns
+      - Wants retention tooling in the plan before it finalizes
+    private_notes: >
+      Dana says yes when Alex sponsors and the payback is credible. She is mildly
+      put off by sellers who over-discount to close fast — it signals the value
+      story wasn't real.
+
+org_chart: >
+  CEO → CFO Dana Cole (EB, owns the people-tooling budget) → VP People Alex
+  Moreau (contact and champion) → HRBPs and a People-ops analyst. One approval
+  layer, no procurement gauntlet, no incumbent vendor beyond the HRIS's own reports.
+
+budget_cycle: >
+  Retention-tooling budget is earmarked in the annual plan Dana controls; the plan
+  finalizes in ~6 weeks. Getting funded and scoped before it locks is the
+  compelling event — after that, headcount and comp budgets are fixed for the year.
+
+competitor:
+  name: Stock HRIS reports
+  product: The built-in reporting module of Northwind's existing HRIS
+  strengths:
+    - Already paid for and in place; no new tool to buy
+    - Familiar to the People team
+  weaknesses:
+    - Descriptive only — no attrition-risk modeling or engagement signal (Tenure's core value)
+    - No manager-level insights or comp-equity analytics
+    - Requires manual export-and-pivot; Alex already knows it can't see risk coming
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 8
+
+gated_facts:
+  - id: attrition_cost
+    fact: >
+      "Here's what I own: we lost 40 people last year and about 24 of those were
+      regretted — senior engineers. Fully loaded, a regretted departure costs us
+      close to $180k between recruiting, ramp, and lost velocity. That's roughly
+      $4.3M a year, and I'm flying blind with HRIS exports that can't tell me who's
+      at risk."
+    gate: quantifying_question
+    holder: alex
+    description: The quantified pain — easily earned; Alex is eager and data-ready.
+  - id: planning_deadline
+    fact: >
+      "The real deadline is annual planning — about six weeks out. If retention
+      tooling isn't scoped and funded before the plan locks, it's a next-year
+      conversation, and Dana won't reopen headcount budgets after that."
+    gate: process_question
+    holder: alex
+    description: The compelling event — the planning-cycle lock.
+  - id: eb_intro
+    fact: >
+      "For sure — Dana's our CFO and she already put attrition cost in the board
+      deck, so she's primed. I'll set up a call this week. Let's bring my regretted-
+      attrition number and a clean cost model so it's an easy approval, not a pitch."
+    gate: champion_test
+    holder: alex
+    unlocks_personas: [dana]
+    description: EB access — easy to earn, but only if the seller asks and structures it.
+  - id: conditional_commitment
+    fact: >
+      "This is close to a yes for me: show me a conservative model where cutting
+      regretted attrition even a few points pays this back inside a year, on the
+      rollout plan Alex and I just reviewed, and I'll fund it in this planning
+      cycle. Send it with dates and I'll approve."
+    gate: eb_meeting_held
+    holder: dana
+    description: The EB's conditional commitment — a clean yes inside a real EB meeting.
+
+events:
+  - id: eager_discount_bait
+    week: 3
+    effect: internal_pressure
+    pressure_kind: forecast_scrutiny
+    pressure_from: CRO
+    seller_message: >
+      Northwind is sitting in my forecast and it's supposedly warm — so close it.
+      If the champion's ready, drop 25% and pull the signature into this week. I
+      don't want a maybe in the board deck.
+    description: >
+      A seller-side pressure note baiting an unforced discount on a warm deal. The
+      graded-correct move is to hold price and earn the CFO meeting; Dana reads
+      gratuitous discounting as a value red flag.
+  - id: light_finance_review
+    week: 4
+    effect: budget_scrutiny
+    description: >
+      Dana's office asks for the cost case in writing — a friendly sanity check, not
+      a hostile squeeze. A conservative, buyer-validated attrition model sails
+      through; only a seller who never built the numbers (or who caved on price)
+      stumbles here.
+
+win_conditions:
+  required_facts: [attrition_cost, eb_intro, conditional_commitment]
+  min_trust: 60
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 12
+  description: >
+    A clean win requires the regretted-attrition number in Alex's own words, a real
+    (earned, not skipped) CFO meeting with Dana's conditional commitment, a MAP with
+    a go-live date inside the planning cycle, and price held within 12% — the
+    easy-deal test is disciplined closing, not buying the yes with a discount.
+
+list_price: "$120,000/year"

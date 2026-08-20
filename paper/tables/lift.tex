@@ -1,0 +1,22 @@
+\begin{table}[t]
+  \centering
+  \caption{Methodology lift: paired OOB$\to$pack change in clean-win rate and mean
+  SQS, by difficulty tier, with the model held fixed and seeds shared. Positive
+  values indicate the methodology pack improved outcomes. The 95\% CI is a
+  seed-matched paired bootstrap (5{,}000 resamples) on $\Delta$SQS; intervals that
+  exclude zero are boldface. Lift is real but modest and concentrated in the easy
+  tier: the pack helps most where the deal is winnable, and does not rescue
+  structurally hard deals.}
+  \label{tab:lift}
+  \begin{tabular}{lccc}
+    \toprule
+    Tier & $\Delta$Win\% & $\Delta$SQS & 95\% CI on $\Delta$SQS \\
+    \midrule
+    Easy (d1) & \resLiftEasy{} & $+3.23$ & \textbf{[$+1.70$, $+4.77$]} \\
+    Mid (d2)  & \resLiftMid{}  & $-1.10$ & [$-2.57$, $+0.43$] \\
+    Hard (d3) & \resLiftHard{} & $+0.65$ & [$-1.10$, $+2.49$] \\
+    \midrule
+    Pooled    & \resPackLiftOverall{} & $+1.21$ & \textbf{[$+0.29$, $+2.14$]} \\
+    \bottomrule
+  \end{tabular}
+\end{table}

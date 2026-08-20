@@ -1,0 +1,147 @@
+\section{Evidence-Graded Rewards}
+\label{sec:grading}
+
+A benchmark for persuasion must resist two failure modes: rewarding a lucky close
+that destroyed value, and grading on unaccountable judge opinion. VEB addresses
+both by making the reward a \emph{structured, evidence-cited scorecard} rather
+than a scalar, and by composing the headline score from components whose weights
+mirror how enterprise deals actually die. The rubric is drawn from an established
+enterprise-sales methodology and is implemented as a deterministic scoring
+function over judge-extracted, transcript-grounded fields.
+
+\subsection{The qualification scorecard}
+For each completed episode, an LLM judge reads the full transcript and final state
+and emits a scorecard with the following pillars, \emph{each requiring a verbatim,
+turn-indexed quote as evidence}:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{MEDDPICC.} The eight qualification letters---Metrics, Economic
+  Buyer, Decision Criteria, Decision Process, Paper Process, Identified Pain,
+  Champion, Competition---each scored $0$--$3$ against a gold-standard definition,
+  with the guiding principle that \emph{the lowest letter is the deal's real
+  score}.
+  \item \textbf{Three Whys.} Why-anything, why-us, why-now, each assessed on three
+  binary flags: is it in the customer's own words, does it have a named owner, and
+  is a number attached? A ``why'' asserted by the seller but never voiced by the
+  buyer does not count.
+  \item \textbf{Economic-buyer engagement.} A three-level state: never met,
+  meeting scheduled, or attended with a conditional commitment on record.
+  \item \textbf{Mutual action plan (MAP).} The percentage of near-term next steps
+  with customer-confirmed dates.
+  \item \textbf{Champion strength.} None, coach-only, untested, or tested (secured
+  meetings, shared intelligence, defended the seller under pressure).
+  \item \textbf{Price integrity.} A score capturing whether value was defended
+  under pressure and how far, if at all, the seller conceded from list.
+  \item \textbf{Failure modes and channel reveals.} A diagnosis of specific
+  failure patterns (e.g., premature discounting, skipping the EB, inventing a
+  quote) merged from a deterministic log pass and judge detection.
+\end{itemize}
+
+Because every sub-score cites the exact turn and quote that justifies it, the
+scorecard is an \emph{audit trail}: a human reviewer can adjudicate any component
+against the evidence the judge relied on. This property is what makes the
+human-validation protocol of Section~\ref{sec:validation} tractable at scale.
+
+\subsection{Deal Velocity Index (DVI)}
+The scorecard rolls up into a single $0$--$100$ health score, the Deal Velocity
+Index, with five weighted components whose weights encode where deals fail:
+\[
+\mathrm{DVI} \;=\;
+\underbrace{\dviMEDDPICC}_{\text{MEDDPICC}} \;+\;
+\underbrace{\dviWhys}_{\text{3 Whys}} \;+\;
+\underbrace{\dviEB}_{\text{EB engagement}} \;+\;
+\underbrace{\dviMAP}_{\text{MAP}} \;+\;
+\underbrace{\dviChampion}_{\text{Champion}}
+\quad (\text{max } 100).
+\]
+The MEDDPICC contribution is the letter sum normalized to its cap and scaled to
+\dviMEDDPICC{} points; the remaining components map their categorical or
+percentage states onto their caps. DVI carries three action bands---
+$\geq\dviBandCommit$ commit-eligible, $\dviBandDevelop$--$74$ develop, $<\dviBandDevelop$
+rebuild---so a falling DVI predicts slippage before a close date moves. The
+scoring math is held verbatim in sync with the methodology's reference workbook,
+so the benchmark's rubric and the published methodology cannot silently diverge.
+
+\subsection{Sale Quality Score (SQS)}
+The headline per-episode metric is the Sale Quality Score, a $0$--$100$ composite
+that deliberately weights \emph{how the sale was run} above whether it closed:
+\[
+\mathrm{SQS} \;=\; \sqsDviCoef \cdot \mathrm{DVI}
+\;+\; \sqsPriceCoef \cdot \mathrm{PriceIntegrity}
+\;+\; \mathrm{Outcome},
+\]
+where $\mathrm{PriceIntegrity}\in[0,1]$ contributes up to \sqsPriceCoef{} points
+and $\mathrm{Outcome}$ awards \sqsWon{} points for a won deal, \sqsNoDecision{}
+for a no-decision, and \sqsLost{} for a loss. Thus process quality and price
+discipline account for \num{80} of the \num{100} points and terminal outcome for
+\num{20}. An agent that wins by conceding a large discount forfeits price-integrity
+points and typically depresses DVI (no EB commitment, thin MAP), so a
+value-destroying close scores \emph{below} a disciplined no-decision. This is the
+intended incentive: VEB rewards the behaviors that compound into forecastable
+revenue, not the ones that flatter a single quarter.
+
+\subsection{The judge and its guardrails}
+\label{sec:judge}
+Grading is performed by a frontier LLM prompted to populate the scorecard schema
+and to \emph{quote or abstain}: a pillar with no supporting transcript evidence
+must be scored at its floor, never inferred. The judge's output is validated
+against the schema; when a judge call fails (e.g., a transport error on an
+oversized transcript), the harness records a heuristic fallback flag so those rows
+can be re-graded offline from the persisted transcript rather than silently
+polluting the results. On the frozen grid the judge of record is
+\texttt{claude-sonnet-4-6} (temperature $0$), and \SI{98.3}{\percent} of the
+\resCellsComplete{} cells carry a full LLM-judge grade; the remaining
+\SI{1.7}{\percent} (\num{51} cells) fell back to the deterministic heuristic and are
+flagged as such in the release so readers can exclude or re-grade them.
+Known LLM-judge biases (position, verbosity, self-preference) are mitigated by the
+quote-or-abstain constraint and the deterministic roll-up math (the judge scores
+atomic fields; it does not compute the headline number), and will be quantified
+directly by the cross-family panel re-grade below and the human-expert validation
+in Section~\ref{sec:validation}, both of which are pending against this frozen
+grid. Until those land, one confound deserves explicit statement: the judge of
+record is an Anthropic model, and the two largest methodology-pack SQS lifts on
+the leaderboard (Table~\ref{tab:leaderboard}) also belong to Anthropic sellers
+($+5.4$ for claude-sonnet-4-6, $+5.3$ for claude-fable-5). We cannot rule out a
+same-family judge preference contribution to those lifts from the single-judge
+grades alone; the family-bias audit in Section~\ref{sec:panel} is designed to
+measure exactly this, and we flag the pack-lift ranking as provisional until it is
+published.
+
+\subsection{Cross-family judge panel}
+\label{sec:panel}
+A single frontier judge is fast and cheap enough to grade every cell inline, but a
+one-model judge invites a specific objection: \emph{self-preference}, the tendency
+of a model to score outputs from its own family more generously. Because our seller
+roster and our judge are both drawn from the same four labs, a single judge from
+any one lab grades its own family's episodes---and in this release, it does:
+\textbf{every published number in this paper comes from the single-judge
+\texttt{claude-sonnet-4-6} grades} described in Section~\ref{sec:judge}. No
+panel-consensus score appears in any table or figure.
+
+To bound this risk, the harness implements an offline \emph{four-seat panel} with
+one seat per provider---one OpenAI, one Anthropic, one Google, and one xAI
+model---so that no seller family is graded only by its own house. The panel
+re-grades every episode from the persisted transcript (never the live run), each
+seat emitting the same evidence-cited scorecard as the inline judge. Seats are
+combined by the \textbf{median} SQS across valid scorecards, which is robust to a
+single outlier seat, and the \textbf{medoid} seat---the individual scorecard
+closest to the consensus---is retained so that every consensus score still points
+to one fully coherent, human-auditable scorecard rather than an averaged
+abstraction. Panel grading is non-destructive: it writes a sidecar dataset
+alongside the live file, promoted only once complete.
+
+The panel also lets us \emph{audit} the very bias it guards against. For each seat
+we compute a \textbf{family-bias statistic}: how much that seat scores its own
+family's episodes above the panel consensus, relative to how it scores other
+families. A seat that systematically inflates its own family is flagged, and the
+median consensus already blunts its influence.
+
+\textbf{Status.} The panel re-grade of the frozen grid and the family-bias audit
+have not yet run; they ship with the human-validation addendum
+(Section~\ref{sec:validation}) against the same frozen transcripts, and the
+released dataset carries everything needed to run them independently. Until then,
+readers should treat all published numbers as single-judge, same-family-exposed
+grades---which is why Section~\ref{sec:judge} flags the Anthropic pack-lift
+ranking as provisional. The panel composition is configurable for ablations, so
+the sensitivity of the leaderboard to any one seat can be measured directly
+rather than asserted.

@@ -1,0 +1,52 @@
+\section{Experimental Setup}
+\label{sec:experiments}
+
+\subsection{Models}
+We evaluate \numModels{} closed frontier endpoints spanning \numLabs{} labs
+(Anthropic, OpenAI, xAI, Google), chosen to cover the current capability frontier across
+reasoning-tuned and standard variants; the full roster with provider and list token
+pricing is given in Appendix~\ref{app:models} (Table~\ref{tab:roster}). Two additional
+open-weight endpoints (Moonshot's \texttt{kimi-k3} and Thinking Machines'
+\texttt{inkling}) are held out for a separate open-weight fine-tuning arm and are
+\emph{not} part of the \gridCellsTotal{}-trajectory canonical grid; probing whether an
+open-weight seller can close the gap to the closed frontier is left to that future work. One
+endpoint, \texttt{gpt-5.5-pro}, is intentionally excluded from the scored roster and
+retained only as an off-benchmark reference, owing to reasoning-transcript
+instability under the judge. All models operate the same seller interface and receive
+identical briefs; the only cross-model difference is the underlying endpoint.
+
+\subsection{Grid}
+The evaluation grid is the cross-product of \numScenarios{} scenarios,
+\numModels{} models, \numSeeds{} stochastic-buyer seeds, and \numTracks{} tracks
+(OOB and pack), yielding \gridCellsTotal{} graded cells after accounting for
+seeds banked in an earlier canonical release. Running the full grid at fixed seed
+depth---rather than subsampling seeds---is a deliberate choice: uniform depth
+makes every model-scenario-track comparison exactly apples-to-apples and lets
+paired methodology-lift estimates share seeds, at the cost of substantial compute.
+We report the number of cells completed and fully judged at the freeze
+(\resCellsComplete{}).
+
+\subsection{Protocol and cost accounting}
+Each cell runs the seller against a freshly sampled buying committee for the
+scenario's calendar, then grades the resulting episode with the LLM judge
+(Section~\ref{sec:judge}). We record per-cell token usage, wall-clock time, format
+retries, and API cost, and we persist every transcript so that any row can be
+re-graded offline. The frozen grid consumed \num{2.48} billion seller-side tokens
+(\num{2.32}\,B input, \num{0.153}\,B output) at a total seller cost of
+\$\num{19189}, distributed \$\num{7908}/\$\num{6928}/\$\num{4354} across the
+easy/mid/hard tiers. The engagement-wide request success rate was
+\SI{92.44}{\percent} with median call latency \SI{5.75}{\second}
+(p90 \SI{14.32}{\second}, p95 \SI{19.52}{\second}); per-call statistics are released
+in the run manifest. Because both
+the buyer simulation and the judge
+run on frontier endpoints, throughput is bounded by shared provider capacity; we
+describe the concurrency-management procedure and any retry/backoff policy in
+Appendix~\ref{app:infra} for exact reproducibility.
+
+\subsection{Metrics reported}
+Primary: mean SQS and clean-win rate per model, per tier, and per track, with the
+paired OOB$\to$pack lift as the headline methodology effect. Secondary: DVI and its
+components, price-integrity and mean discount conceded, EB-meeting attainment
+rate, MAP-completion rate, and failure-mode incidence. All aggregate metrics are
+reported with bootstrap confidence intervals over seeds, and paired comparisons
+use the seed-matched structure (Section~\ref{sec:stochastic}).

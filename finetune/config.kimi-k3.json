@@ -1,0 +1,45 @@
+{
+  "_note": "Training is COMPUTE-GATED (Tinker-blocked) and OUT OF SCOPE for this scaffold. This config documents intended hyperparameters only — nothing is executed here.",
+  "base_model": {
+    "id": "kimi-k3",
+    "provider": "moonshot",
+    "description": "Kimi K3 open-weight base model for LoRA/SFT fine-tuning."
+  },
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.05,
+    "target_modules": ["q_proj", "v_proj"],
+    "bias": "none"
+  },
+  "training": {
+    "learning_rate": 2e-4,
+    "epochs": 3,
+    "batch_size": 4,
+    "gradient_accumulation_steps": 4,
+    "warmup_ratio": 0.03,
+    "lr_scheduler": "cosine",
+    "max_seq_length": 8192,
+    "fp16": true,
+    "seed": 42
+  },
+  "data": {
+    "canonical_preview_path": "datasets/veb-canonical-135/veb-canonical-135-preview.jsonl",
+    "sft_export_path": "finetune/sft-kimi-k3.jsonl",
+    "filter": "training_ready == True",
+    "expected_rows": 44
+  },
+  "output": {
+    "dir": "finetune/checkpoints/kimi-k3",
+    "save_steps": 50,
+    "eval_steps": 50,
+    "logging_steps": 10
+  },
+  "eval": {
+    "oob_baseline_sqs": null,
+    "_oob_baseline_note": "Set to the locked base-arm SQS mean before running eval.py. The paper's base-on-pack lift is approximately 0 (95% CI covers zero). eval.py computes the OOB->FT delta at run time from real environment rollouts.",
+    "env_cli": "node dist/cli.js env rollout",
+    "default_seeds": 3,
+    "default_mock": true
+  }
+}

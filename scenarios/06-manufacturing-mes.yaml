@@ -1,0 +1,274 @@
+# Scenario 6 — Industrial predictive-maintenance / MES sale into a manufacturer (difficulty 2)
+# The OT/IT divide is the whole game: a skeptical plant manager who owns uptime
+# but has been burned by "digital transformation," an OT controls engineer who
+# guards the network, a VP of Ops EB who wants a proven line before a rollout,
+# and an incumbent historian vendor with a services lock-in.
+id: manufacturing-mes
+name: Kestrel Components — Predictive Maintenance Platform
+difficulty: 2
+description: >
+  A mid-market auto-parts manufacturer losing money to unplanned downtime. A
+  plant manager owns the uptime number but distrusts corporate "digital"
+  projects; an OT controls engineer can veto on network-safety grounds; the VP
+  of Operations controls capital but wants proof on one line first; and the
+  incumbent historian vendor defends with a services contract. Shop-floor
+  credibility, not a slick dashboard, wins here.
+
+seller_brief: |
+  You are an enterprise seller for AxleSense, a predictive-maintenance and
+  manufacturing-analytics platform (edge sensor ingestion, vibration/thermal
+  anomaly detection, MES-integrated work-order automation, OEE analytics). List
+  price: $640,000/year for a three-plant deployment.
+
+  Account: Kestrel Components, a mid-market tier-1 auto-parts supplier (6 plants,
+  ~$780M revenue, US Southeast + Mexico). Public signals: an earnings call
+  mentioned "unplanned downtime pressuring gross margin"; they posted "reliability
+  engineer" and "OT/IT convergence" roles; a key OEM customer put them on a
+  quality-and-delivery watchlist after missed shipments.
+
+  Your entry point: Rosa Ibarra, Plant Manager of their largest facility, took a
+  first call after a downtime-heavy quarter. She owns the uptime number — but
+  she has been burned by two corporate "digital transformation" programs that
+  cost money and changed nothing, so she is skeptical of anything that smells
+  like a dashboard. Above her sits the VP of Manufacturing Operations, Curtis
+  Nnamdi, who controls capital but will not fund a multi-plant rollout without
+  proof on one line. Between you and production sits an OT controls engineer,
+  Milan Petrov, who can veto on network-safety grounds (the OT/IT divide is
+  real here), and plant procurement runs the incumbent historian contract. You
+  have a 6-week interaction window before the capital-planning cycle closes.
+
+  You may make calls, send emails, request meetings, and plan privately between
+  touches. You are graded on The Value Engine methodology: evidence-based
+  discovery, quantified downtime impact, Economic Buyer access, a Mutual Action
+  Plan that runs the OT security review in parallel with a scoped line pilot,
+  and price integrity.
+
+company:
+  name: Kestrel Components
+  industry: Automotive parts manufacturing (tier-1 supplier)
+  size: 6 plants, ~$780M revenue, ~4,200 employees
+  situation: >
+    Unplanned downtime is compressing gross margin and a key OEM has them on a
+    delivery watchlist — a lost-of-business threat. Corporate froze
+    discretionary capital pending a reliability plan, and two prior digital
+    programs failed, leaving the shop floor cynical. Any new spend needs proof on
+    one line and OT sign-off before the capital-planning cycle locks.
+
+personas:
+  - id: rosa
+    name: Rosa Ibarra
+    role: Plant Manager (largest facility)
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Blunt, shop-floor credible, allergic to corporate buzzwords. Owns the
+      uptime and scrap numbers cold. Two failed "transformation" programs made
+      her deeply skeptical of software promises. Answers direct operational
+      questions candidly; walks out on a dashboard demo. Becomes a genuine
+      champion only if the seller earns floor credibility and hands her a
+      hard-numbers case she can defend to the VP.
+    pressures:
+      - Owns the plant's downtime, OEE, and OEM-delivery scores
+      - An OEM watchlist threatens the plant's largest program
+      - Corporate froze capital pending a reliability plan she must produce
+    private_notes: >
+      Rosa will not walk anything to Curtis unless the seller proves it on real
+      line data first. She quietly blames the incumbent historian for "data we
+      can't act on." Her OT gatekeeper, Milan, must bless any network touch or
+      it dies on the floor.
+  - id: milan
+    name: Milan Petrov
+    role: OT Controls & Automation Engineer
+    committee_role: technical_gatekeeper
+    personality: >
+      Guardian of the plant network. Has killed IT-led projects that ignored OT
+      safety and segmentation. Requires an air-gapped/segmented pilot design and
+      an OT-security review before anything touches a PLC. Rewards sellers who
+      speak OT — protocol compatibility, no production risk, read-only first —
+      and distrusts anyone who treats the plant like a data-center.
+    pressures:
+      - Any network incident that stops a line is on him
+      - Understaffed; will not fast-track vendors who ignore OT constraints
+  - id: curtis
+    name: Curtis Nnamdi
+    role: VP Manufacturing Operations (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Operations-first, results-driven, ten-minute patience for vendors. Opens
+      with "show me it worked on one line, with real numbers, then we talk
+      rollout." Will give a conditional commitment tied to a signed pilot on a
+      single line if shown a conservative downtime-cost model and an OT-cleared
+      plan. Dismisses vendor decks and "up to" savings claims.
+    pressures:
+      - Corporate capital freeze he must justify breaking, plant by plant
+      - The OEM watchlist is a board-visible revenue risk
+      - Two prior software programs failed on his watch; low tolerance for a third
+    private_notes: >
+      Curtis only funds what a plant manager AND OT both sponsor. He respects a
+      conservative floor number tied to real downtime hours and a pilot he can
+      point the board to.
+  - id: dwight
+    name: Dwight Feller
+    role: Plant Procurement Lead
+    committee_role: procurement
+    personality: >
+      Administers the incumbent historian services contract; measured on
+      savings-vs-list. Uses the incumbent's bundled pricing as an anchor and
+      leans on switching-cost fear. Respects a seller who reframes to
+      downtime-cost-of-delay and offers structured trades; punishes naked
+      discounting by asking for more.
+    pressures:
+      - Plant cost-reduction target on non-production spend
+
+org_chart: >
+  Corporate CFO (capital freeze) → VP Manufacturing Operations Curtis Nnamdi
+  (EB, owns plant capital) → Plant Manager Rosa Ibarra (contact) → production
+  supervisors and maintenance. Parallel on the floor: OT Controls Engineer Milan
+  Petrov (network veto) and Plant Procurement Lead Dwight Feller (runs the
+  incumbent historian contract). Corporate IT is remote and defers to plant OT
+  on the floor network.
+
+budget_cycle: >
+  Corporate froze discretionary capital pending a reliability plan; the
+  capital-planning cycle locks in ~6 weeks. A scoped single-line pilot that
+  proves out AND clears OT security review before the cycle can be funded for
+  rollout this year; anything later waits. The OT review must run in parallel
+  with the pilot or it cannot close in the window.
+
+competitor:
+  name: Datum Historian
+  product: Incumbent process-historian and reporting vendor with a bundled services contract
+  strengths:
+    - Already collecting tag data at every plant; switching-cost and "rip out our data" fear
+    - Bundled services contract plant procurement administers
+    - Cleared OT review years ago — no new network paper
+    - Cheaper sticker via a "reporting refresh" upsell
+  weaknesses:
+    - Reporting is rear-view — no predictive vibration/thermal anomaly detection (AxleSense differentiator)
+    - No MES-integrated work-order automation; alerts don't become action
+    - Rosa's team says its data is "unactionable"; maintenance ignores it
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 8
+
+gated_facts:
+  - id: downtime_number
+    fact: >
+      "Straight numbers: we ran about 240 hours of unplanned downtime last year
+      on the two critical lines. At our contribution rate that's roughly $5.8M
+      of product we didn't ship — and it's exactly why the OEM put us on their
+      watchlist. That's my number; I report it every Monday."
+    gate: quantifying_question
+    holder: rosa
+    description: The quantified pain — released only on a real Impact question, not a pitch.
+  - id: scrap_cost
+    fact: >
+      "On top of that, unplanned stops spike scrap and rework — call it another
+      $1.4M a year in material and labor we eat. Nobody upstairs connects the
+      two, but on the floor it's the same root cause."
+    gate: quantifying_question
+    holder: rosa
+    description: Second value-model row — scrap and rework.
+  - id: decision_process
+    fact: >
+      "Nothing gets funded past a pilot without Curtis — VP of Ops, he owns
+      plant capital. But nothing touches my network without Milan, my OT
+      engineer, and his security review. Corporate froze capital until we hand up
+      a reliability plan. Software vendors always skip the OT step and die on the floor."
+    gate: process_question
+    holder: rosa
+    unlocks_personas: [milan, curtis]
+    description: EB identity + the OT gauntlet — released on a process question.
+  - id: capital_window
+    fact: >
+      "Be realistic on timing: if this isn't proven on a line and through OT
+      before the capital cycle locks — about six weeks — Curtis won't reopen the
+      plan till next year. The OEM watchlist won't wait that long, but the budget will."
+    gate: process_question
+    holder: rosa
+    description: The compelling event — the capital cycle plus OEM watchlist clock.
+  - id: datum_gap
+    fact: >
+      "Between us: the historian gives us pretty reports nobody acts on — it's
+      rear-view mirror data. Dwight loves the bundle because it's easy to renew.
+      If you tell him his data is useless he'll dig in, so be smart about how you
+      surface it."
+    gate: competitor_probe
+    holder: rosa
+    description: Competitive landmine — released when the seller maps alternatives.
+  - id: eb_intro
+    fact: >
+      "Alright — I'll take you to Curtis, but you earn it: Milan signs off on the
+      pilot design first so it's OT-safe, we lead with MY downtime numbers, and
+      there's no 'up to' anywhere. Pre-brief Milan or Curtis will kill it in the room."
+    gate: champion_test
+    holder: rosa
+    unlocks_personas: [curtis]
+    description: EB access — earned by a champion-test ask with real internal cost.
+  - id: conditional_commitment
+    fact: >
+      "Here's the deal: run a 60-day pilot on one critical line — read-only
+      first, OT-reviewed by Milan — against criteria my team signs: measured
+      downtime reduction and validated predictive catches. Clear it on a
+      conservative model and I'll fund the rollout in this capital cycle. Put the
+      criteria and the OT dates in writing."
+    gate: eb_meeting_held
+    holder: curtis
+    description: The EB's conditional commitment — only inside a real EB meeting.
+
+events:
+  - id: rosa_quiet
+    week: 3
+    effect: champion_goes_quiet
+    description: >
+      A line-down crisis and an OEM audit swallow Rosa's week; she goes dark and
+      cuts a call short. Sellers who panic-pitch lose her hard-won trust; sellers
+      who send a useful one-page pilot-scoping draft she can hand to Milan keep momentum.
+  - id: ot_security_review
+    week: 4
+    effect: security_review
+    description: >
+      Milan formally opens an OT-security review — network segmentation, protocol
+      compatibility, read-only data path, no production risk. It cannot be
+      compressed. Only sellers who designed for OT up front and brought the packet
+      keep the capital-cycle timeline intact.
+  - id: procurement_bundle
+    week: 5
+    effect: procurement_enters
+    description: >
+      Plant procurement enters anchoring on Datum's bundled renewal and demands
+      20% off list plus switching-cost protections. Price-integrity test under a
+      capital-freeze narrative: defend the downtime-cost value model, trade
+      structure for price, never gift the discount.
+    persona:
+      id: dwight
+      name: Dwight Feller
+      role: Plant Procurement Lead
+      committee_role: procurement
+      personality: >
+        Anchors on the incumbent bundle, measured on savings-vs-list, leans on
+        switching-cost fear. Respects a seller who reframes to cost-of-downtime
+        and offers structured trades; punishes naked discounting by asking for more.
+      pressures:
+        - Plant non-production cost-reduction target
+      private_notes: >
+        Authorized to 10% with a multi-year term; the Datum comparison ignores
+        predictive detection and MES automation, which he privately concedes.
+
+win_conditions:
+  required_facts: [downtime_number, decision_process, eb_intro, conditional_commitment]
+  min_trust: 68
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 10
+  description: >
+    A funded rollout requires the downtime number in Rosa's own words, the OT
+    gauntlet mapped AND started in parallel (the MAP must carry the OT-security
+    review and single-line pilot dates inside the capital cycle), Curtis's
+    conditional commitment against a signed line pilot, and price held within
+    10% (traded for term or scope, never gifted).
+
+list_price: "$640,000/year"

@@ -1,0 +1,119 @@
+%==============================================================================
+%  macros.tex --- single source of truth for every number in the paper.
+%
+%  Two classes of macro:
+%    (1) DESIGN CONSTANTS --- fixed by the benchmark specification. Final.
+%    (2) RESULT MACROS     --- provisional; wrapped in \NUM{} so they render
+%        visually distinct until the full grid completes and they are frozen.
+%
+%  When the grid finishes: replace the \NUM{...} bodies with final values and
+%  set \draftfalse in main.tex. Nothing else in the prose needs to change.
+%==============================================================================
+
+% ---------- (1) DESIGN CONSTANTS (final) -------------------------------------
+% NOTE: these are the CURRENT grid dimensions and SUPERSEDE the stale snapshot in
+% the book's afterword ("206 arms / 12 scenarios / 11 industries / nine endpoints").
+% The book afterword will be re-synced to this work later; do not backport its
+% numbers into the paper.
+\newcommand{\numScenarios}{9}                 % total scenarios
+\newcommand{\numScenariosNew}{6}              % scenarios added in the expanded release
+\newcommand{\numScenariosOrig}{3}             % original scenarios
+\newcommand{\numModels}{11}                   % model endpoints in the canonical frontier grid
+\newcommand{\numModelsFrontier}{11}           % closed frontier endpoints
+\newcommand{\numModelsOpen}{2}                % FUTURE WORK: open-weight fine-tuning arms (kimi-k3, inkling) -- NOT in the canonical grid
+\newcommand{\numLabs}{4}                       % Anthropic, OpenAI, xAI, Google (canonical frontier labs)
+\newcommand{\numSeeds}{15}                     % stochastic-buyer seeds per cell
+\newcommand{\numTracks}{2}                     % out-of-box (OOB) vs. methodology pack
+\newcommand{\numIndustries}{9}                % distinct verticals
+
+% Difficulty tiers
+\newcommand{\numTierEasy}{4}                  % d1
+\newcommand{\numTierMid}{3}                   % d2
+\newcommand{\numTierHard}{2}                  % d3
+
+% Reward decomposition (milestone weights, sum = 1.0)
+\newcommand{\wFacts}{0.40}
+\newcommand{\wTrust}{0.20}
+\newcommand{\wEB}{0.15}
+\newcommand{\wMAP}{0.15}
+\newcommand{\wPrice}{0.10}
+
+% Deal Velocity Index (DVI) component weights (sum = 100), book Ch.13 Fig.7
+\newcommand{\dviMEDDPICC}{40}
+\newcommand{\dviWhys}{20}
+\newcommand{\dviEB}{15}
+\newcommand{\dviMAP}{15}
+\newcommand{\dviChampion}{10}
+% DVI action bands
+\newcommand{\dviBandCommit}{75}   % >= commit-eligible
+\newcommand{\dviBandDevelop}{50}  % 50--74 develop; <50 rebuild
+
+% Sale Quality Score (SQS) coefficients
+\newcommand{\sqsDviCoef}{0.6}
+\newcommand{\sqsPriceCoef}{20}
+\newcommand{\sqsWon}{20}
+\newcommand{\sqsNoDecision}{6}
+\newcommand{\sqsLost}{0}
+
+% Grid size (design)
+\newcommand{\gridCellsTotal}{2970}            % 9 scen x 11 models x 15 seeds x 2 tracks
+\newcommand{\gridCellsNew}{1980}              % 6 new scen x 11 x 15 x 2
+\newcommand{\gridCellsExpand}{990}            % 3 orig scen x 15 seeds x 11 x 2
+
+% ---------- (2) RESULT MACROS (provisional; freeze at grid completion) --------
+% The 16 result macros below are AUTO-GENERATED from datasets/veb-canonical-135/paper-stats.json
+% by analysis/gen-macros.py (single source of truth). Do not hand-edit; regenerate instead.
+\input{result-macros.tex}
+% Human-expert agreement (kappa/alpha) is a PRE-REGISTERED, forthcoming study; we
+% never print a fabricated number. The macros render an honest textual placeholder
+% and the prose is written so the sentences read naturally without a value.
+\newcommand{\resJudgeKappa}{\textit{(forthcoming)}}  % judge--expert Cohen's kappa (pre-registered)
+\newcommand{\resJudgeAlpha}{\textit{(forthcoming)}}  % multi-rater Krippendorff's alpha (pre-registered)
+
+% ---------- Hardened (adversarial) judge track ------------------------------
+% A second, deterministic-override judge that reconstructs the objective MEDDPICC/
+% EB/MAP dimensions from the event log and lets the LLM score only subjective dims.
+% Re-graded 2969/2970 canonical cells (one grok-4.3 row unmatched); the meanDelta is
+% the mean per-model SQS change vs the default judge (negative = default marginally generous).
+\newcommand{\resHardenedCells}{2969}           % canonical cells re-graded under the hardened judge
+\newcommand{\resHardenedMeanDelta}{-0.52}      % mean per-model SQS change, hardened vs default
+\newcommand{\resHardenedMaxDrop}{-3.05}        % largest per-model drop
+\newcommand{\resHardenedMaxDropModel}{claude-fable-5} % model with the largest drop
+\newcommand{\resHardenedRankChurn}{0}          % top-2 rank changes under the hardened judge
+
+% ---------- Score distribution (VEB as an RL environment) -------------------
+% Each rollout (scenario x seed x track) is one "problem"; training reward = SQS/100 in [0,1].
+% NB: this SQS/100 training reward is distinct from the dataset's native `reward` field
+% (a milestone/DVI composite in reward_breakdown); the two have different grand means.
+% Entropy is normalized Shannon entropy of the 10-bin reward histogram, per model.
+\newcommand{\resPassBar}{60}                    % raw-SQS clean-pass bar for binarized reward
+\newcommand{\resDistGrandReward}{0.60}         % grand-mean reward over all 2970 canonical rollouts
+\newcommand{\resDistMeanStd}{0.15}             % mean per-model reward std dev
+\newcommand{\resDistMeanEntropy}{0.76}         % mean per-model normalized reward entropy (10 bins)
+\newcommand{\resDistEntropyLo}{0.63}           % min per-model entropy (grok-4.3)
+\newcommand{\resDistEntropyHi}{0.84}           % max per-model entropy (gemini-3.5-flash)
+\newcommand{\resDistLeaderReward}{0.73}        % gpt-5.6-sol mean reward
+\newcommand{\resDistLeaderPass}{67.8}          % gpt-5.6-sol pass-rate (%) at SQS>=60
+
+% ---------- (3) ENRICHMENT LAYER (design constants + calibration results) -----
+% Design constants (final): the enrichment layer is separate from SQS grading.
+\newcommand{\numAiFeatures}{17}               % behavioral features in aiFeatures record: 15 LLM-judged + 2 deterministic (rl__public_private_divergence, rl__hidden_negativity)
+\newcommand{\numDetFeatures}{44}              % deterministic (transcript/log) features
+\newcommand{\numEnrichPasses}{3}              % people / message / play
+\newcommand{\numEnrichSeats}{3}               % ensemble seats (production cheap panel)
+
+% Inter-panel calibration (FINAL --- already in hand on \resPanelCalibN{} rows):
+% cheap production panel vs. frontier reference panel.
+\newcommand{\resPanelCalibN}{139}             % canonical rows scored by BOTH panels
+\newcommand{\resPanelPearson}{0.894}          % mean Pearson r, 11 scalar AI features
+\newcommand{\resPanelMAD}{0.047}              % mean abs. diff, same 11 scalar features
+\newcommand{\resPanelCatPosture}{89.9}        % rel__buyer_posture exact-match %
+\newcommand{\resPanelCatDiscovery}{90.6}      % content__discovery_vs_pitch exact-match %
+\newcommand{\resPanelCatEthic}{98.6}          % ethic__value_defended exact-match %
+
+% Enrichment coverage (frozen: enrichment joined onto every canonical row).
+\newcommand{\resEnrichRows}{2970}             % canonical trajectories enriched (2970/2970 coverage)
+
+% (4) VALUE FRONTIER macros (resFrontierBest, resFrontierBestSQSPerUSD,
+%     resCostPerDealMin, resCostPerDealMax, resLatencyPfifty, resLatencyPninety,
+%     resReliability) are generated into result-macros.tex — see \input above.

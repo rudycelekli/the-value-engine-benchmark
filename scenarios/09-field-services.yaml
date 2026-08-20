@@ -1,0 +1,208 @@
+# Scenario 9 — Warm field-service-management sale into a growing home-services company (difficulty 1)
+# Third winnable control, fresh (blue-collar) industry: an FSM/dispatch platform
+# into a fast-growing HVAC & plumbing company drowning in paper dispatch. The
+# owner IS the EB and is reachable through an ops-manager champion; the incumbent
+# is a whiteboard and spreadsheets. Winnable, and the signal is disciplined closing.
+id: field-services
+name: Summit Home Services — Field Service Management Platform
+difficulty: 1
+description: >
+  A fast-growing residential HVAC and plumbing company outgrowing paper dispatch
+  and spreadsheets. The operations manager is desperate for a field-service
+  platform before the summer peak; the owner-operator holds the checkbook, is
+  reachable in one step, and already knows dispatch is chaos. No real incumbent.
+  A disciplined seller wins this — the signal is which models close a warm,
+  blue-collar deal without fumbling the fundamentals.
+
+seller_brief: |
+  You are an enterprise seller for DispatchIQ, a field-service-management platform
+  (smart scheduling and dispatch, mobile technician app, automated customer
+  updates, invoicing, and job-profitability analytics). List price: $72,000/year
+  for Summit's technician count.
+
+  Account: Summit Home Services, a fast-growing residential HVAC & plumbing
+  company (~120 technicians, ~$28M revenue, three metro branches). Public signals:
+  strong Google-review growth but recent reviews mention "missed appointment
+  windows"; they're hiring dispatchers and a "operations analyst"; the owner posts
+  about "growing pains" on LinkedIn.
+
+  Your entry point: Marcus Bell, Operations Manager, called you after a brutal
+  week of double-booked trucks and angry customers. He runs dispatch on a
+  whiteboard and spreadsheets and it's collapsing as they add technicians. Above
+  him is exactly one decision-maker: the owner/CEO, Gina Russo, who signs the
+  checks, feels the chaos personally, and wants it fixed before the summer AC-repair
+  peak. There's no software incumbent to displace. You have a 6-week window before
+  peak season hits.
+
+  You may make calls, send emails, request meetings, and plan privately between
+  touches. Even a warm, hands-on-owner deal is graded on The Value Engine
+  methodology: quantify the cost of the chaos in the buyer's words, earn a real
+  owner meeting (don't skip it because Marcus is eager), build a Mutual Action Plan
+  to a live-before-peak date, and hold price with integrity.
+
+company:
+  name: Summit Home Services
+  industry: Residential home services (HVAC & plumbing)
+  size: ~120 technicians, ~$28M revenue, 3 branches
+  situation: >
+    Growing fast on reputation but dispatch is breaking down — double-booked
+    trucks, missed appointment windows, and rising customer complaints just as the
+    summer AC-repair peak approaches. The owner feels every bad review personally
+    and has cash to fix it, but the whole operation still runs on a whiteboard and
+    spreadsheets.
+
+personas:
+  - id: marcus
+    name: Marcus Bell
+    role: Operations Manager
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Practical, harried, running dispatch by hand and hating it — he made the
+      call himself. Talks in real operational numbers (trucks, jobs, complaints)
+      and will quantify the pain readily. Eager to fix it fast, which tempts a
+      lazy seller into taking a soft yes without the owner or a real plan. Becomes
+      a committed champion the moment the seller helps him make the case to Gina.
+    pressures:
+      - Owns the dispatch chaos and the rising complaint count
+      - Adding techs weekly; the manual system is at its breaking point
+      - Wants it live before the summer peak
+    private_notes: >
+      Marcus talks to owner Gina Russo daily and can get her on a call within
+      days. Gina already feels the pain and has money — the meeting is winnable.
+      The graded question is whether the seller earns and structures it with real
+      numbers rather than coasting on Marcus's urgency.
+  - id: gina
+    name: Gina Russo
+    role: Owner & CEO (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Hands-on owner-operator, decisive, feels every missed appointment and bad
+      review personally. Controls the checkbook and has cash set aside for growth.
+      Will give a clear conditional commitment if shown a simple, credible payback
+      tied to more completed jobs per day and fewer complaints — she doesn't want a
+      long process, but she respects a real go-live plan over a rushed discount.
+    pressures:
+      - Bad reviews threaten the referral engine the business runs on
+      - Wants dispatch fixed before summer peak
+    private_notes: >
+      Gina says yes fast when Marcus backs it and the math is obvious. A seller who
+      slashes price to close quick actually makes her suspicious the tool is weak.
+
+org_chart: >
+  Owner/CEO Gina Russo (EB, signs every check) → Operations Manager Marcus Bell
+  (contact and champion) → dispatchers and ~120 field technicians across 3
+  branches. That's the whole decision — one approval layer, no procurement, no
+  software incumbent to rip out.
+
+budget_cycle: >
+  Gina controls the cash directly and can approve on the spot. The real clock is
+  the summer AC-repair peak ~6 weeks out: Marcus needs dispatch and the technician
+  app live before the rush, a genuine operational compelling event rather than a
+  fiscal one.
+
+competitor:
+  name: Whiteboard + spreadsheets
+  product: Manual dispatch on a whiteboard, spreadsheets, and phone calls
+  strengths:
+    - Free and familiar; no software to learn or buy
+    - Total flexibility for a small team
+  weaknesses:
+    - No smart scheduling — double-bookings and idle drive-time (DispatchIQ's core value)
+    - No mobile app, automated customer updates, or job-profitability visibility
+    - Collapses as technician count grows; Marcus already knows it can't scale to peak
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 8
+
+gated_facts:
+  - id: chaos_cost
+    fact: >
+      "Here's my real number: we run about 300 jobs a week and we're losing maybe
+      15% of capacity to bad routing, double-bookings, and windshield time — that's
+      close to $1.8M a year in jobs we could complete but don't. Add the missed
+      windows costing us five-star reviews, and referrals are our whole growth
+      engine. I'm running all of it off a whiteboard."
+    gate: quantifying_question
+    holder: marcus
+    description: The quantified pain — easily earned; Marcus is eager and operational.
+  - id: peak_deadline
+    fact: >
+      "The honest deadline is summer peak — about six weeks out. If we're not live
+      with real dispatch and the tech app before the AC rush, we'll drown in it and
+      Gina will be answering one-star reviews all season."
+    gate: process_question
+    holder: marcus
+    description: The compelling event — the summer-peak live-by date.
+  - id: eb_intro
+    fact: >
+      "Easy — Gina owns the business and signs everything, and she already knows
+      dispatch is a mess. I'll get her on a call this week. Let's bring my capacity
+      and complaint numbers and a clear rollout plan so it's a quick yes, not a sales pitch."
+    gate: champion_test
+    holder: marcus
+    unlocks_personas: [gina]
+    description: EB access — easy to earn, but only if the seller actually asks and structures it.
+  - id: conditional_commitment
+    fact: >
+      "This is a yes waiting to happen: if you can have us live before peak — my
+      techs on the app, dispatch off the whiteboard — on the plan Marcus and I just
+      went through, I'll cut the check this week. Send me the plan with dates and
+      it's approved."
+    gate: eb_meeting_held
+    holder: gina
+    description: The EB's conditional commitment — a clean yes inside a real EB meeting.
+
+events:
+  - id: eager_discount_bait
+    week: 3
+    effect: internal_pressure
+    pressure_kind: quarter_end
+    pressure_from: VP of Sales
+    seller_message: >
+      Summit's an easy win — the owner's ready and it's a small deal, so just get
+      it in. Knock 25% off and pull the signature into this week; I'll sign off.
+      No need to overwork a warm one.
+    description: >
+      A seller-side pressure note baiting an unforced discount on a warm deal. The
+      graded-correct move is to hold price and earn the owner meeting; Gina reads a
+      big unprompted discount as a sign the product is weak.
+  - id: light_price_check
+    week: 4
+    effect: procurement_enters
+    description: >
+      Gina asks her bookkeeper to "just look at the number" — a friendly, low-key
+      check, not a hostile negotiation. A quick payback reframe and a small trade
+      (annual prepay, a review-referral) closes it; only caving to a deep discount
+      loses the deal.
+    persona:
+      id: theresa
+      name: Theresa Lott
+      role: Bookkeeper / Office Manager
+      committee_role: procurement
+      personality: >
+        Careful with the owner's money but not a professional negotiator. Accepts a
+        clear payback and a modest trade readily; only pushes harder if the seller
+        signals weakness by over-discounting first.
+      pressures:
+        - Keeping Summit's growth spend sensible
+      private_notes: >
+        Comfortable with list given the capacity math; a small trade like annual
+        prepay is plenty. She is not looking for a fight.
+
+win_conditions:
+  required_facts: [chaos_cost, eb_intro, conditional_commitment]
+  min_trust: 60
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 12
+  description: >
+    A clean win requires the lost-capacity number in Marcus's own words, a real
+    (earned, not skipped) owner meeting with Gina's conditional commitment, a MAP
+    with a live-before-peak date, and price held within 12% — the easy-deal test is
+    disciplined closing, not buying the yes with an unforced discount.
+
+list_price: "$72,000/year"

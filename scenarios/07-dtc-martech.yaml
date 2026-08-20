@@ -1,0 +1,209 @@
+# Scenario 7 — Warm mid-market martech sale into a fast-growing DTC brand (difficulty 1)
+# The winnable control: a hot inbound, an enthusiastic champion who sits one desk
+# from the founder-EB, budget already earmarked, a weak in-house incumbent, and a
+# genuine peak-season compelling event. Disciplined sellers should CLOSE this;
+# the point is top-end discrimination — a model that fumbles a gimme is exposed.
+id: dtc-martech
+name: Lumewell — Customer Data & Lifecycle Platform
+difficulty: 1
+description: >
+  A fast-growing direct-to-consumer wellness brand whose growth-marketing lead
+  is desperate for a unified customer-data and lifecycle platform before peak
+  season. Warm inbound, budget earmarked, one friendly approval layer to the
+  founder, and only spreadsheets to displace. A disciplined seller should win
+  this cleanly — the value is in separating models that close a warm deal from
+  those that talk themselves out of one.
+
+seller_brief: |
+  You are an enterprise seller for Cadence, a customer-data and lifecycle-
+  marketing platform (unified customer profiles, segmentation, automated
+  email/SMS journeys, retention analytics). List price: $96,000/year at
+  Lumewell's contact volume.
+
+  Account: Lumewell, a fast-growing DTC wellness brand (~$40M revenue, ~2.5M
+  customers, 70 employees, founder-led). Public signals: they just closed a
+  Series B for growth; their founder posts constantly about "retention is the
+  new acquisition"; they're hiring lifecycle and CRM marketers.
+
+  Your entry point: Jordan Kim, Head of Growth Marketing, filled out a "book a
+  demo" form and came in hot — she's been stitching customer data together in
+  spreadsheets and a basic email tool and it's breaking as they scale into peak
+  Q4. Above her is exactly one person: the founder/CEO, Priya Shah, who signs
+  anything Jordan sponsors and has money set aside from the raise. There is no
+  entrenched vendor — just in-house spreadsheets and a cheap email tool. You have
+  a 6-week window; Jordan needs this live before the Q4 peak-season push.
+
+  You may make calls, send emails, request meetings, and plan privately between
+  touches. Even a warm deal is graded on The Value Engine methodology: quantify
+  the pain in the buyer's words, earn real Economic Buyer access (don't just take
+  the yes), build a Mutual Action Plan to a live-by date, and hold price with
+  integrity even when the buyer is eager.
+
+company:
+  name: Lumewell
+  industry: Direct-to-consumer wellness / e-commerce
+  size: ~$40M revenue, ~2.5M customers, 70 employees
+  situation: >
+    Post-Series-B and scaling fast. Retention is the board's headline metric and
+    the current spreadsheet-plus-basic-email stack is buckling ahead of Q4 peak
+    season. Budget from the raise is earmarked for growth tooling; the founder is
+    decisive and wants retention infrastructure in place before the holiday push.
+
+personas:
+  - id: jordan
+    name: Jordan Kim
+    role: Head of Growth Marketing
+    committee_role: champion_candidate
+    is_initial_contact: true
+    personality: >
+      Energetic, motivated, already sold on the category — she requested the
+      demo. Answers questions openly and will happily quantify her pain. Eager to
+      move fast, which is its own trap: a lazy seller lets her self-serve a vague
+      "yes" without a real business case or EB meeting. Becomes a strong champion
+      the moment the seller helps her frame the value for the founder.
+    pressures:
+      - Owns the retention number the board now watches
+      - Spreadsheet stack is breaking with weeks to Q4 peak
+      - Wants a win to prove her growth-marketing mandate
+    private_notes: >
+      Jordan reports directly to founder/CEO Priya Shah and can get her on a call
+      within days — she just needs to be asked properly, with numbers to present.
+      She'll gladly introduce Priya; the graded question is whether the seller
+      earns and structures the meeting rather than skipping it because the yes is easy.
+  - id: priya
+    name: Priya Shah
+    role: Founder & CEO (Economic Buyer)
+    committee_role: economic_buyer
+    is_economic_buyer: true
+    personality: >
+      Decisive, growth-minded, founder-fast. Trusts Jordan's judgment and has
+      budget from the raise. Will give a clear conditional commitment if shown a
+      simple, credible payback tied to retention — she does not need a
+      12-week gauntlet, but she does respect a seller who brings a real plan and a
+      live-by date rather than just taking her money.
+    pressures:
+      - Promised the board retention gains this year
+      - Wants infrastructure live before Q4 peak season
+    private_notes: >
+      Priya says yes fast when Jordan sponsors and the payback is obvious. She
+      still expects a concrete rollout plan and a date; a seller who over-discounts
+      to "close faster" actually makes her wonder what's wrong with the product.
+
+org_chart: >
+  Founder/CEO Priya Shah (EB, controls the growth budget) → Head of Growth
+  Marketing Jordan Kim (contact and champion) → 3 marketers. That's the whole
+  buying group — one approval layer, no procurement department, no incumbent
+  vendor to displace.
+
+budget_cycle: >
+  Growth budget from the Series B is available now and Priya controls it
+  directly. The real clock is Q4 peak season ~6 weeks out: Jordan needs the
+  platform live and journeys built before the holiday push, a genuine
+  compelling event rather than a fiscal artifact.
+
+competitor:
+  name: In-house spreadsheets + basic email tool
+  product: Manual customer lists in spreadsheets plus an entry-level email sender
+  strengths:
+    - Free / already in place; no switching effort perceived
+    - Team knows it; no new tool to learn
+  weaknesses:
+    - No unified profiles — data is fragmented and stale (Cadence's core value)
+    - No segmentation or automated journeys; everything is manual batch sends
+    - Breaks at Lumewell's scale; Jordan already knows it can't survive Q4
+
+calendar:
+  weeks: 6
+  slots_per_week: 2
+  max_turns_per_call: 8
+
+gated_facts:
+  - id: retention_pain
+    fact: >
+      "Here's my number: our repeat-purchase rate has slipped from 34% to 28% as
+      we scaled, and every point of retention is worth roughly $400k a year to us.
+      I'm running the whole thing out of spreadsheets and a basic email tool — I
+      literally can't segment or automate, so we're leaving money on the table
+      every single week."
+    gate: quantifying_question
+    holder: jordan
+    description: The quantified pain — released on a genuine Impact question (easy to earn; she's eager).
+  - id: peak_deadline
+    fact: >
+      "The honest deadline is Q4 peak — about six weeks out. If we're not live
+      with real journeys before the holiday push, we've missed our biggest
+      retention window of the year and I'll have to explain that to Priya."
+    gate: process_question
+    holder: jordan
+    description: The compelling event — the peak-season live-by date.
+  - id: eb_intro
+    fact: >
+      "Totally — Priya's my CEO and she sits right here; she signs off on growth
+      tooling and there's budget from the raise. I'll get her on a call this week.
+      Let's present my retention number and a clear rollout plan so it's a
+      five-minute yes, not a sales pitch."
+    gate: champion_test
+    holder: jordan
+    unlocks_personas: [priya]
+    description: EB access — easily earned, but only if the seller actually asks and structures it.
+  - id: conditional_commitment
+    fact: >
+      "This is a straightforward yes for me: if you can have us live with our top
+      three retention journeys before peak, on the plan Jordan and I just walked
+      through, I'll sign this week and get you the budget. Send the plan with dates
+      and I'll approve it."
+    gate: eb_meeting_held
+    holder: priya
+    description: The EB's conditional commitment — a clean yes, but only inside a real EB meeting.
+
+events:
+  - id: eager_discount_bait
+    week: 3
+    effect: internal_pressure
+    pressure_kind: quarter_end
+    pressure_from: VP of Sales
+    seller_message: >
+      Lumewell is an easy one — just get it in. Jordan's ready to buy, so throw
+      20% off and pull the signature into this week; I'll approve it. Don't
+      overthink a warm deal.
+    description: >
+      A seller-side pressure note baiting an unforced discount on an already-warm
+      deal. The graded-correct move is to hold price — Priya reads gratuitous
+      discounting as a red flag, not a gift.
+  - id: light_procurement
+    week: 4
+    effect: procurement_enters
+    description: >
+      Priya loops in her fractional finance contractor to "just check the number"
+      — a light, friendly review, not a hostile squeeze. A quick value reframe and
+      a small structured trade (annual prepay, case-study rights) closes it; caving
+      to a big discount is the only way to lose here.
+    persona:
+      id: sanjay
+      name: Sanjay Rao
+      role: Fractional Finance / Ops
+      committee_role: procurement
+      personality: >
+        Pragmatic part-timer doing a sanity check, not a professional discount
+        hunter. Accepts a clear value story and a modest trade readily; only pushes
+        harder if the seller signals desperation by over-discounting first.
+      pressures:
+        - Keeping the founder's growth spend disciplined
+      private_notes: >
+        Fine with list price given the payback; a small trade (annual prepay) is
+        more than enough. He is not looking for a fight.
+
+win_conditions:
+  required_facts: [retention_pain, eb_intro, conditional_commitment]
+  min_trust: 60
+  requires_eb_meeting: true
+  requires_map: true
+  max_discount_pct: 12
+  description: >
+    A clean win requires the retention number in Jordan's own words, a real
+    (earned, not skipped) EB meeting with Priya's conditional commitment, a MAP
+    with a live-before-peak date, and price held within 12% — the easy-deal test
+    is whether the seller closes with discipline instead of buying the yes with an
+    unforced discount.
+
+list_price: "$96,000/year"
