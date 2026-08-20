@@ -91,3 +91,42 @@ def test_verify_fails_on_stale_manifest_preview_sha():
     finally:
         shutil.copy2(backup, MANIFEST)
         backup.unlink()
+
+
+def _verify_fails_with(mutate):
+    """Apply `mutate` to paper-stats.json, assert verify fails, always restore."""
+    backup = PAPER_STATS.with_suffix(".json.bak")
+    shutil.copy2(PAPER_STATS, backup)
+    try:
+        data = json.loads(PAPER_STATS.read_text())
+        mutate(data)
+        PAPER_STATS.write_text(json.dumps(data, indent=2))
+        result = subprocess.run(
+            [sys.executable, str(VERIFY)],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+        )
+        print(result.stdout)
+        assert result.returncode != 0, (
+            f"verify_stats.py exited 0 on mutated lineage.\nstdout:\n{result.stdout}"
+        )
+    finally:
+        shutil.copy2(backup, PAPER_STATS)
+        backup.unlink()
+
+
+def test_verify_fails_without_lineage():
+    """Stats with no recorded source are unsourced numbers — reject them."""
+    _verify_fails_with(lambda d: d.pop("lineage", None))
+
+
+def test_verify_fails_on_lineage_source_digest_drift():
+    """The stats' source digest must match the digest the release advertises.
+
+    If they diverge, the headline numbers were computed from some file other
+    than the one a reader downloads and checksums.
+    """
+    def mutate(d):
+        d["lineage"]["source_sha256"] = "0" * 64
+    _verify_fails_with(mutate)

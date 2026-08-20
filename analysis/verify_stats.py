@@ -27,7 +27,14 @@ MANIFEST    = DATASET_DIR / "manifest.json"
 PREVIEW     = DATASET_DIR / "veb-canonical-135-preview.jsonl"
 PREVIEW_SHA = DATASET_DIR / "veb-canonical-135-preview.jsonl.sha256"
 FULL        = DATASET_DIR / "veb-canonical-135.jsonl"
+FULL_SHA    = DATASET_DIR / "veb-canonical-135.jsonl.sha256"
+MACROS      = ROOT / "paper" / "result-macros.tex"
 ANALYZE     = Path(__file__).parent / "analyze-canonical-135.py"
+
+# Lineage fields paper-stats.json must carry for a headline number to be
+# traceable back to the bytes it was computed from.
+LINEAGE_REQUIRED = ("source_file", "source_sha256", "source_bytes",
+                    "generator", "generator_sha256", "generated_at", "git")
 
 # Headline paths diffed in FULL mode (all derivable from JSONL only).
 # Each entry is a tuple of keys to walk into the JSON dict.
@@ -178,6 +185,54 @@ def main() -> int:
         )
         all_ok = all_ok and ok
 
+    # 8. LINEAGE COMPLETENESS: a headline number with no recorded source is an
+    #    unsourced number. paper-stats.json must say which file it was computed
+    #    from, by what generator, and when.
+    lin = committed.get("lineage") or {}
+    missing = [k for k in LINEAGE_REQUIRED if not lin.get(k)]
+    ok = check(
+        "paper-stats[lineage] records source file, digest, generator and timestamp",
+        not missing,
+        f"missing/empty: {missing}" if missing else "",
+    )
+    all_ok = all_ok and ok
+
+    # 9. ONE DIGEST EVERYWHERE (full dataset): the same generalisation as #5,
+    #    applied to the out-of-band release. The stats' recorded source digest
+    #    must equal the digest the release advertises -- otherwise the numbers
+    #    were computed from some other file than the one readers download.
+    full_recorded = {}
+    if FULL_SHA.exists():
+        full_recorded[".sha256 sidecar"] = FULL_SHA.read_text().split()[0]
+    if "sha256" in manifest:
+        full_recorded["manifest[sha256]"] = manifest["sha256"]
+    if lin.get("source_sha256"):
+        full_recorded["paper-stats[lineage][source_sha256]"] = lin["source_sha256"]
+
+    distinct = set(full_recorded.values())
+    agree = len(distinct) == 1 and len(full_recorded) >= 3
+    ok = check(
+        f"full-dataset digest agrees across all {len(full_recorded)} recorded location(s)",
+        agree,
+        "" if agree else "; ".join(f"{k}={v[:16]}…" for k, v in full_recorded.items())
+        or "no location records the full-dataset digest",
+    )
+    all_ok = all_ok and ok
+
+    # 10. MACROS ARE NOT STALE: result-macros.tex embeds the digest of the
+    #     paper-stats.json it was generated from. If the stats were regenerated
+    #     without regenerating the macros, the paper prints numbers from a file
+    #     that no longer exists in that form.
+    if MACROS.exists():
+        stats_sha = hashlib.sha256(COMMITTED.read_bytes()).hexdigest()
+        cited = stats_sha in MACROS.read_text()
+        ok = check(
+            "result-macros.tex records the current paper-stats.json digest",
+            cited,
+            "" if cited else f"macros do not cite sha256(paper-stats.json)={stats_sha[:16]}…",
+        )
+        all_ok = all_ok and ok
+
     # ------------------------------------------------------------------ #
     # FULL MODE: recompute from veb-canonical-135.jsonl                  #
     # ------------------------------------------------------------------ #
@@ -185,6 +240,17 @@ def main() -> int:
     tmpfile = None
     if full_mode:
         print("\n=== Full-mode numeric recompute ===")
+        # The file on disk must be the one the committed stats were computed
+        # from; otherwise a "matching" recompute would only prove self-consistency
+        # with whatever the local copy happens to be.
+        actual_full_sha = sha256_file(FULL)
+        ok = check(
+            "sha256(full JSONL on disk) == paper-stats[lineage][source_sha256]",
+            actual_full_sha == lin.get("source_sha256"),
+            f"disk={actual_full_sha[:16]}… lineage={str(lin.get('source_sha256'))[:16]}…"
+            if actual_full_sha != lin.get("source_sha256") else "",
+        )
+        all_ok = all_ok and ok
         try:
             fd, tmppath = tempfile.mkstemp(suffix=".json", prefix="veb-verify-")
             os.close(fd)

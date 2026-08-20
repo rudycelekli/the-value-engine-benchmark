@@ -10,9 +10,13 @@ Latency/reliability come from the Portkey export, rescoped to the 11-model roste
 Env overrides (for use by verify_stats.py and Task 7):
   VEB_ROWS       — path to the source JSONL (overrides SRC default)
   VEB_STATS_OUT  — path to write the output JSON (overrides OUT default)
+  VEB_PORTKEY    — path to the provider telemetry export (overrides PORTKEY)
 """
+import datetime
+import hashlib
 import json
 import os
+import subprocess
 from collections import defaultdict
 from pathlib import Path
 
@@ -31,7 +35,82 @@ if os.environ.get("VEB_STATS_OUT"):
 else:
     OUT = SRC.parent / "paper-stats.json"
 
-PORTKEY = ROOT / "rollouts" / "_portkey-export" / "portkey-full.jsonl.gz"
+if os.environ.get("VEB_PORTKEY"):
+    PORTKEY = Path(os.environ["VEB_PORTKEY"])
+else:
+    PORTKEY = ROOT / "rollouts" / "_portkey-export" / "portkey-full.jsonl.gz"
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def git_state():
+    """Commit the generator ran from, and whether that tree was dirty.
+
+    A dirty tree means the recorded sha does not identify the exact code that
+    produced the numbers — record it rather than imply a clean provenance.
+    """
+    def run(*args):
+        try:
+            r = subprocess.run(["git", *args], cwd=str(ROOT),
+                               capture_output=True, text=True)
+            return r.stdout.strip() if r.returncode == 0 else None
+        except OSError:
+            return None
+
+    sha = run("rev-parse", "HEAD")
+    status = run("status", "--porcelain")
+    return {"sha": sha, "dirty": bool(status) if status is not None else None}
+
+
+def lineage(src: Path) -> dict:
+    """Source lineage for the emitted stats.
+
+    Without this a reader cannot tell which bytes a headline number was
+    computed from, or whether the stats predate the rows they summarize.
+
+    `sources` is explicit that this file has two inputs, not one: every rubric,
+    cost and outcome number comes from the graded rollouts, but the
+    latency_reliability block comes from a provider telemetry export that is
+    NOT part of the release and therefore cannot be reproduced from it.
+    """
+    sources = [{
+        "role": "graded rollouts — every rubric, outcome and cost number",
+        "file": src.name,
+        "sha256": sha256_file(src),
+        "bytes": src.stat().st_size,
+        "distribution": "out-of-band (see DATA.md); digest committed in-repo",
+    }]
+    telemetry = {
+        "role": "provider telemetry — latency_reliability block only",
+        "file": PORTKEY.name,
+        "distribution": "not distributed — private operational export; this block "
+                        "is not reproducible from the released dataset",
+    }
+    if PORTKEY.exists():
+        telemetry["sha256"] = sha256_file(PORTKEY)
+        telemetry["bytes"] = PORTKEY.stat().st_size
+        telemetry["present_at_generation"] = True
+    else:
+        telemetry["present_at_generation"] = False
+    sources.append(telemetry)
+
+    return {
+        "source_file": src.name,
+        "source_sha256": sources[0]["sha256"],
+        "source_bytes": sources[0]["bytes"],
+        "sources": sources,
+        "generator": "analysis/analyze-canonical-135.py",
+        "generator_sha256": sha256_file(Path(__file__).resolve()),
+        "generated_at": datetime.datetime.now(datetime.timezone.utc)
+                                 .replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "git": git_state(),
+    }
 
 
 def pct(vals, p):
@@ -231,6 +310,7 @@ def main():
 
     result = {
         "source": str(SRC.name),
+        "lineage": lineage(SRC),
         "rows": len(rows),
         "roster": roster,
         "grid": {"scenarios": 9, "seeds": 15, "models": len(roster), "tracks": 2,
