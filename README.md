@@ -31,13 +31,13 @@ static leaderboard dump.
 | [`validation/`](validation/) | Judge-vs-human agreement protocol: blind grading sheet, rater qualification, and Cohen's κ / Krippendorff's α computation. |
 | [`finetune/`](finetune/) | SFT/RLVR export — turns graded rollouts into `prompt` / `completion` / `reward` training rows. |
 | [`paper/`](paper/) | Full research paper — LaTeX source + compiled [`main.pdf`](paper/main.pdf). Target venue: NeurIPS Datasets & Benchmarks. |
-| [`datasets/veb-canonical-135/`](datasets/veb-canonical-135/) | Canonical dataset artifacts: a Gebru-style [`DATASHEET.md`](datasets/veb-canonical-135/DATASHEET.md), `manifest.json`, `paper-stats.json`, a **66-row full-fidelity preview** (`*-preview.jsonl`), and SHA-256 checksums for the full release. |
+| [`datasets/veb-canonical-135/`](datasets/veb-canonical-135/) | Canonical dataset artifacts: a Gebru-style [`DATASHEET.md`](datasets/veb-canonical-135/DATASHEET.md), `manifest.json`, `paper-stats.json`, a **78-row full-fidelity preview** (`*-preview.jsonl`), and SHA-256 checksums for the full release. |
 | [`datasets/veb-base-540/`](datasets/veb-base-540/) | Base-model leaderboard (540-cell base grid). |
 | [`results/`](results/) | Findings reports (HTML), the harness leaderboard, and the fine-tuning lift report. |
 | [`DATA.md`](DATA.md) | How to obtain and verify the full dataset. |
 
-The full trajectory JSONLs (470 MB – 1.2 GB) exceed GitHub's file limits and are
-distributed separately — see [`DATA.md`](DATA.md). Their SHA-256 checksums are
+The full trajectory JSONL (557 MB uncompressed, 144 MB gzipped) exceeds GitHub's file limits and is
+distributed separately — see [`DATA.md`](DATA.md). Its SHA-256 checksums are
 committed here so any download can be verified byte-for-byte.
 
 **Licensing is split:** code is Apache-2.0 ([`LICENSE-CODE`](LICENSE-CODE)) so you
@@ -48,13 +48,15 @@ corpus, results, and paper are CC BY-NC 4.0 ([`LICENSE-DATA`](LICENSE-DATA)).
 
 ## The evaluation grid
 
-- **11 models**, out-of-the-box (`oob`) vs. methodology-pack (`pack`) tracks
+- **13 models** (11 closed-weight + 2 open-weight), out-of-the-box (`oob`) vs. methodology-pack (`pack`) tracks
 - **9 scenarios × 15 seeds** per model per track → **135 cells/model/track**, **270/model**
-- **2,970 graded episodes** in the canonical-135 freeze (2026-07-13)
+- **3,510 graded episodes** in the canonical-135 freeze (2026-08-20)
 
 Roster: `claude-opus-4-8`, `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-fable-5`,
 `gpt-5.6-sol`, `gpt-5.5`, `gemini-3.1-pro-preview`, `gemini-3.5-flash`,
-`grok-4.5`, `grok-4.3`, `grok-4.20-0309-reasoning`.
+`grok-4.5`, `grok-4.3`, `grok-4.20-0309-reasoning`, `moonshotai/kimi-k3`,
+`thinkingmachines/inkling`. The two open-weight endpoints are full members of the
+canonical grid — graded on every cell, on the leaderboard, not a side experiment.
 
 Every datapoint is one self-contained JSONL line with the full `episode`
 (turns, events, internal-channel thoughts, final state, outcome) and the full
@@ -99,8 +101,8 @@ Drop the full `veb-canonical-135.jsonl` into `datasets/veb-canonical-135/` and
 the same command runs **FULL MODE**: it first confirms the file on disk is the
 one the lineage names, then recomputes every headline number from the rows and
 diffs against the committed `paper-stats.json`. The committed statistics in this
-release were produced that way — reproduced key-for-key from the 2,970-row file
-at `00d8bec5…`, on a clean tree, with the lineage block recording it.
+release were produced that way — reproduced key-for-key from the 3,510-row file
+at `13a9e6e5…`, on a clean tree, with the lineage block recording it.
 
 One honest exception, recorded in the lineage rather than glossed: the three
 latency/reliability numbers derive from a provider telemetry export that is
@@ -116,12 +118,12 @@ shasum -a 256 -c veb-canonical-135-preview.jsonl.sha256
 shasum -a 256 -c veb-canonical-135.jsonl.sha256
 ```
 
-**What you cannot verify from this repo alone:** the 2,970-row source needed for
+**What you cannot verify from this repo alone:** the 3,510-row source needed for
 FULL MODE is distributed out-of-band (see [`DATA.md`](DATA.md)), so the headline
 statistics are recomputable *by anyone who requests the dataset*, not by a
 drive-by cloner. The preview is a stratified, full-fidelity sample — 6 rows per
-model across both tracks and all 9 scenarios, balanced across the decisive
-outcomes so the judge rubric is visibly discriminating — but 66 rows are an
+model across both tracks and 8 of the 9 scenarios, balanced across the decisive
+outcomes so the judge rubric is visibly discriminating — but 78 rows are an
 integrity and schema check, not a statistical one.
 
 **Provenance caveat, stated plainly:** every released row carries

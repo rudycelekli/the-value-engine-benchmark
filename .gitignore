@@ -4,6 +4,7 @@
 *.log
 *.out
 *.toc
+*.synctex.gz
 .DS_Store
 node_modules/
 dist/

@@ -2,14 +2,14 @@
   "source": "veb-canonical-135.jsonl",
   "lineage": {
     "source_file": "veb-canonical-135.jsonl",
-    "source_sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
-    "source_bytes": 492346523,
+    "source_sha256": "13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05",
+    "source_bytes": 584393740,
     "sources": [
       {
         "role": "graded rollouts \u2014 every rubric, outcome and cost number",
         "file": "veb-canonical-135.jsonl",
-        "sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
-        "bytes": 492346523,
+        "sha256": "13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05",
+        "bytes": 584393740,
         "distribution": "out-of-band (see DATA.md); digest committed in-repo"
       },
       {
@@ -22,14 +22,14 @@
       }
     ],
     "generator": "analysis/analyze-canonical-135.py",
-    "generator_sha256": "4a4024db59a9a483fbe2b89fe5eec6d2567b70d20294651f514b0741cc93c186",
-    "generated_at": "2026-08-20T21:20:06Z",
+    "generator_sha256": "fdc98140bc8997169be68879391b0613ed7793b09ebe552dd696e0e29c1bb524",
+    "generated_at": "2026-08-20T23:34:05Z",
     "git": {
-      "sha": "eae720d7fab8ba1fe04500f19f85226f89895df2",
-      "dirty": false
+      "sha": "35312edfe496bb6f720630958b504e750866178b",
+      "dirty": true
     }
   },
-  "rows": 2970,
+  "rows": 3510,
   "roster": [
     "claude-fable-5",
     "claude-opus-4-6",
@@ -41,17 +41,19 @@
     "gpt-5.6-sol",
     "grok-4.20-0309-reasoning",
     "grok-4.3",
-    "grok-4.5"
+    "grok-4.5",
+    "moonshotai/kimi-k3",
+    "thinkingmachines/inkling"
   ],
   "grid": {
     "scenarios": 9,
     "seeds": 15,
-    "models": 11,
+    "models": 13,
     "tracks": 2,
     "per_model_per_track": 135,
     "per_model": 270
   },
-  "cells_graded": 2970,
+  "cells_graded": 3510,
   "per_model": {
     "claude-fable-5": {
       "n": 270,
@@ -195,6 +197,32 @@
       "cost_per_deal_usd": 63.2996,
       "cost_per_cleared_usd": 63.2996,
       "cost_per_run_usd": 2.11
+    },
+    "moonshotai/kimi-k3": {
+      "n": 270,
+      "mean_sqs": 61.59,
+      "mean_dvi": 66.69,
+      "win_rate_pct": 4.07,
+      "cleared_rate_pct": 4.07,
+      "mean_discount_pct": 7.23,
+      "cost_total_usd": 652.27,
+      "deals_won": 11,
+      "cost_per_deal_usd": 59.2973,
+      "cost_per_cleared_usd": 59.2973,
+      "cost_per_run_usd": 2.4158
+    },
+    "thinkingmachines/inkling": {
+      "n": 270,
+      "mean_sqs": 57.84,
+      "mean_dvi": 63.39,
+      "win_rate_pct": 2.22,
+      "cleared_rate_pct": 2.22,
+      "mean_discount_pct": 10.119,
+      "cost_total_usd": 81.67,
+      "deals_won": 6,
+      "cost_per_deal_usd": 13.6109,
+      "cost_per_cleared_usd": 13.6109,
+      "cost_per_run_usd": 0.3025
     }
   },
   "best_model": {
@@ -203,49 +231,49 @@
   },
   "tracks": {
     "oob": {
-      "n": 1485,
-      "mean_sqs": 59.08,
-      "win_rate_pct": 9.02,
-      "cleared_rate_pct": 8.75,
-      "mean_discount_pct": 11.15
+      "n": 1755,
+      "mean_sqs": 59.22,
+      "win_rate_pct": 8.15,
+      "cleared_rate_pct": 7.92,
+      "mean_discount_pct": 10.538
     },
     "pack": {
-      "n": 1485,
-      "mean_sqs": 60.29,
-      "win_rate_pct": 12.05,
-      "cleared_rate_pct": 11.85,
-      "mean_discount_pct": 11.806
+      "n": 1755,
+      "mean_sqs": 60.16,
+      "win_rate_pct": 10.66,
+      "cleared_rate_pct": 10.48,
+      "mean_discount_pct": 11.555
     }
   },
   "pack_lift": {
-    "sqs_points": 1.21,
-    "win_rate_pp": 3.03,
-    "cleared_rate_pp": 3.1
+    "sqs_points": 0.94,
+    "win_rate_pp": 2.51,
+    "cleared_rate_pp": 2.56
   },
   "tier_lift": {
     "easy": {
-      "oob_sqs": 63.34,
-      "pack_sqs": 66.57,
-      "sqs_lift": 3.23,
-      "oob_win_pct": 16.21,
-      "pack_win_pct": 21.21,
-      "win_lift_pp": 5.0
+      "oob_sqs": 63.31,
+      "pack_sqs": 66.48,
+      "sqs_lift": 3.18,
+      "oob_win_pct": 14.87,
+      "pack_win_pct": 18.97,
+      "win_lift_pp": 4.1
     },
     "mid": {
-      "oob_sqs": 56.79,
-      "pack_sqs": 55.7,
-      "sqs_lift": -1.1,
-      "oob_win_pct": 4.65,
-      "pack_win_pct": 4.85,
-      "win_lift_pp": 0.2
+      "oob_sqs": 57.0,
+      "pack_sqs": 55.56,
+      "sqs_lift": -1.44,
+      "oob_win_pct": 3.93,
+      "pack_win_pct": 4.1,
+      "win_lift_pp": 0.17
     },
     "hard": {
-      "oob_sqs": 53.97,
-      "pack_sqs": 54.63,
-      "sqs_lift": 0.65,
-      "oob_win_pct": 1.21,
-      "pack_win_pct": 4.55,
-      "win_lift_pp": 3.33
+      "oob_sqs": 54.38,
+      "pack_sqs": 54.39,
+      "sqs_lift": 0.01,
+      "oob_win_pct": 1.03,
+      "pack_win_pct": 3.85,
+      "win_lift_pp": 2.82
     }
   },
   "cost_per_deal": {
@@ -262,11 +290,13 @@
       "gpt-5.6-sol": 2.3768,
       "grok-4.20-0309-reasoning": 37.5688,
       "grok-4.3": 205.8352,
-      "grok-4.5": 63.2996
+      "grok-4.5": 63.2996,
+      "moonshotai/kimi-k3": 59.2973,
+      "thinkingmachines/inkling": 13.6109
     }
   },
   "cost_per_run": {
-    "min": 0.3948,
+    "min": 0.3025,
     "max": 23.6156,
     "by_model": {
       "claude-fable-5": 23.6156,
@@ -279,7 +309,9 @@
       "gpt-5.6-sol": 1.0035,
       "grok-4.20-0309-reasoning": 1.6697,
       "grok-4.3": 0.7624,
-      "grok-4.5": 2.11
+      "grok-4.5": 2.11,
+      "moonshotai/kimi-k3": 2.4158,
+      "thinkingmachines/inkling": 0.3025
     }
   },
   "frontier": {
@@ -344,6 +376,16 @@
       "eb_attended_pct": 25.2,
       "map_pct": 52.4,
       "price_integrity": 0.801
+    },
+    "moonshotai/kimi-k3": {
+      "eb_attended_pct": 20.7,
+      "map_pct": 44.6,
+      "price_integrity": 0.76
+    },
+    "thinkingmachines/inkling": {
+      "eb_attended_pct": 22.2,
+      "map_pct": 40.4,
+      "price_integrity": 0.638
     }
   },
   "failure_modes": {
@@ -357,33 +399,33 @@
     ],
     "by_tier": {
       "easy": {
-        "no-pain-owner-identified": 78.0,
-        "shallow-implication": 66.8,
-        "never-reached-eb": 70.4,
-        "meeting-waste": 67.2,
-        "discount-beyond-tolerance": 28.7,
-        "price-panic-under-procurement": 18.7
+        "no-pain-owner-identified": 77.8,
+        "shallow-implication": 66.7,
+        "never-reached-eb": 72.3,
+        "meeting-waste": 67.4,
+        "discount-beyond-tolerance": 30.3,
+        "price-panic-under-procurement": 19.3
       },
       "mid": {
-        "no-pain-owner-identified": 90.2,
-        "shallow-implication": 80.9,
-        "never-reached-eb": 73.1,
-        "meeting-waste": 55.8,
-        "discount-beyond-tolerance": 77.6,
-        "price-panic-under-procurement": 72.8
+        "no-pain-owner-identified": 90.8,
+        "shallow-implication": 80.2,
+        "never-reached-eb": 75.8,
+        "meeting-waste": 55.7,
+        "discount-beyond-tolerance": 77.2,
+        "price-panic-under-procurement": 72.6
       },
       "hard": {
-        "no-pain-owner-identified": 93.9,
-        "shallow-implication": 82.6,
-        "never-reached-eb": 90.2,
-        "meeting-waste": 49.8,
-        "discount-beyond-tolerance": 69.4,
-        "price-panic-under-procurement": 33.0
+        "no-pain-owner-identified": 94.4,
+        "shallow-implication": 82.3,
+        "never-reached-eb": 91.2,
+        "meeting-waste": 50.1,
+        "discount-beyond-tolerance": 70.1,
+        "price-panic-under-procurement": 34.4
       }
     }
   },
   "latency_reliability": {
-    "scope": "11-model roster (gpt-5.5-pro excluded)",
+    "scope": "13-model roster (gpt-5.5-pro excluded)",
     "n_calls": 38192,
     "reliability_pct": 92.44,
     "p50_s": 5.75,

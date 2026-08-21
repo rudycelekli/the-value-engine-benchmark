@@ -18,10 +18,10 @@
 \newcommand{\numScenarios}{9}                 % total scenarios
 \newcommand{\numScenariosNew}{6}              % scenarios added in the expanded release
 \newcommand{\numScenariosOrig}{3}             % original scenarios
-\newcommand{\numModels}{11}                   % model endpoints in the canonical frontier grid
-\newcommand{\numModelsFrontier}{11}           % closed frontier endpoints
-\newcommand{\numModelsOpen}{2}                % FUTURE WORK: open-weight fine-tuning arms (kimi-k3, inkling) -- NOT in the canonical grid
-\newcommand{\numLabs}{4}                       % Anthropic, OpenAI, xAI, Google (canonical frontier labs)
+\newcommand{\numModels}{13}                   % model endpoints in the canonical grid
+\newcommand{\numModelsFrontier}{11}           % of which closed-weight frontier endpoints
+\newcommand{\numModelsOpen}{2}                % of which open-weight endpoints (kimi-k3, inkling) -- IN the canonical grid, graded on every cell
+\newcommand{\numLabs}{6}                       % Anthropic, OpenAI, xAI, Google, Moonshot, Thinking Machines
 \newcommand{\numSeeds}{15}                     % stochastic-buyer seeds per cell
 \newcommand{\numTracks}{2}                     % out-of-box (OOB) vs. methodology pack
 \newcommand{\numIndustries}{9}                % distinct verticals
@@ -56,9 +56,9 @@
 \newcommand{\sqsLost}{0}
 
 % Grid size (design)
-\newcommand{\gridCellsTotal}{2970}            % 9 scen x 11 models x 15 seeds x 2 tracks
-\newcommand{\gridCellsNew}{1980}              % 6 new scen x 11 x 15 x 2
-\newcommand{\gridCellsExpand}{990}            % 3 orig scen x 15 seeds x 11 x 2
+\newcommand{\gridCellsTotal}{3510}            % 9 scen x 13 models x 15 seeds x 2 tracks
+\newcommand{\gridCellsNew}{2340}              % 6 new scen x 13 x 15 x 2
+\newcommand{\gridCellsExpand}{1170}           % 3 orig scen x 15 seeds x 13 x 2
 
 % ---------- (2) RESULT MACROS (provisional; freeze at grid completion) --------
 % The 16 result macros below are AUTO-GENERATED from datasets/veb-canonical-135/paper-stats.json
@@ -73,9 +73,14 @@
 % ---------- Hardened (adversarial) judge track ------------------------------
 % A second, deterministic-override judge that reconstructs the objective MEDDPICC/
 % EB/MAP dimensions from the event log and lets the LLM score only subjective dims.
-% Re-graded 2969/2970 canonical cells (one grok-4.3 row unmatched); the meanDelta is
-% the mean per-model SQS change vs the default judge (negative = default marginally generous).
-\newcommand{\resHardenedCells}{2969}           % canonical cells re-graded under the hardened judge
+% SCOPE: this re-grade was run over the 11-model closed-weight subset only --
+% 2969/2970 of those cells (one grok-4.3 row unmatched). It predates the two
+% open-weight arms and has NOT been re-run over the full \gridCellsTotal{} grid,
+% because re-grading costs a fresh judge pass per cell. The numbers below are
+% therefore reported for that subset and must not be restated as covering the
+% whole grid; renumbering them to 3510 would assert work that was never done.
+\newcommand{\resHardenedCells}{2969}           % cells re-graded (of the 2970-cell 11-model subset)
+\newcommand{\resHardenedScope}{the \numModelsFrontier{} closed-weight models}
 \newcommand{\resHardenedMeanDelta}{-0.52}      % mean per-model SQS change, hardened vs default
 \newcommand{\resHardenedMaxDrop}{-3.05}        % largest per-model drop
 \newcommand{\resHardenedMaxDropModel}{claude-fable-5} % model with the largest drop
@@ -87,9 +92,9 @@
 % (a milestone/DVI composite in reward_breakdown); the two have different grand means.
 % Entropy is normalized Shannon entropy of the 10-bin reward histogram, per model.
 \newcommand{\resPassBar}{60}                    % raw-SQS clean-pass bar for binarized reward
-\newcommand{\resDistGrandReward}{0.60}         % grand-mean reward over all 2970 canonical rollouts
-\newcommand{\resDistMeanStd}{0.15}             % mean per-model reward std dev
-\newcommand{\resDistMeanEntropy}{0.76}         % mean per-model normalized reward entropy (10 bins)
+\newcommand{\resDistGrandReward}{0.60}         % grand-mean reward over all 3510 canonical rollouts
+\newcommand{\resDistMeanStd}{0.14}             % mean per-model reward std dev
+\newcommand{\resDistMeanEntropy}{0.75}         % mean per-model normalized reward entropy (10 bins)
 \newcommand{\resDistEntropyLo}{0.63}           % min per-model entropy (grok-4.3)
 \newcommand{\resDistEntropyHi}{0.84}           % max per-model entropy (gemini-3.5-flash)
 \newcommand{\resDistLeaderReward}{0.73}        % gpt-5.6-sol mean reward
@@ -112,7 +117,7 @@
 \newcommand{\resPanelCatEthic}{98.6}          % ethic__value_defended exact-match %
 
 % Enrichment coverage (frozen: enrichment joined onto every canonical row).
-\newcommand{\resEnrichRows}{2970}             % canonical trajectories enriched (2970/2970 coverage)
+\newcommand{\resEnrichRows}{3510}             % canonical trajectories enriched (3510/3510 coverage)
 
 % (4) VALUE FRONTIER macros (resFrontierBest, resFrontierBestSQSPerUSD,
 %     resCostPerDealMin, resCostPerDealMax, resLatencyPfifty, resLatencyPninety,

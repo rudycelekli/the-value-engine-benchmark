@@ -4,9 +4,9 @@ Every result macro below is emitted solely from `datasets/veb-canonical-135/pape
 
 ## Lineage
 
-- Generated from datasets/veb-canonical-135/paper-stats.json (sha256 1ba709865f7e8b25f69c6c8d9ac040835c591a5edbb8e43f824860d47b38dff4),
-- produced 2026-08-20T21:20:06Z by analysis/analyze-canonical-135.py from:
--   - veb-canonical-135.jsonl (sha256 00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3) — graded rollouts — every rubric, outcome and cost number
+- Generated from datasets/veb-canonical-135/paper-stats.json (sha256 22d8a445cf7915d07a57f1cecd18f0d33700aee863a3d63b457e300387223a49),
+- produced 2026-08-20T23:34:05Z by analysis/analyze-canonical-135.py from:
+-   - veb-canonical-135.jsonl (sha256 13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05) — graded rollouts — every rubric, outcome and cost number
 -   - portkey-full.jsonl.gz (sha256 43ae1dbf73773cabe206dda742b296559d28c8cbdb8ce4f4fb52f231e52d6f0d) — provider telemetry — latency_reliability block only
 
 `analysis/verify_stats.py` checks that the digests above still match the files on disk, so a macro that predates the rows it claims to summarize fails the release gate.
@@ -17,15 +17,15 @@ The three latency/reliability macros (`resLatencyPfifty`, `resLatencyPninety`, `
 
 | Macro | Value | Source field in paper-stats.json |
 |---|---|---|
-| `\resPackLiftOverall` | `3.0` | `paper-stats.pack_lift.win_rate_pp` |
+| `\resPackLiftOverall` | `2.5` | `paper-stats.pack_lift.win_rate_pp` |
 | `\resBestModel` | `gpt-5.6-sol` | `paper-stats.best_model.model` |
 | `\resBestModelSQS` | `72.5` | `paper-stats.best_model.mean_sqs` |
-| `\resCellsComplete` | `2970` | `paper-stats.cells_graded` |
-| `\resLiftEasy` | `5.0` | `paper-stats.tier_lift.easy.win_lift_pp` |
+| `\resCellsComplete` | `3510` | `paper-stats.cells_graded` |
+| `\resLiftEasy` | `4.1` | `paper-stats.tier_lift.easy.win_lift_pp` |
 | `\resLiftMid` | `0.2` | `paper-stats.tier_lift.mid.win_lift_pp` |
-| `\resLiftHard` | `3.3` | `paper-stats.tier_lift.hard.win_lift_pp` |
-| `\resDiscountOOB` | `11.2` | `paper-stats.tracks.oob.mean_discount_pct` |
-| `\resDiscountPack` | `11.8` | `paper-stats.tracks.pack.mean_discount_pct` |
+| `\resLiftHard` | `2.8` | `paper-stats.tier_lift.hard.win_lift_pp` |
+| `\resDiscountOOB` | `10.5` | `paper-stats.tracks.oob.mean_discount_pct` |
+| `\resDiscountPack` | `11.6` | `paper-stats.tracks.pack.mean_discount_pct` |
 | `\resFrontierBest` | `gpt-5.6-sol` | `paper-stats.frontier.efficiency_leader` |
 | `\resFrontierBestSQSPerUSD` | `30.5` | `paper-stats.frontier.sqs_per_usd_per_deal` |
 | `\resCostPerDealMin` | `2.38` | `paper-stats.cost_per_deal.min` |

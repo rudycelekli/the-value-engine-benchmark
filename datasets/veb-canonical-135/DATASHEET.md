@@ -6,9 +6,9 @@ the data so that anyone evaluating, buying, or building on it can judge fitness
 for their use without contacting the authors first.
 
 - **Dataset:** `veb-canonical-135`
-- **Version / freeze:** canonical-135, grid frozen 2026-07-13
-- **Full size:** 2,970 datapoints (one self-contained JSON object per line)
-- **Free evaluation sample:** `veb-canonical-135-preview.jsonl` — 66 rows, same schema, full fidelity
+- **Version / freeze:** canonical-135, grid frozen 2026-08-20
+- **Full size:** 3,510 datapoints (one self-contained JSON object per line)
+- **Free evaluation sample:** `veb-canonical-135-preview.jsonl` — 78 rows, same schema, full fidelity
 - **Benchmark:** The Value Engine Benchmark (VEB)
 
 ---
@@ -39,19 +39,19 @@ test) and a stochastic LLM **buyer**, paired with a full judge **grade** and a
 scalar **reward**. One instance = one JSONL line, fully self-contained.
 
 **How many instances are there?**
-2,970 in the full set. The grid is exact and balanced:
+3,510 in the full set. The grid is exact and balanced:
 
 | Axis | Values |
 |------|--------|
-| Models (seller under test) | 11 |
+| Models (seller under test) | 13 (11 closed-weight + 2 open-weight) |
 | Scenarios | 9 |
 | Seeds | 15 |
 | Tracks | 2 (`oob`, `pack`) |
 | Per model per track | 135 |
-| **Total** | **11 × 9 × 15 × 2 = 2,970** |
+| **Total** | **13 × 9 × 15 × 2 = 3,510** |
 
-Each of the 11 models has exactly 135 rows in `oob` and 135 in `pack`; each of the
-9 scenarios has exactly 330 rows.
+Each of the 13 models has exactly 135 rows in `oob` and 135 in `pack`; each of the
+9 scenarios has exactly 390 rows.
 
 **What data does each instance consist of?**
 Top-level keys: `id`, `env`, `model`, `buyer_sim`, `seed`, `reward`, `resolved`,
@@ -135,7 +135,7 @@ than papered over.
 
 **What preprocessing was done?**
 Rows are deduplicated by `(scenario_id, model, pack, seed)`, keeping the latest
-`generated_at`. The release is filtered to the 11-model live roster. No content
+`generated_at`. The release is filtered to the 13-model live roster. No content
 of the episode or grade is altered, truncated, or redacted — rows are emitted
 verbatim.
 
@@ -176,15 +176,15 @@ if format_retries > 0:
 training_ready = (judge_type == "llm") and (len(flags) == 0)
 ```
 
-**Observed counts in the 66-row preview:**
+**Observed counts in the 78-row preview:**
 
 | Metric | Count |
 |--------|-------|
-| `judge_type == "heuristic"` | 2 |
-| `format_retries > 0` | 20 |
-| flagged (any flag) | 22 |
-| `training_ready == True` | 44 |
-| `training_ready == False` | 22 |
+| `judge_type == "heuristic"` | 0 |
+| `format_retries > 0` | 29 |
+| flagged (any flag) | 29 |
+| `training_ready == True` | 49 |
+| `training_ready == False` | 29 |
 
 Rationale: `flags` is populated only from real, observable degradations — no
 thresholds, no inference, no fabrication. Every reason a row is quarantined is
@@ -222,13 +222,13 @@ prefer this flag over assuming every row is training-clean.
 
 ## Distribution & Licensing
 
-**Free evaluation sample:** `veb-canonical-135-preview.jsonl` (66 rows) is
+**Free evaluation sample:** `veb-canonical-135-preview.jsonl` (78 rows) is
 released under **CC BY-NC 4.0** so evaluators can inspect real, full-fidelity
-rows before any purchase. It is stratified across all 11 models, both tracks, and
-all 9 scenarios, and deliberately over-samples the rare high-signal outcomes
+rows before any purchase. It is stratified across all 13 models, both tracks, and
+8 of the 9 scenarios, and deliberately over-samples the rare high-signal outcomes
 (won / lost / walked_away) so the judge rubric is visibly doing work.
 
-**Full dataset:** `veb-canonical-135.jsonl` (2,970 rows, ~470 MB) and its
+**Full dataset:** `veb-canonical-135.jsonl` (3,510 rows, ~557 MB) and its
 compressed copy are distributed out-of-band (they exceed platform file limits);
 the repository tracks only `manifest.json`, `DATASHEET.md`, and `*.sha256`
 records. Full-dataset license is negotiated separately with the dataset owner.

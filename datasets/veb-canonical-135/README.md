@@ -6,8 +6,9 @@ stochastic LLM **buyer**, paired with a detailed **judge grade** and a scalar
 **reward**. Designed for RLHF / RLVR, reward-model training, offline RL, and
 methodology research.
 
-- **2,970 datapoints** — one self-contained JSON object per line (JSONL)
-- **Grid:** 11 models × 9 scenarios × 15 seeds × 2 tracks (`oob`, `pack`) = **135 rollouts / model / track**
+- **3,510 datapoints** — one self-contained JSON object per line (JSONL)
+- **Grid:** 13 models × 9 scenarios × 15 seeds × 2 tracks (`oob`, `pack`) = **135 rollouts / model / track**
+  (11 closed-weight frontier endpoints + 2 open-weight; every model is graded on every cell)
 - **Fidelity:** full trajectory (`episode`) + full rubric (`grade`) + `reward` embedded in every row
 - **Integrity:** 0 missing episode, 0 missing grade, 0 zero-turn rollouts (verified)
 
@@ -15,9 +16,9 @@ methodology research.
 
 | File | Purpose |
 |------|---------|
-| `veb-canonical-135-preview.jsonl` | **Free evaluation sample** (66 lines, ~10M) — same schema, full fidelity, CC BY-NC 4.0 |
-| `veb-canonical-135.jsonl` | The full dataset (470M, 2,970 lines) — distributed out-of-band |
-| `veb-canonical-135.jsonl.gz` | Compressed copy for transfer (121M) |
+| `veb-canonical-135-preview.jsonl` | **Free evaluation sample** (78 lines, ~11M) — same schema, full fidelity, CC BY-NC 4.0 |
+| `veb-canonical-135.jsonl` | The full dataset (557M, 3,510 lines) — distributed out-of-band |
+| `veb-canonical-135.jsonl.gz` | Compressed copy for transfer (144M) |
 | `*.sha256` | SHA-256 checksums for integrity verification |
 | `manifest.json` | Machine-readable provenance, schema, per-model/track counts |
 | `DATASHEET.md` | *Datasheet for Datasets* — motivation, composition, uses, limitations |
@@ -25,9 +26,9 @@ methodology research.
 
 ### Free preview subset
 
-`veb-canonical-135-preview.jsonl` is a **66-row stratified sample** you can open
-and inspect without any purchase: every one of the 11 models, both tracks, all 9
-scenarios, and a deliberate over-sampling of the rare high-signal outcomes
+`veb-canonical-135-preview.jsonl` is a **78-row stratified sample** you can open
+and inspect without any purchase: every one of the 13 models, both tracks, 8 of
+the 9 scenarios, and a deliberate over-sampling of the rare high-signal outcomes
 (won / lost / walked_away) so you can see the judge rubric actually
 discriminating. Each preview row is a *verbatim, full-fidelity* datapoint
 (episode + grade embedded) — not a reduced or redacted view. Released under
@@ -39,7 +40,7 @@ discriminating. Each preview row is a *verbatim, full-fidelity* datapoint
 ```bash
 shasum -a 256 -c veb-canonical-135.jsonl.gz.sha256   # expect: OK
 gunzip -k veb-canonical-135.jsonl.gz
-wc -l veb-canonical-135.jsonl                        # expect: 2970
+wc -l veb-canonical-135.jsonl                        # expect: 3510
 ```
 
 ## Row schema
@@ -89,7 +90,7 @@ Each line is one datapoint with these top-level keys:
 - **Dedup rule:** rows are deduplicated by `(scenario_id, model, pack, seed)`,
   keeping the latest `generated_at`. See `manifest.json` for the full roster and counts.
 - **Roster:** `gpt-5.5-pro` is intentionally excluded (off-roster, reasoning-only
-  exploratory arm). The 11 graded models are listed in `manifest.json`.
+  exploratory arm). The 13 graded models are listed in `manifest.json`.
 
 ## Quick start
 
@@ -108,15 +109,15 @@ with open("veb-canonical-135.jsonl") as f:
 ## Provenance
 
 - **Benchmark:** The Value Engine Benchmark (VEB)
-- **Grid frozen:** 2026-07-13, canonical-135, 2,970/2,970 (100%)
+- **Grid frozen:** 2026-08-20, canonical-135, 3,510/3,510 (100%)
 - **Integrity:** all checksums in `*.sha256`; row-level integrity verified (0 missing episode/grade, 0 zero-turn)
 
 ## License / usage
 
 **CC BY-NC 4.0.** The free evaluation sample (`veb-canonical-135-preview.jsonl`,
-66 rows) is released under [CC BY-NC 4.0](../../LICENSE-DATA). The code that
+78 rows) is released under [CC BY-NC 4.0](../../LICENSE-DATA). The code that
 generates and grades these rows is separately licensed Apache-2.0
 ([LICENSE-CODE](../../LICENSE-CODE)). The full dataset
-(`veb-canonical-135.jsonl`, 2,970 rows) is distributed out-of-band and its
+(`veb-canonical-135.jsonl`, 3,510 rows) is distributed out-of-band and its
 license is negotiated separately with the dataset owner. Contact the owner
 before redistribution.

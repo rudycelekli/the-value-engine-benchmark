@@ -54,10 +54,19 @@ The frozen sample is drawn by `validation/sample.py` using a fixed seed
 | outcome | `won`, `lost`, `no_decision` |
 
 **Target sample size:** 300 episodes when the full 3,510-row grid is available.
-**Current public preview:** 66 episodes (the full preview JSONL).
+**Current frozen draw:** 66 episodes over the 11 closed-weight models.
 
 The frozen draw is committed as `validation/sampled-ids.json`. No episodes are
 added or removed after commit without a new pre-registration revision.
+
+**Scope of the frozen draw.** It was pre-registered against the preview as it
+stood at the time — 66 rows, 11 closed-weight models — and therefore contains no
+`kimi-k3` or `inkling` episodes, even though both are now full members of the
+canonical grid and the preview has since grown to 78 rows. The draw is
+deliberately *not* re-drawn to match: silently re-sampling a pre-registered
+manifest is exactly the degree of freedom pre-registration exists to remove. The
+κ/α addendum will report against this manifest and state this scope; extending
+coverage to the open-weight arms requires a numbered revision, not an edit.
 
 ---
 

@@ -9,12 +9,12 @@ separately.
 
 | File | Size | SHA-256 (committed in this repo) |
 |------|------|----------------------------------|
-| `veb-canonical-135.jsonl` | ~470 MB | see `datasets/veb-canonical-135/veb-canonical-135.jsonl.sha256` |
-| `veb-canonical-135.jsonl.gz` | ~121 MB | see `datasets/veb-canonical-135/veb-canonical-135.jsonl.gz.sha256` |
-| `veb-canonical-135-preview.jsonl` | ~9 MB | **included in this repo** |
+| `veb-canonical-135.jsonl` | ~557 MB | see `datasets/veb-canonical-135/veb-canonical-135.jsonl.sha256` |
+| `veb-canonical-135.jsonl.gz` | ~144 MB | see `datasets/veb-canonical-135/veb-canonical-135.jsonl.gz.sha256` |
+| `veb-canonical-135-preview.jsonl` | ~11 MB | **included in this repo** |
 
 The canonical full-file digest
-(`00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3`) is recorded
+(`13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05`) is recorded
 in three places — the `.sha256` sidecar, `manifest.json`, and
 `paper-stats.json`'s `lineage.source_sha256` — and `make verify` fails if any of
 them disagree. That last one is what ties the published statistics to these exact
@@ -34,7 +34,7 @@ canonical-135 release described in the paper and datasheet.
 
 ## Licensing
 
-The 66-row preview is released as a **free evaluation sample under CC BY-NC 4.0**
+The 78-row preview is released as a **free evaluation sample under CC BY-NC 4.0**
 (see `manifest.json` and `LICENSE-DATA`). The full dataset license is negotiated
 separately. The environment code that produces and grades these rows is licensed
 **Apache-2.0** (`LICENSE-CODE`) — you may run, modify, and build on the harness

@@ -103,16 +103,19 @@ $\kappa$/$\alpha$ addendum against the frozen sample manifest.
 \subsection{Judge robustness: the hardened track}
 \label{sec:hardened}
 To bound the risk that the leaderboard is an artifact of a lenient or gameable
-judge, we re-graded the entire grid under a second, \emph{hardened} judge that
+judge, we re-graded \resHardenedScope{} under a second, \emph{hardened} judge that
 reconstructs the objective qualification dimensions---MEDDPICC coverage,
 economic-buyer attainment, and MAP-date confirmation---deterministically from the
 turn-indexed event log, and lets the LLM score only the irreducibly subjective
 dimensions (trust, price integrity, champion quality). This removes the judge's
 discretion over exactly the dimensions a model could most plausibly talk its way
-into. The hardened judge re-scored \resHardenedCells{} of \gridCellsTotal{} cells
-(one cell failed re-grade on a transient judge error and falls back to its default
-grade). The result is a robustness check, not a replacement: we report it as a
-parallel track and keep the default judge as the primary ranking.
+into. The hardened judge re-scored \resHardenedCells{} of those cells (one cell
+failed re-grade on a transient judge error and falls back to its default grade).
+The re-grade predates the two open-weight arms and covers \resHardenedScope{}
+rather than the full \gridCellsTotal{}-cell grid; we report its scope explicitly
+rather than imply coverage it does not have. The result is a robustness check,
+not a replacement: we report it as a parallel track and keep the default judge as
+the primary ranking.
 
 The rankings are stable. The mean per-model SQS change is
 \resHardenedMeanDelta{}~points---the hardened judge is marginally \emph{stricter},

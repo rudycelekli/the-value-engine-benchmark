@@ -1,16 +1,27 @@
 #!/usr/bin/env python3
 """Compute all paper benchmark numbers from the validated packaged grid.
 
-Source: datasets/veb-canonical-135/veb-canonical-135.jsonl  (2970 rows, authoritative)
+Source: datasets/veb-canonical-135/veb-canonical-135.jsonl  (3510 rows, authoritative)
 Emits:  datasets/veb-canonical-135/paper-stats.json  + stdout summary
 
 Every paper/benchmark-page number derives from THIS file only (per user directive).
-Latency/reliability come from the Portkey export, rescoped to the 11-model roster.
+Latency/reliability come from the Portkey export, rescoped to the roster present
+in the source rows. Roster size and every grid dimension are derived from the
+data, never hardcoded — the run aborts if they do not multiply out to the row
+count.
 
 Env overrides (for use by verify_stats.py and Task 7):
   VEB_ROWS       — path to the source JSONL (overrides SRC default)
   VEB_STATS_OUT  — path to write the output JSON (overrides OUT default)
   VEB_PORTKEY    — path to the provider telemetry export (overrides PORTKEY)
+  VEB_ROWS_AS    — the name the source JSONL is *published* under, when that
+                   differs from its local path. The internal export lives at
+                   veb-canonical-135-plus540.jsonl but readers download the
+                   identical bytes as veb-canonical-135.jsonl; recording the
+                   published name keeps `source` referring to a file the reader
+                   can actually obtain. The digest is unaffected — it is always
+                   computed from the bytes actually read, so the name can never
+                   drift away from the content it labels.
 """
 import datetime
 import hashlib
@@ -29,6 +40,11 @@ if os.environ.get("VEB_ROWS"):
     SRC = Path(os.environ["VEB_ROWS"])
 else:
     SRC = _full if _full.exists() else _preview
+
+# The name readers see. Defaults to the local filename, so an unset override
+# is always truthful; set it only when the local path is an internal export of
+# bytes that are published under a different name.
+SRC_NAME = os.environ.get("VEB_ROWS_AS") or SRC.name
 
 if os.environ.get("VEB_STATS_OUT"):
     OUT = Path(os.environ["VEB_STATS_OUT"])
@@ -81,7 +97,7 @@ def lineage(src: Path) -> dict:
     """
     sources = [{
         "role": "graded rollouts — every rubric, outcome and cost number",
-        "file": src.name,
+        "file": SRC_NAME,
         "sha256": sha256_file(src),
         "bytes": src.stat().st_size,
         "distribution": "out-of-band (see DATA.md); digest committed in-repo",
@@ -101,7 +117,7 @@ def lineage(src: Path) -> dict:
     sources.append(telemetry)
 
     return {
-        "source_file": src.name,
+        "source_file": SRC_NAME,
         "source_sha256": sources[0]["sha256"],
         "source_bytes": sources[0]["bytes"],
         "sources": sources,
@@ -156,6 +172,7 @@ def main():
             "cost_usd": ((r.get("cost") or {}).get("usd")),
             "difficulty": (g.get("scenarioMeta") or {}).get("difficulty"),
             "scenario": (r.get("env") or {}).get("scenario_id"),
+            "seed": r.get("seed"),
             "eb_attended": eb == "attended_with_conditional_commitment",
             "map_pct": g.get("mapDatesConfirmedPct"),
             "modes": [fm.get("modeId") for fm in (g.get("failureModes") or [])],
@@ -300,7 +317,7 @@ def main():
             if isinstance(rt, (int, float)):
                 lat.append(rt)
     latency = {
-        "scope": "11-model roster (gpt-5.5-pro excluded)",
+        "scope": f"{len(roster)}-model roster (gpt-5.5-pro excluded)",
         "n_calls": n,
         "reliability_pct": round(100 * ok / n, 2) if n else None,
         "p50_s": round(pct(lat, 50) / 1000, 2) if lat else None,
@@ -308,13 +325,35 @@ def main():
         "p95_s": round(pct(lat, 95) / 1000, 2) if lat else None,
     }
 
+    # ---- grid, derived from the rows themselves ----
+    # Every dimension comes from the data so the published grid can never
+    # describe a shape the dataset does not have. The assertion below is what
+    # makes "3,510 = 13 x 9 x 15 x 2" a checked fact rather than a claim.
+    n_scenarios = len({r["scenario"] for r in rows})
+    n_seeds = len({r["seed"] for r in rows})
+    n_tracks = len({r["track"] for r in rows})
+    grid = {
+        "scenarios": n_scenarios,
+        "seeds": n_seeds,
+        "models": len(roster),
+        "tracks": n_tracks,
+        "per_model_per_track": n_scenarios * n_seeds,
+        "per_model": n_scenarios * n_seeds * n_tracks,
+    }
+    product = grid["models"] * grid["scenarios"] * grid["seeds"] * grid["tracks"]
+    if product != len(rows):
+        raise SystemExit(
+            f"grid inconsistency: {grid['models']} models x {grid['scenarios']} scenarios x "
+            f"{grid['seeds']} seeds x {grid['tracks']} tracks = {product}, "
+            f"but the source has {len(rows)} rows"
+        )
+
     result = {
-        "source": str(SRC.name),
+        "source": SRC_NAME,
         "lineage": lineage(SRC),
         "rows": len(rows),
         "roster": roster,
-        "grid": {"scenarios": 9, "seeds": 15, "models": len(roster), "tracks": 2,
-                 "per_model_per_track": 135, "per_model": 270},
+        "grid": grid,
         "cells_graded": len(rows),
         "per_model": per_model,
         "best_model": {"model": best_model, "mean_sqs": per_model[best_model]["mean_sqs"]},

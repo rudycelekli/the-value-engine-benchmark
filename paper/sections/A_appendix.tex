@@ -133,14 +133,15 @@ modes are discarded; an empty list is valid.
 \section{Model Roster}
 \label{app:models}
 
-Table~\ref{tab:roster} lists the \numModels{} frontier endpoints evaluated in the
-canonical grid, with provider and
-list token pricing (USD per million tokens) used for the cost-per-deal computation.
-All models route through Portkey. The two open-weight endpoints ($\dagger$,
-\texttt{kimi-k3} and \texttt{inkling}) are shown for reference as the held-out
-open-weight fine-tuning arm and are \emph{not} part of the \numModels{}-model canonical
-grid. \texttt{gpt-5.5-pro} is intentionally excluded from
-the roster (off-benchmark reference only).
+Table~\ref{tab:roster} lists the \numModels{} endpoints evaluated in the canonical
+grid, with provider and list token pricing (USD per million tokens) used for the
+cost-per-deal computation. The \numModelsFrontier{} closed-weight frontier models
+route through Portkey; the \numModelsOpen{} open-weight endpoints ($\dagger$,
+\texttt{kimi-k3} and \texttt{inkling}) route directly to their hosted-inference
+providers, which have no Portkey path. All \numModels{} are full members of the
+canonical grid---graded on every cell and ranked on the leaderboard.
+\texttt{gpt-5.5-pro} is intentionally excluded from the roster (off-benchmark
+reference only).
 
 \begin{table}[t]
   \centering

@@ -34,7 +34,9 @@ export const FRONTIER_MODELS: ModelEntry[] = [
   // Verified against the live /v1/models list on 2026-07-02. Prices are
   // estimates carried over from the prior flagship/mini tiers.
   // NOTE: gpt-5.5-pro is intentionally NOT on the roster (off-benchmark
-  // experiment); leaving it out keeps `--sellers frontier` at 11 models.
+  // experiment); leaving it out keeps `--sellers frontier` at 11 closed-weight
+  // models. The canonical grid is 13 — frontier plus the two open-weight
+  // endpoints in EXTRA_MODELS below.
   { provider: 'openai', model: 'gpt-5.5', inputPerMtok: 1.25, outputPerMtok: 10 },
   // Verified available via Portkey 2026-07-09 (routes on chat/completions). Price
   // is a placeholder ESTIMATE (carried from gpt-5.5 tier) until OpenAI publishes
@@ -50,9 +52,15 @@ export const FRONTIER_MODELS: ModelEntry[] = [
 ];
 
 /**
- * Extra models added OUTSIDE the canonical-11 frontier roster (so `--sellers
- * frontier` stays at 11 for leaderboard continuity). Run these via explicit
- * specs, e.g. `--sellers openrouter:moonshotai/kimi-k3,together:thinkingmachines/inkling`.
+ * The two open-weight endpoints. These ARE part of the published canonical grid
+ * (13 models x 9 scenarios x 15 seeds x 2 tracks = 3,510 cells) — they are graded
+ * on every cell and appear on the leaderboard. They are held outside the
+ * `frontier` alias only because that alias means "closed-weight frontier
+ * endpoints" and is kept stable at 11 for leaderboard continuity; it is NOT a
+ * statement that these models are outside the benchmark.
+ *
+ * To reproduce the full published grid, name them explicitly alongside frontier:
+ *   --sellers frontier,openrouter:moonshotai/kimi-k3,together:thinkingmachines/inkling
  *
  * These two route DIRECTLY to their provider (not through Portkey) — the
  * workspace has no Portkey integration for OpenRouter/Together and Portkey has
@@ -110,7 +118,8 @@ export function costOfUsage(usage: Map<string, { inputTokens: number; outputToke
  * Resolve a `--sellers` spec into a list of concrete seller specs.
  *
  * Supports:
- *   - `frontier` → all 11 registry models as `provider:model`;
+ *   - `frontier` → the 11 closed-weight registry models as `provider:model`
+ *     (the canonical grid is 13 — add the two open-weight specs explicitly);
  *   - `provider:model` (anthropic/openai/xai/gemini);
  *   - `scripted-baseline` / `scripted-disciplined`;
  *   - comma-separated lists mixing any of the above.

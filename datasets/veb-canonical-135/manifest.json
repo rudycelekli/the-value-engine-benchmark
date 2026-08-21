@@ -1,13 +1,13 @@
 {
   "dataset": "veb-canonical-135",
-  "description": "The Value Engine Benchmark \u2014 canonical 135/model/track grid. Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
-  "generated_at": "2026-07-13T16:13:55Z",
-  "sha256": "00d8bec5bb78e926b6ec083cf82526c81cee29ea22d4b3ff0e4c6cb9cbbb0ab3",
-  "rows": 2970,
+  "description": "The Value Engine Benchmark — canonical 135/model/track grid (13-model board: 11 frontier + 2 open-weight). Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
+  "generated_at": "2026-08-20T23:35:19Z",
+  "sha256": "13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05",
+  "rows": 3510,
   "grid": {
     "scenarios": 9,
     "seeds": 15,
-    "models": 11,
+    "models": 13,
     "tracks": [
       "oob",
       "pack"
@@ -15,8 +15,8 @@
     "per_model_per_track": 135
   },
   "rows_by_track": {
-    "oob": 1485,
-    "pack": 1485
+    "oob": 1755,
+    "pack": 1755
   },
   "rows_by_model_track": {
     "claude-fable-5|oob": 135,
@@ -40,7 +40,11 @@
     "grok-4.3|oob": 135,
     "grok-4.3|pack": 135,
     "grok-4.5|oob": 135,
-    "grok-4.5|pack": 135
+    "grok-4.5|pack": 135,
+    "moonshotai/kimi-k3|oob": 135,
+    "moonshotai/kimi-k3|pack": 135,
+    "thinkingmachines/inkling|oob": 135,
+    "thinkingmachines/inkling|pack": 135
   },
   "roster": [
     "claude-fable-5",
@@ -53,41 +57,43 @@
     "gpt-5.6-sol",
     "grok-4.20-0309-reasoning",
     "grok-4.3",
-    "grok-4.5"
+    "grok-4.5",
+    "moonshotai/kimi-k3",
+    "thinkingmachines/inkling"
   ],
   "preview": {
     "file": "veb-canonical-135-preview.jsonl",
-    "sha256": "69247af3e9f8687168cf1374e24f7e4e49ccbba4be1f8e587eb960b9e5ab4242",
-    "rows": 66,
-    "license": "CC BY-NC 4.0 (free evaluation sample) \u2014 full dataset license negotiated separately; the environment code that generates and grades these rows is separately licensed Apache-2.0",
-    "sampling": "stratified: 6 rows per model (all 11), both tracks, all 9 scenarios; balanced across the decisive outcomes (won 20 / walked_away 20 / lost 19, plus no_decision 5 and buyer_dark 2) so the judge rubric is visibly discriminating",
+    "sha256": "5ae95a816f9b25c2efa271041197b850857aa486ad8784a33a8200cfd1f1c837",
+    "rows": 78,
+    "license": "CC BY-NC 4.0 (free evaluation sample) — full dataset license negotiated separately",
+    "sampling": "stratified: 6 rows per model (all 13), both tracks, 8 of 9 scenarios; deliberately over-samples rare high-signal outcomes so the judge rubric is visibly discriminating",
     "coverage": {
-      "models": 11,
+      "models": 13,
       "tracks": {
-        "oob": 32,
-        "pack": 34
+        "oob": 59,
+        "pack": 19
       },
-      "scenarios": 9,
+      "scenarios": 8,
       "outcomes": {
-        "won": 20,
-        "lost": 19,
-        "walked_away": 20,
-        "no_decision": 5,
-        "buyer_dark": 2
+        "won": 25,
+        "lost": 16,
+        "walked_away": 12,
+        "buyer_dark": 9,
+        "no_decision": 16
       }
     },
     "same_schema_as_full": true,
-    "note": "Every preview row is a verbatim full-fidelity datapoint (episode+grade embedded) drawn from the full dataset \u2014 not a reduced or redacted view."
+    "note": "Every preview row is a verbatim full-fidelity datapoint (episode+grade embedded) drawn from the full dataset — not a reduced or redacted view."
   },
   "outcome_distribution_full": {
-    "won": 313,
-    "lost": 177,
-    "walked_away": 159,
-    "buyer_dark": 31,
-    "no_decision": 2290
+    "no_decision": 2768,
+    "lost": 193,
+    "won": 330,
+    "walked_away": 176,
+    "buyer_dark": 43
   },
   "datasheet": "DATASHEET.md",
-  "dedup_key": "(scenario_id, model, pack, seed) \u2014 latest generated_at wins",
+  "dedup_key": "(scenario_id, model, pack, seed) — latest generated_at wins",
   "row_schema": {
     "top_level": [
       "id",
@@ -145,5 +151,5 @@
       "notes"
     ]
   },
-  "notes": "gpt-5.5-pro excluded (off-roster reasoning-only exploratory arm). One datapoint = one JSONL line, fully self-contained (episode+grade embedded)."
+  "notes": "Open-weight endpoints kimi-k3 (Moonshot) and inkling (Thinking Machines) join the 11 frontier models. gpt-5.5-pro excluded (off-roster reasoning-only exploratory arm). One datapoint = one JSONL line, fully self-contained (episode+grade embedded)."
 }

@@ -2,14 +2,18 @@
 \label{sec:experiments}
 
 \subsection{Models}
-We evaluate \numModels{} closed frontier endpoints spanning \numLabs{} labs
-(Anthropic, OpenAI, xAI, Google), chosen to cover the current capability frontier across
+We evaluate \numModels{} endpoints spanning \numLabs{} labs---\numModelsFrontier{}
+closed-weight frontier models (Anthropic, OpenAI, xAI, Google) and \numModelsOpen{}
+open-weight models (Moonshot's \texttt{kimi-k3}, Thinking Machines'
+\texttt{inkling})---chosen to cover the current capability frontier across
 reasoning-tuned and standard variants; the full roster with provider and list token
-pricing is given in Appendix~\ref{app:models} (Table~\ref{tab:roster}). Two additional
-open-weight endpoints (Moonshot's \texttt{kimi-k3} and Thinking Machines'
-\texttt{inkling}) are held out for a separate open-weight fine-tuning arm and are
-\emph{not} part of the \gridCellsTotal{}-trajectory canonical grid; probing whether an
-open-weight seller can close the gap to the closed frontier is left to that future work. One
+pricing is given in Appendix~\ref{app:models} (Table~\ref{tab:roster}). The two
+open-weight endpoints are full members of the \gridCellsTotal{}-trajectory canonical
+grid: they are graded on every cell and ranked on the leaderboard alongside the closed
+frontier. They additionally serve as the base policies for a separate open-weight
+fine-tuning arm---whether supervised fine-tuning on VEB trajectories closes the
+remaining gap to the closed frontier is left to that future work, and no fine-tuned
+checkpoint appears in the results reported here. One
 endpoint, \texttt{gpt-5.5-pro}, is intentionally excluded from the scored roster and
 retained only as an off-benchmark reference, owing to reasoning-transcript
 instability under the judge. All models operate the same seller interface and receive
