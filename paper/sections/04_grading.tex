@@ -111,8 +111,8 @@ published.
 \label{sec:panel}
 A single frontier judge is fast and cheap enough to grade every cell inline, but a
 one-model judge invites a specific objection: \emph{self-preference}, the tendency
-of a model to score outputs from its own family more generously. Because our seller
-roster and our judge are both drawn from the same four labs, a single judge from
+of a model to score outputs from its own family more generously. Our judge seats are
+drawn from \numJudgeLabs{} of the \numLabs{} labs on the seller roster, so a single judge from
 any one lab grades its own family's episodes---and in this release, it does:
 \textbf{every published number in this paper comes from the single-judge
 \texttt{claude-sonnet-4-6} grades} described in Section~\ref{sec:judge}. No
@@ -120,7 +120,11 @@ panel-consensus score appears in any table or figure.
 
 To bound this risk, the harness implements an offline \emph{four-seat panel} with
 one seat per provider---one OpenAI, one Anthropic, one Google, and one xAI
-model---so that no seller family is graded only by its own house. The panel
+model---so that no seller family is graded only by its own house. The two
+open-weight sellers (\texttt{kimi-k3}, \texttt{inkling}) have no seat of their
+own, which cuts the other way: they are the only endpoints on the board that no
+judge shares a family with, so any residual self-preference works against the
+closed frontier's measured lead over them, not for it. The panel
 re-grades every episode from the persisted transcript (never the live run), each
 seat emitting the same evidence-cited scorecard as the inline judge. Seats are
 combined by the \textbf{median} SQS across valid scorecards, which is robust to a

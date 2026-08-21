@@ -25,7 +25,9 @@ additionally routes to per-provider judges through the same gateway.
   track cross-product, incremental additions are merged by unique cell id with
   deduplication, so re-runs never double-count. The frozen grid is keyed
   \texttt{<scenario>·<provider>:<model>[·pack]·s<seed>}, giving exactly
-  $9\times15\times11\times2=2{,}970$ unique cells.
+  $\numScenarios\times\numSeeds\times\numModels\times\numTracks=\gridCellsTotal$
+  unique cells. (Written through the macros rather than as digits: the literal
+  that stood here outlived the roster it described.)
 \end{itemize}
 
 \section{Scenario Catalog}

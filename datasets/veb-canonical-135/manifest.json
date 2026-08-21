@@ -1,6 +1,6 @@
 {
   "dataset": "veb-canonical-135",
-  "description": "The Value Engine Benchmark — canonical 135/model/track grid (13-model board: 11 frontier + 2 open-weight). Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
+  "description": "The Value Engine Benchmark — canonical 135/model/track grid (13-model board: 11 closed-weight frontier + 2 open-weight). Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
   "generated_at": "2026-08-20T23:35:19Z",
   "sha256": "13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05",
   "rows": 3510,
@@ -151,5 +151,5 @@
       "notes"
     ]
   },
-  "notes": "Open-weight endpoints kimi-k3 (Moonshot) and inkling (Thinking Machines) join the 11 frontier models. gpt-5.5-pro excluded (off-roster reasoning-only exploratory arm). One datapoint = one JSONL line, fully self-contained (episode+grade embedded)."
+  "notes": "Open-weight endpoints kimi-k3 (Moonshot) and inkling (Thinking Machines) join the 11 closed-weight frontier models to form the 13-endpoint canonical roster; both are graded on every cell and ranked alongside the closed frontier. gpt-5.5-pro excluded (off-roster reasoning-only exploratory arm). One datapoint = one JSONL line, fully self-contained (episode+grade embedded)."
 }

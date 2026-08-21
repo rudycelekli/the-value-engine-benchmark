@@ -94,14 +94,14 @@
   <div class="mid">
     <div class="kicker">Research Report · VEB-v1</div>
     <h1>Can frontier AI actually <em>sell?</em><br>The full Value&nbsp;Engine&nbsp;Benchmark.</h1>
-    <p class="sub">3510 full multi-week enterprise sales campaigns. 13 frontier models from four labs, each run bare and armed with the Value Engine methodology, against a stochastic, seed-pinned buying committee whose facts must be <em>earned</em>. Every score traces to a transcript line; every number carries a bootstrap 95% CI.</p>
+    <p class="sub">3510 full multi-week enterprise sales campaigns. Thirteen models from six labs, each run bare and armed with the Value Engine methodology, against a stochastic, seed-pinned buying committee whose facts must be <em>earned</em>. Every score traces to a transcript line; every number carries a bootstrap 95% CI.</p>
   </div>
   <div class="meta">
     <div><span class="k">Date</span><span class="v">July 22, 2026</span></div>
     <div><span class="k">Campaigns</span><span class="v">3510 — 9 scenarios × 15 seeds × 13 models × 2 arms</span></div>
-    <div><span class="k">Models</span><span class="v">13 sellers · 4 labs · 2 arms</span></div>
+    <div><span class="k">Models</span><span class="v">13 sellers · 6 labs · 2 arms</span></div>
     <div><span class="k">Rigor</span><span class="v">1000-iter bootstrap · seed 42</span></div>
-    <div><span class="k">Fingerprint</span><span class="v">sha256 3f16cfe43317…</span></div>
+    <div><span class="k">Fingerprint</span><span class="v">canonical.json sha256 3f16cfe43317…</span></div>
   </div>
 </div>
 
@@ -109,7 +109,7 @@
 <section><div class="page">
   <div class="secno">01 · Executive Summary</div>
   <h2>What we learned from 3510 simulated enterprise sales campaigns</h2>
-  <p class="lede">We ran 13 frontier models through 3510 complete enterprise deals — real buying committees, procurement, champions who go quiet, incumbents who counterattack — and graded every move against the discipline of enterprise selling. The headline is the whole thesis: <strong>the frontier can't close.</strong></p>
+  <p class="lede">We ran thirteen models through 3510 complete enterprise deals — real buying committees, procurement, champions who go quiet, incumbents who counterattack — and graded every move against the discipline of enterprise selling. The headline is the whole thesis: <strong>the frontier can't close.</strong></p>
   <div class="statband">
     <div class="stat"><span class="n">330<small>/3510</small></span><span class="l">Campaigns closed-won — 9%. Winning is rare, by design</span></div>
     <div class="stat"><span class="n">80%</span><span class="l">Stalled to no-decision (2811 deals). The dominant failure</span></div>
@@ -118,7 +118,7 @@
   </div>
   <h3>Three findings</h3>
   <ul>
-    <li><strong>They don't lose by getting out-argued — they never reach the room.</strong> 78% of campaigns never engaged the economic buyer (the single largest SQS penalty at -19.1 points), and 69% ignored a mid-cycle event that changed the deal. Frontier models are articulate and unable to close.</li>
+    <li><strong>They don't lose by getting out-argued — they never reach the room.</strong> 78% of campaigns never engaged the economic buyer (the single largest SQS penalty at -19.1 points), and 69% ignored a mid-cycle event that changed the deal. These models are articulate and unable to close.</li>
     <li><strong>No model clears a coin-flip win rate.</strong> GPT-5.6-Sol leads at 42%, GPT-5.5 follows at 30%, and every other model sits at or below 11%. Fluency does not transfer to outcomes.</li>
     <li><strong>Methodology moves the number — honestly, and unevenly.</strong> Injecting the Value Engine frameworks reliably lifted Claude Sonnet 4.6 and Claude Fable 5 (up to +5.4 SQS); nowhere else did the effect clear its confidence interval. The effect is real, measurable, and model-specific — with one caveat we state plainly in §04.</li>
   </ul>
@@ -298,7 +298,7 @@
   <p>The entire dataset behind this report is deterministically emitted, byte-stable, and sha256-fingerprinted. Nothing here is asserted; all of it is derived from the 3510 canonical campaign records.</p>
   <table>
     <tr><th>Field</th><th>Value</th></tr>
-    <tr><td>Dataset sha256</td><td><code>3f16cfe433176e24e0c5a58c61c9820f91feb8dd580b977be27ad3dd980d5020</code></td></tr>
+    <tr><td>Analysis input sha256</td><td><code>canonical.json</code> — <code>3f16cfe433176e24e0c5a58c61c9820f91feb8dd580b977be27ad3dd980d5020</code></td></tr>
     <tr><td>Campaigns</td><td>3510 total — 9 scenarios × 15 seeds × 13 models × 2 arms</td></tr>
     <tr><td>Models</td><td>Claude Fable 5, Claude Opus 4.6, Claude Opus 4.8, Claude Sonnet 4.6, Gemini 3.1 Pro, Gemini 3.5 Flash, GPT-5.5, GPT-5.6-Sol, Kimi-K3, Inkling, Grok-4.20 Reasoning, Grok-4.3, Grok-4.5</td></tr>
     <tr><td>Bootstrap</td><td>1000 iterations · seed 42</td></tr>
