@@ -71,6 +71,16 @@
 \newcommand{\resJudgeKappa}{\textit{(forthcoming)}}  % judge--expert Cohen's kappa (pre-registered)
 \newcommand{\resJudgeAlpha}{\textit{(forthcoming)}}  % multi-rater Krippendorff's alpha (pre-registered)
 
+% ---------- Judge-fallback coverage -----------------------------------------
+% Counted directly over the released \gridCellsTotal{}-row file (rows whose
+% grade.judge == "heuristic"). These were previously typed as literals in two
+% separate sections and were computed against the retired 2,970-cell denominator,
+% so the same 51 cells were reported as 1.7% in prose while the macro denominator
+% had already moved to 3,510. Held as macros so the two sites cannot diverge.
+\newcommand{\resJudgeFallbackCells}{51}        % cells graded by the deterministic heuristic
+\newcommand{\resJudgeFallbackPct}{1.5}         % 51 / 3510
+\newcommand{\resJudgeLLMPct}{98.5}             % 3459 / 3510
+
 % ---------- Hardened (adversarial) judge track ------------------------------
 % A second, deterministic-override judge that reconstructs the objective MEDDPICC/
 % EB/MAP dimensions from the event log and lets the LLM score only subjective dims.

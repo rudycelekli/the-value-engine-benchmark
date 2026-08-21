@@ -3,13 +3,25 @@ Idempotent annotator: adds judge_type, format_retries, flags, training_ready
 to every row of the veb-canonical-135 preview JSONL.
 
 Safe to run multiple times (re-derives from real fields, never appends duplicates).
+
+This script is the SINGLE producer of the annotated preview bytes. The public
+site serves a copy of the same file, so it must be annotated by running this
+script against it -- not by re-implementing the derivation in the JS packager.
+Two serializers (Python json.dumps vs JS JSON.stringify) disagree on separators
+and key ordering, so a re-implementation would produce a different digest for
+identical content, and an auditor cross-checking site bytes against repo
+checksums would see a spurious mismatch.
+
+Usage:  python3 analysis/add_status_fields.py [path/to/preview.jsonl]
 """
 
 import json
 import pathlib
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PREVIEW = ROOT / "datasets/veb-canonical-135/veb-canonical-135-preview.jsonl"
+DEFAULT_PREVIEW = ROOT / "datasets/veb-canonical-135/veb-canonical-135-preview.jsonl"
+PREVIEW = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PREVIEW
 
 
 def derive_status(row: dict) -> dict:

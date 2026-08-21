@@ -1,4 +1,4 @@
-# Datasheet — VEB Canonical-135
+# Datasheet — VEB Canonical-135 (13-model board)
 
 A *Datasheet for Datasets* (Gebru et al., 2021) for the **VEB Canonical-135**
 sales-negotiation trajectory dataset. This document is intended to travel with
@@ -6,7 +6,7 @@ the data so that anyone evaluating, buying, or building on it can judge fitness
 for their use without contacting the authors first.
 
 - **Dataset:** `veb-canonical-135`
-- **Version / freeze:** canonical-135, grid frozen 2026-08-20
+- **Version / freeze:** canonical-135 (13-model board), grid frozen 2026-08-20
 - **Full size:** 3,510 datapoints (one self-contained JSON object per line)
 - **Free evaluation sample:** `veb-canonical-135-preview.jsonl` — 78 rows, same schema, full fidelity
 - **Benchmark:** The Value Engine Benchmark (VEB)
@@ -58,9 +58,8 @@ Top-level keys: `id`, `env`, `model`, `buyer_sim`, `seed`, `reward`, `resolved`,
 `cleared_bar`, `reward_breakdown`, `trajectory`, `format_retries`, `cost`,
 `transcript_ref`, `provenance`, `generated_at`, `episode`, `grade`.
 
-- `episode` — the full trajectory: `turns` (seller/buyer/system messages and
-  actions), `events`, `signals`, `internalChannel` (the seller's private
-  reasoning channel), `finalState`, `outcome`.
+- `episode` — the full trajectory: `turns`, `events`, `signals`,
+  `internalChannel` (the seller's private reasoning channel), `finalState`, `outcome`.
 - `grade` — the full rubric: `meddpicc`, `threeWhys`, `ebEngagement`,
   `mapDatesConfirmedPct`, `champion`, `conditionalCommitmentBeforeProof`,
   `priceIntegrity`, `dvi`, `saleQualityScore`, `failureModes`, `walkAways`,
@@ -74,11 +73,11 @@ Yes — two, embedded in every row: `reward` (scalar in [0,1]) and `grade`
 
 | Outcome | Count | Share |
 |---------|-------|-------|
-| no_decision | 2,290 | 77.1% |
-| won | 313 | 10.5% |
-| lost | 177 | 6.0% |
-| walked_away | 159 | 5.4% |
-| buyer_dark | 31 | 1.0% |
+| no_decision | 2,768 | 78.9% |
+| won | 330 | 9.4% |
+| lost | 193 | 5.5% |
+| walked_away | 176 | 5.0% |
+| buyer_dark | 43 | 1.2% |
 
 The reward signal is dominated by hard negotiations that end without a deal —
 this is realistic for enterprise B2B and is *why* the rubric grade matters:
@@ -113,16 +112,16 @@ multi-turn episode to termination and grades it with an LLM judge.
 **Tracks:** `oob` = out-of-the-box seller prompt; `pack` = seller augmented with a
 structured sales-methodology pack.
 
-**Over what timeframe?** Rollouts accumulated through the grid freeze on 2026-07-13.
+**Over what timeframe?** Rollouts accumulated through the grid freeze on 2026-08-20.
 
 **Provenance:** each row carries `provenance` and `generated_at`; routing/cost
 metadata is in `cost`.
 
-**Provenance caveat — dirty generating tree.** Every row in this freeze records
-`provenance.git.dirty = true`. Rollouts were generated inside the private
-development repo while that working tree had uncommitted changes, so the recorded
-`provenance.git.sha` identifies the checkout each run *started from*, not the
-exact code bytes that produced the row. What *is* pinned per row:
+**Provenance caveat — dirty generating tree.** 3,510 of 3,510 rows in this
+freeze record `provenance.git.dirty = true`. Rollouts were generated inside the
+private development repo while that working tree had uncommitted changes, so the
+recorded `provenance.git.sha` identifies the checkout each run *started from*,
+not the exact code bytes that produced the row. What *is* pinned per row:
 `provenance.taskChecksum` (sha256 over the canonical scenario JSON, so the world
 the agent negotiated in is exactly identified), `provenance.buyerSim` (frozen
 buyer-sim version string), the seed, and the SHA-256 of the released file itself.
@@ -152,10 +151,9 @@ Treat them accordingly (see Limitations).
 ## Row status fields
 
 Every row of `veb-canonical-135-preview.jsonl` carries four machine-readable
-quality/status fields added in the `2026-08-20` enrichment pass. These make the
-quality caveats disclosed in the paper directly filterable — a downstream
-RL/fine-tuning user can select only `training_ready=true` rows without reading
-the prose.
+quality/status fields. These make the quality caveats disclosed in the paper
+directly filterable — a downstream RL/fine-tuning user can select only
+`training_ready=true` rows without reading the prose.
 
 | Field | Type | Derivation |
 |-------|------|------------|
@@ -186,6 +184,15 @@ training_ready = (judge_type == "llm") and (len(flags) == 0)
 | `training_ready == True` | 49 |
 | `training_ready == False` | 29 |
 
+**Same derivation over the full 3,510-row release:**
+
+| Metric | Count |
+|--------|-------|
+| `judge_type == "heuristic"` | 51 |
+| `format_retries > 0` | 1,002 |
+| flagged (any flag) | 1,046 |
+| `training_ready == True` | 2,464 |
+
 Rationale: `flags` is populated only from real, observable degradations — no
 thresholds, no inference, no fabrication. Every reason a row is quarantined is
 visible in `flags`. The `training_ready` gate is the conservative filter
@@ -210,13 +217,12 @@ recommended for RLVR/SFT use.
   outcomes — they are an LLM judge's assessment of simulated negotiations.
 - Do not use `internalChannel` (the seller's private reasoning) as if it were
   user-facing content; it is included for analysis of honesty/consistency.
-- Not a source of real customer, PII, or proprietary commercial data (there is
-  none — see below).
+- Not a source of real customer, PII, or proprietary commercial data (there is none).
 
-**Training-readiness gate.** Rows carry (or, as an additive field, will carry) a
-`training_ready` flag. Cells that were heuristic-graded before the frozen-grid
-re-grade are marked *not* training-ready so downstream training can filter them —
-prefer this flag over assuming every row is training-clean.
+**Training-readiness gate.** Prefer the `training_ready` flag over assuming every
+row is training-clean: rows that fell back to the heuristic judge, or that needed
+a format retry, are marked *not* training-ready so downstream training can filter
+them. See *Row status fields* above for the exact derivation.
 
 ---
 
@@ -225,10 +231,11 @@ prefer this flag over assuming every row is training-clean.
 **Free evaluation sample:** `veb-canonical-135-preview.jsonl` (78 rows) is
 released under **CC BY-NC 4.0** so evaluators can inspect real, full-fidelity
 rows before any purchase. It is stratified across all 13 models, both tracks, and
-8 of the 9 scenarios, and deliberately over-samples the rare high-signal outcomes
-(won / lost / walked_away) so the judge rubric is visibly doing work.
+8 of the 9 scenarios, and deliberately over-samples the rare
+high-signal outcomes (won / lost / walked_away) so the judge rubric is visibly
+doing work.
 
-**Full dataset:** `veb-canonical-135.jsonl` (3,510 rows, ~557 MB) and its
+**Full dataset:** `veb-canonical-135.jsonl` (3,510 rows) and its
 compressed copy are distributed out-of-band (they exceed platform file limits);
 the repository tracks only `manifest.json`, `DATASHEET.md`, and `*.sha256`
 records. Full-dataset license is negotiated separately with the dataset owner.
@@ -242,10 +249,11 @@ records. Full-dataset license is negotiated separately with the dataset owner.
 
 - **Simulated, not real.** Buyers and outcomes are LLM-simulated; findings
   transfer to real sales only as far as the simulation is faithful.
-- **Judge-labeled.** `grade`/`reward` inherit the judge model's biases; a small
-  number of early cells were heuristic-graded before the frozen-grid re-grade.
-- **Outcome imbalance.** ~77% no_decision; downstream training should account for
-  this (e.g., reweighting, or using `saleQualityScore` rather than raw outcome).
+- **Judge-labeled.** `grade`/`reward` inherit the judge model's biases; 51 cells
+  fell back to the deterministic heuristic judge and are flagged as such.
+- **Outcome imbalance.** ~78.9% of rollouts end `no_decision`; downstream training
+  should account for this (e.g., reweighting, or using `saleQualityScore` rather
+  than raw outcome).
 - **English, B2B enterprise framing.** Nine scenarios in specific verticals; not a
   general negotiation corpus.
 
@@ -254,8 +262,8 @@ records. Full-dataset license is negotiated separately with the dataset owner.
 ## Maintenance
 
 - **Owner/contact:** the VEB dataset owner (contact before redistribution).
-- **Versioning:** this release is the frozen `canonical-135` grid (2026-07-13).
-  Future enrichment layers (AI-derived features) will ship as additive fields
-  with their own provenance, leaving these columns unchanged.
+- **Versioning:** this release is the frozen `canonical-135` 13-model board (2026-08-20).
+  Enrichment layers (AI-derived features) ship as additive fields with their own
+  provenance, leaving these columns unchanged.
 - **Erratum policy:** integrity checksums are authoritative; any correction ships
   as a new freeze with an updated `manifest.json`.

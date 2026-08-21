@@ -1,7 +1,7 @@
 {
   "dataset": "veb-canonical-135",
   "description": "The Value Engine Benchmark — canonical 135/model/track grid (13-model board: 11 closed-weight frontier + 2 open-weight). Multi-turn LLM sales-negotiation rollouts with full trajectory (episode) and judge rubric (grade) per datapoint.",
-  "generated_at": "2026-08-20T23:35:19Z",
+  "generated_at": "2026-08-20T00:00:00Z",
   "sha256": "13a9e6e5ac7a638207423393d24153ac31b9d3b92fdb09a77783c83b2af98f05",
   "rows": 3510,
   "grid": {

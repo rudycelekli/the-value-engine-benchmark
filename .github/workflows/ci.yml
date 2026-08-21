@@ -18,6 +18,12 @@ jobs:
       - run: make demo
       - run: make calibrate
       - run: make pytest
+      # Re-run the row-status annotator over the committed preview. It is
+      # idempotent, so a clean tree afterwards proves the released bytes still
+      # match what the annotator produces. Without this the preview could be
+      # regenerated upstream and committed unannotated -- which is exactly how the
+      # site and this repo came to serve two different previews under one name.
+      - run: python3 analysis/add_status_fields.py
       - run: python3 analysis/verify_stats.py
       - run: bash scripts/secret-guard.sh
       # The Python suite mutates generated artifacts (gen-macros rewrites

@@ -89,9 +89,9 @@ against the schema; when a judge call fails (e.g., a transport error on an
 oversized transcript), the harness records a heuristic fallback flag so those rows
 can be re-graded offline from the persisted transcript rather than silently
 polluting the results. On the frozen grid the judge of record is
-\texttt{claude-sonnet-4-6} (temperature $0$), and \SI{98.3}{\percent} of the
+\texttt{claude-sonnet-4-6} (temperature $0$), and \SI{\resJudgeLLMPct}{\percent} of the
 \resCellsComplete{} cells carry a full LLM-judge grade; the remaining
-\SI{1.7}{\percent} (\num{51} cells) fell back to the deterministic heuristic and are
+\SI{\resJudgeFallbackPct}{\percent} (\resJudgeFallbackCells{} cells) fell back to the deterministic heuristic and are
 flagged as such in the release so readers can exclude or re-grade them.
 Known LLM-judge biases (position, verbosity, self-preference) are mitigated by the
 quote-or-abstain constraint and the deterministic roll-up math (the judge scores
