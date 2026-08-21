@@ -12,7 +12,7 @@ strongest configuration is \resBestModel{} at $\mathrm{SQS}=\resBestModelSQS$ an
 pack-track clean-win rate of the median model (\resMedianCleanPack{}\%). The
 ranking is dominated by two OpenAI endpoints (\resBestModel{} and
 gpt-5.5, pack SQS \resBestModelPackSQS{} and \resRunnerUpPackSQS{}), after which the field compresses into a
-$50$--$65$ SQS band where models are separated more by price discipline than by
+$\resFieldBandLo$--$\resFieldBandHi$ SQS band where models are separated more by price discipline than by
 closing power.
 
 The most instructive feature of the table is the \emph{inversion} between win-rate
@@ -38,8 +38,9 @@ surfaces both pathologies that a raw win-rate leaderboard would hide.
   \includegraphics[width=0.82\linewidth]{figures/leaderboard_sqs.pdf}
   \caption{Mean Sale-Quality Score per model, pooled over both tracks and all
   tiers, colored by lab. The two OpenAI endpoints lead; the remaining field
-  compresses into a $50$--$65$ band separated more by price discipline than by
-  closing power.}
+  compresses into a $\resFieldBandLo$--$\resFieldBandHi$ band separated more by price discipline than by
+  closing power. Open-weight endpoints are daggered ($\dagger$), as in
+  Table~\ref{tab:leaderboard}.}
   \label{fig:leaderboard}
 \end{figure}
 

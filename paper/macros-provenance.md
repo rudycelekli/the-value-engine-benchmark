@@ -24,6 +24,8 @@ The three latency/reliability macros (`resLatencyPfifty`, `resLatencyPninety`, `
 | `\resBestModelCleanPack` | `45.9` | `paper-stats.per_model_track[best].pack.cleared_rate_pct` |
 | `\resMedianCleanPack` | `6.7` | `median over paper-stats.per_model_track[*].pack.cleared_rate_pct` |
 | `\resRunnerUpPackSQS` | `68.9` | `paper-stats.per_model_track[gpt-5.5].pack.mean_sqs` |
+| `\resFieldBandLo` | `51` | `floor(min paper-stats.per_model[*].mean_sqs excl. top two)` |
+| `\resFieldBandHi` | `66` | `ceil(max paper-stats.per_model[*].mean_sqs excl. top two)` |
 | `\resCellsComplete` | `3510` | `paper-stats.cells_graded` |
 | `\resLiftEasy` | `4.1` | `paper-stats.tier_lift.easy.cleared_lift_pp` |
 | `\resLiftMid` | `0.3` | `paper-stats.tier_lift.mid.cleared_lift_pp` |
@@ -68,6 +70,7 @@ The three latency/reliability macros (`resLatencyPfifty`, `resLatencyPninety`, `
 | `\resFrontierBestSQSPerUSD` | `30.5` | `paper-stats.frontier.sqs_per_usd_per_deal` |
 | `\resCostPerDealMin` | `2.38` | `paper-stats.cost_per_deal.min` |
 | `\resCostPerDealMax` | `579.66` | `paper-stats.cost_per_deal.max` |
+| `\resCostPerDealSpread` | `244` | `paper-stats.cost_per_deal.max / .min` |
 | `\resCostPerRunMin` | `0.30` | `paper-stats.cost_per_run.min` |
 | `\resCostPerRunMax` | `23.62` | `paper-stats.cost_per_run.max` |
 | `\resCostPerRunMinModel` | `inkling` | `argmin paper-stats.cost_per_run.by_model` |

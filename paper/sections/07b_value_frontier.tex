@@ -53,7 +53,7 @@ striking result is how the trade-off collapses: a single model, \resFrontierBest
 is simultaneously the highest-quality \emph{and} the cheapest-per-deal seller on
 the board, delivering \resFrontierBestSQSPerUSD{} SQS points per USD and strictly
 dominating every other endpoint on both axes at once. The rest of the story is in
-the \emph{spread}: cost-per-deal ranges more than two-hundred-fold across the
+the \emph{spread}: cost-per-deal ranges \resCostPerDealSpread-fold across the
 roster, from \$\resCostPerDealMin{} to \$\resCostPerDealMax{} per completed deal,
 so the expensive models are not buying quality---they are strictly dominated,
 paying far more for less. A quality-only leaderboard hides exactly this: that the
@@ -72,7 +72,8 @@ on price and quality together.
   win counts (the \$\resCostPerDealMax{} point divides by 11 wins);
   \texttt{gpt-5.6-sol} and \texttt{grok-4.5} pricing assumes the provider's
   adjacent-tier list rate. The qualitative conclusion is robust to both: the
-  $>200\times$ per-deal spread persists as a $\sim$60$\times$ spread on the
+  \resCostPerDealSpread$\times$ per-deal spread persists as a
+  $\sim$\resCostPerRunSpread$\times$ spread on the
   denominator-free cost-per-run axis.}
   \label{fig:frontier}
 \end{figure}

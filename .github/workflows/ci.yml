@@ -25,6 +25,12 @@ jobs:
       # site and this repo came to serve two different previews under one name.
       - run: python3 analysis/add_status_fields.py
       - run: python3 analysis/verify_stats.py
+      # Figures were the one generated artifact outside the drift gate, so when
+      # the grid grew from 11 to 13 endpoints the prose and tables regenerated
+      # from paper-stats.json and the plots silently did not. --check needs no
+      # plotting stack: it recomputes every plotted value from paper-stats.json
+      # and re-hashes the committed PDFs against figure-data.json.
+      - run: make figures-check
       - run: bash scripts/secret-guard.sh
       # The Python suite mutates generated artifacts (gen-macros rewrites
       # paper/result-macros.tex). If a run leaves the tree dirty, a committed

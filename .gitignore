@@ -16,3 +16,7 @@ runs/
 # here to run `make verify` in FULL MODE. Its .sha256 sidecars stay tracked.
 datasets/veb-canonical-135/veb-canonical-135.jsonl
 datasets/veb-canonical-135/veb-canonical-135.jsonl.gz
+
+# Local convenience copy of paper/main.pdf under its human-readable title, for
+# attaching to email and DMs. Byte-identical to main.pdf; not a second artifact.
+paper/The Value Engine Benchmark.pdf

@@ -1,4 +1,4 @@
-.PHONY: build demo live verify calibrate test pytest
+.PHONY: build demo live verify calibrate test pytest figures figures-check
 SELLER ?= anthropic:claude-opus-4-8
 SCENARIO ?= logistics-saas
 
@@ -28,3 +28,15 @@ test: build
 # SFT export, judge/expert agreement. Stdlib only apart from pytest itself.
 pytest:
 	python3 -m pytest -q analysis finetune validation
+
+# Re-render the four paper figures from paper-stats.json. Needs matplotlib.
+figures:
+	python3 paper/figures/render_figures.py
+
+# Drift gate for figures. Stdlib only, so CI needs no plotting stack: it
+# recomputes the plotted values from paper-stats.json and re-hashes the PDFs
+# against figure-data.json. The generated TeX was already gated this way, which
+# is why prose healed on the 11->13 model regrid while the figures silently did
+# not; this closes that hole.
+figures-check:
+	python3 paper/figures/render_figures.py --check

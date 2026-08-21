@@ -69,11 +69,13 @@ Figure~\ref{fig:frontier} situates each endpoint on the quality/cost plane.
 The result that matters for practitioners is that capability and cost-efficiency do
 \emph{not} trade off at the top: the highest-SQS model (\resBestModel{}) is also the
 cheapest per closed deal at \$\resCostPerDealMin{}, while the most expensive model
-costs \$\resCostPerDealMax{} per deal---a $>200\times$ spread---with no
+costs \$\resCostPerDealMax{} per deal---a \resCostPerDealSpread$\times$
+spread---with no
 corresponding quality advantage. The spread survives the change of denominator:
 on cost-per-run, which does not divide by (sometimes small) win counts, the same
-ordering holds at a $\sim$60$\times$ spread (\$0.39--\$23.62 per episode), with
-\resBestModel{} at \$1.00 per run. The Value Frontier collapses to essentially a
+ordering holds at a $\sim$\resCostPerRunSpread$\times$ spread
+(\$\resCostPerRunMin{}--\$\resCostPerRunMax{} per episode), with
+\resBestModel{} at \$\resFrontierBestCostPerRun{} per run. The Value Frontier collapses to essentially a
 single efficient point, and the expensive Anthropic and reasoning-heavy xAI
 endpoints sit strictly inside it: they pay more per token and per deal without
 buying better sales outcomes on this task.

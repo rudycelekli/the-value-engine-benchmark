@@ -39,6 +39,20 @@ def sgn(x, dp=2):
     return f"{x:+.{dp}f}".replace("-", "$-$").replace("+", "$+$")
 
 
+def field_band():
+    """SQS band the field compresses into once the top two are set aside.
+
+    Section 7.1 and the leaderboard figure caption both describe this band. It
+    was typed as "50--65" against the 11-model roster; claude-fable-5 sits at
+    65.9 on the 13-model board, so the typed upper edge had quietly become
+    false. Rounded outward so the band always contains every model in it.
+    """
+    import math
+    vals = sorted((g("per_model")[m]["mean_sqs"] for m in g("roster")), reverse=True)
+    rest = vals[2:]
+    return math.floor(min(rest)), math.ceil(max(rest))
+
+
 def median_pack_cleared():
     """Median model's pack-track clean-win rate — the leader's comparison base."""
     vals = sorted(g("per_model_track")[m]["pack"]["cleared_rate_pct"] for m in g("roster"))
@@ -61,6 +75,8 @@ MACROS = [
     ("resBestModelCleanPack",   f'{g("per_model_track")[BEST]["pack"]["cleared_rate_pct"]:.1f}', "paper-stats.per_model_track[best].pack.cleared_rate_pct"),
     ("resMedianCleanPack",      f'{median_pack_cleared():.1f}',                      "median over paper-stats.per_model_track[*].pack.cleared_rate_pct"),
     ("resRunnerUpPackSQS",      f'{g("per_model_track")["gpt-5.5"]["pack"]["mean_sqs"]:.1f}', "paper-stats.per_model_track[gpt-5.5].pack.mean_sqs"),
+    ("resFieldBandLo",          str(field_band()[0]),                               "floor(min paper-stats.per_model[*].mean_sqs excl. top two)"),
+    ("resFieldBandHi",          str(field_band()[1]),                               "ceil(max paper-stats.per_model[*].mean_sqs excl. top two)"),
     ("resCellsComplete",        str(g("cells_graded")),                             "paper-stats.cells_graded"),
     ("resLiftEasy",             f'{g("tier_lift","easy","cleared_lift_pp"):.1f}',   "paper-stats.tier_lift.easy.cleared_lift_pp"),
     ("resLiftMid",              f'{g("tier_lift","mid","cleared_lift_pp"):.1f}',    "paper-stats.tier_lift.mid.cleared_lift_pp"),
@@ -110,6 +126,10 @@ MACROS = [
     ("resFrontierBestSQSPerUSD",f'{g("frontier","sqs_per_usd_per_deal"):.1f}',      "paper-stats.frontier.sqs_per_usd_per_deal"),
     ("resCostPerDealMin",       f'{g("cost_per_deal","min"):.2f}',                  "paper-stats.cost_per_deal.min"),
     ("resCostPerDealMax",       f'{g("cost_per_deal","max"):.2f}',                  "paper-stats.cost_per_deal.max"),
+    # The abstract, Section 8.5 and the frontier caption each typed the per-deal
+    # spread as ">200x". True, but hand-rounded in three places, which is the
+    # same failure shape as the cost-per-run endpoints below.
+    ("resCostPerDealSpread",    f'{g("cost_per_deal","max") / g("cost_per_deal","min"):.0f}', "paper-stats.cost_per_deal.max / .min"),
     # Cost-per-run endpoints were typed and named the wrong cheapest model: the
     # floor moved to an open-weight endpoint when the two open arms landed, and
     # the quoted spread was computed before that.
