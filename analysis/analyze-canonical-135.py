@@ -27,6 +27,7 @@ import datetime
 import hashlib
 import json
 import os
+import statistics
 import subprocess
 from collections import defaultdict
 from pathlib import Path
@@ -199,12 +200,33 @@ def main():
             "win_rate_pct": round(100 * deals_won / len(mr), 2),
             "cleared_rate_pct": round(100 * sum(1 for r in mr if r["cleared"]) / len(mr), 2),
             "mean_discount_pct": round(mean([r["discount"] for r in mr]), 3),
+            "mean_price_integrity": round(mean([r["price_score"] for r in mr]), 3),
             "cost_total_usd": round(cost_total, 2),
             "deals_won": deals_won,
             "cost_per_deal_usd": round(cost_total / deals_won, 4) if deals_won else None,
             "cost_per_cleared_usd": round(cost_total / max(1, sum(1 for r in mr if r["cleared"])), 4),
             "cost_per_run_usd": round(cost_total / len(mr), 4) if mr else None,
         }
+
+    # ---- per-model x per-track (the leaderboard table's cells) ----
+    # The leaderboard was hand-maintained in tables/leaderboard.tex, so its cells
+    # were literals that no generator owned -- and one of them disagreed with the
+    # prose. Emitting the cells here lets the table be generated, which is the
+    # only way "the paper matches its own dataset" is true by construction.
+    # Both rates are reported because they are NOT the same quantity: `cleared`
+    # is the machine-checked clean-win predicate (Section 3, win conditions) and
+    # is a strict subset of `won` -- deals can close while failing the gate.
+    per_model_track = {}
+    for m in roster:
+        per_model_track[m] = {}
+        for t in ("oob", "pack"):
+            tr = subset(lambda r, m=m, t=t: r["model"] == m and r["track"] == t)
+            per_model_track[m][t] = {
+                "n": len(tr),
+                "mean_sqs": round(mean([r["sqs"] for r in tr]), 2),
+                "win_rate_pct": round(100 * sum(1 for r in tr if won(r)) / len(tr), 2),
+                "cleared_rate_pct": round(100 * sum(1 for r in tr if r["cleared"]) / len(tr), 2),
+            }
 
     # ---- headline: best model by mean SQS ----
     best_model = max(roster, key=lambda m: per_model[m]["mean_sqs"])
@@ -218,10 +240,21 @@ def main():
             "win_rate_pct": round(100 * sum(1 for r in tr if won(r)) / len(tr), 2),
             "cleared_rate_pct": round(100 * sum(1 for r in tr if r["cleared"]) / len(tr), 2),
             "mean_discount_pct": round(mean([r["discount"] for r in tr]), 3),
+            # Process markers pooled per track. Section 7.2 narrates the pack's
+            # mechanism as a rise in EB engagement and MAP completion against a
+            # slight loss of price discipline; those three pairs were typed.
+            "eb_attended_pct": round(100 * sum(1 for r in tr if r["eb_attended"]) / len(tr), 1),
+            "map_pct": round(mean([r["map_pct"] for r in tr]), 1),
+            "price_integrity": round(mean([r["price_score"] for r in tr]), 3),
         }
     oob, packt = track_stats("oob"), track_stats("pack")
+    # Differenced from the unrounded means, not from the rounded values above:
+    # subtracting two already-rounded means gave 0.94 while the paired bootstrap
+    # over the identical rows gave 0.93, and a reader comparing the two tables
+    # would read that purely presentational gap as a methodological one.
+    _sqs = {t: mean([r["sqs"] for r in rows if r["track"] == t]) for t in ("oob", "pack")}
     pack_lift = {
-        "sqs_points": round(packt["mean_sqs"] - oob["mean_sqs"], 2),
+        "sqs_points": round(_sqs["pack"] - _sqs["oob"], 2),
         "win_rate_pp": round(packt["win_rate_pct"] - oob["win_rate_pct"], 2),
         "cleared_rate_pp": round(packt["cleared_rate_pct"] - oob["cleared_rate_pct"], 2),
     }
@@ -240,6 +273,14 @@ def main():
                 "pack_win_pct": round(100 * sum(1 for r in p if won(r)) / len(p), 2),
                 "win_lift_pp": round(100 * sum(1 for r in p if won(r)) / len(p)
                                      - 100 * sum(1 for r in o if won(r)) / len(o), 2),
+                # The paper reports "clean-win rate" throughout, which is the
+                # `cleared` gate (Section 3), not raw `won`. Emitting the cleared
+                # series alongside keeps the two distinguishable instead of
+                # letting prose silently pick one and the table the other.
+                "oob_cleared_pct": round(100 * sum(1 for r in o if r["cleared"]) / len(o), 2),
+                "pack_cleared_pct": round(100 * sum(1 for r in p if r["cleared"]) / len(p), 2),
+                "cleared_lift_pp": round(100 * sum(1 for r in p if r["cleared"]) / len(p)
+                                         - 100 * sum(1 for r in o if r["cleared"]) / len(o), 2),
             }
 
     # ---- cost per deal spread across roster ----
@@ -287,6 +328,14 @@ def main():
         "meeting-waste", "discount-beyond-tolerance", "price-panic-under-procurement",
     ]
     failure_modes = {"modes": heat_modes, "by_tier": {}}
+    # Pooled incidence over the whole grid. Section 8.1 quoted these two headline
+    # rates as typed literals carried over from the retired 2,970-cell grid, so
+    # they drifted from the dataset they describe once the grid moved. Derived
+    # here so the prose is fed by the same pass that builds the heatmap.
+    failure_modes["overall"] = {
+        mode: round(100 * sum(1 for r in rows if mode in r["modes"]) / len(rows), 1)
+        for mode in heat_modes
+    }
     for tier, name in [(1, "easy"), (2, "mid"), (3, "hard")]:
         tr = subset(lambda r, t=tier: r["difficulty"] == t)
         n_t = len(tr)
@@ -294,6 +343,86 @@ def main():
             mode: round(100 * sum(1 for r in tr if mode in r["modes"]) / n_t, 1)
             for mode in heat_modes
         } if n_t else {}
+
+    # ---- seed-matched paired bootstrap on Delta SQS ----
+    # Section 8.4 promises the headline lift is a *within-pair* contrast (same
+    # model, scenario and seed; pack vs OOB) via a seeded paired bootstrap, never
+    # a difference of independent means. The point estimates and CIs in
+    # tables/lift.tex were typed from an earlier grid, so the table asserted a
+    # protocol the paper described but no longer re-ran. Implemented here with the
+    # same deterministic LCG as src/stats/bootstrap.ts, so both pipelines agree.
+    BOOT_ITERS, BOOT_SEED = 5000, 42
+
+    def _rng(seed):
+        s = seed & 0xFFFFFFFF
+
+        def nxt():
+            nonlocal s
+            s = (s * 1664525 + 1013904223) & 0xFFFFFFFF
+            return s / 0x100000000
+        return nxt
+
+    def paired_ci(pairs):
+        """Percentile 95% CI on the mean within-pair difference (pack - oob)."""
+        if not pairs:
+            return None
+        rnd = _rng(BOOT_SEED)
+        n = len(pairs)
+        means = []
+        for _ in range(BOOT_ITERS):
+            total = 0.0
+            for _ in range(n):
+                a, b = pairs[int(rnd() * n)]
+                total += a - b
+            means.append(total / n)
+        means.sort()
+        return [round(means[int(BOOT_ITERS * 0.025)], 2),
+                round(means[int(BOOT_ITERS * 0.975) - 1], 2)]
+
+    # Pair on (model, scenario, seed) — the shared label that makes pairing valid.
+    paired = {}
+    for r in rows:
+        paired.setdefault((r["model"], r["scenario"], r["seed"]), {})[r["track"]] = r
+    pairs_by_tier = {"easy": [], "mid": [], "hard": [], "pooled": []}
+    tier_name = {1: "easy", 2: "mid", 3: "hard"}
+    for key, tt in paired.items():
+        if "oob" not in tt or "pack" not in tt:
+            continue
+        d = (tt["pack"]["sqs"], tt["oob"]["sqs"])
+        pairs_by_tier["pooled"].append(d)
+        name = tier_name.get(tt["oob"]["difficulty"])
+        if name:
+            pairs_by_tier[name].append(d)
+    sqs_lift = {
+        k: {
+            "pairs": len(v),
+            "delta_sqs": round(mean([a - b for a, b in v]), 2),
+            "ci95": paired_ci(v),
+        }
+        for k, v in pairs_by_tier.items()
+    }
+    for k, v in sqs_lift.items():
+        ci = v["ci95"]
+        v["significant"] = bool(ci and (ci[0] > 0 or ci[1] < 0))
+
+    # ---- seed variance: within-cell decisiveness of buyer stochasticity ----
+    # A "cell" holds model, scenario and track fixed and varies only the buyer
+    # seed. A cell that contains both a clean win and a non-win is a bundle of
+    # seed-matched preference pairs -- the artifact that justifies the seed depth.
+    # Section 8.3 quoted "90 of 198 cells", a count fixed to the retired 11-model
+    # roster; derived here it tracks the roster automatically.
+    cells = {}
+    for r in rows:
+        cells.setdefault((r["model"], r["scenario"], r["track"]), []).append(r)
+    mixed = sum(1 for v in cells.values()
+                if any(x["cleared"] for x in v) and not all(x["cleared"] for x in v))
+    intra_sd = [statistics.stdev([x["sqs"] for x in v]) for v in cells.values() if len(v) > 1]
+    seed_variance = {
+        "cells": len(cells),
+        "mixed_cells": mixed,
+        "mixed_pct": round(100 * mixed / len(cells), 1),
+        "mean_intra_cell_sqs_sd": round(mean(intra_sd), 1),
+    }
 
     # ---- latency/reliability from Portkey, rescoped to roster ----
     # map roster bare names -> portkey raw model field (same bare names)
@@ -356,6 +485,7 @@ def main():
         "grid": grid,
         "cells_graded": len(rows),
         "per_model": per_model,
+        "per_model_track": per_model_track,
         "best_model": {"model": best_model, "mean_sqs": per_model[best_model]["mean_sqs"]},
         "tracks": {"oob": oob, "pack": packt},
         "pack_lift": pack_lift,
@@ -366,6 +496,8 @@ def main():
                      "sqs_per_usd_per_deal": round(eff[frontier_best], 3) if frontier_best else None},
         "behavioral": behavioral,
         "failure_modes": failure_modes,
+        "sqs_lift_paired": sqs_lift,
+        "seed_variance": seed_variance,
         "latency_reliability": latency,
     }
     OUT.write_text(json.dumps(result, indent=2))

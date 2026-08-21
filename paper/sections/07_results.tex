@@ -8,23 +8,27 @@ grid and threaded through the macros of Section~\ref{sec:grading}.
 Table~\ref{tab:leaderboard} reports mean SQS and clean-win rate for all
 \numModels{} models, pooled across scenarios and tiers, for each track. The
 strongest configuration is \resBestModel{} at $\mathrm{SQS}=\resBestModelSQS$ and a
-$46.7\%$ pack-track clean-win rate---roughly $7\times$ the pack-track win rate of
-the median model ($6.7\%$). The ranking is dominated by two OpenAI endpoints (\resBestModel{} and
-gpt-5.5, pack SQS $72.9$ and $68.9$), after which the field compresses into a
+\resBestModelCleanPack{}\% pack-track clean-win rate---roughly $7\times$ the
+pack-track clean-win rate of the median model (\resMedianCleanPack{}\%). The
+ranking is dominated by two OpenAI endpoints (\resBestModel{} and
+gpt-5.5, pack SQS \resBestModelPackSQS{} and \resRunnerUpPackSQS{}), after which the field compresses into a
 $50$--$65$ SQS band where models are separated more by price discipline than by
 closing power.
 
 The most instructive feature of the table is the \emph{inversion} between win-rate
-and SQS. gemini-3.5-flash posts the third-highest OOB clean-win rate ($11.9\%$) yet
-ranks ninth on SQS. The clean-win gate itself requires price to be held---and
+and SQS. gemini-3.5-flash posts the third-highest OOB clean-win rate
+(\resFlashCleanOOB{}\%) yet
+ranks eleventh on SQS. The clean-win gate itself requires price to be held---and
 indeed flash's winning episodes carry a $0\%$ mean discount---so the damage is not
 in the wins but everywhere else: across \emph{all} of its episodes flash concedes a
-$23.1\%$ mean discount, collapsing its price-integrity score to $0.44$ and dragging
+\resFlashDiscount{}\% mean discount, collapsing its price-integrity score to
+\resFlashPriceIntegrity{} and dragging
 down the process scores on the large majority of deals it does not close. It is a
 model that either closes clean or gives the store away, and the evidence-graded
 scorecard penalizes exactly that second mode. Conversely claude-fable-5 earns a high SQS
-($68.5$ pack) on process quality while almost never producing a clean win
-($0.7\%$ OOB, $7.4\%$ pack): it qualifies rigorously but fails to convert. SQS
+(\resFablePackSQS{} pack) on process quality while almost never producing a clean win
+(\resFableCleanOOB{}\% OOB, \resFableCleanPack{}\% pack): it qualifies rigorously
+but fails to convert. SQS
 surfaces both pathologies that a raw win-rate leaderboard would hide.
 
 \input{tables/leaderboard}
@@ -44,15 +48,21 @@ The headline paired comparison is the OOB$\to$pack lift with the model held fixe
 Pooled, the methodology pack changes clean-win rate by \resPackLiftOverall{}~pp.
 Table~\ref{tab:lift} breaks the lift down by difficulty tier: \resLiftEasy{}~pp on
 easy, \resLiftMid{}~pp on mid, and \resLiftHard{}~pp on hard. The SQS lift is
-significant and largest on the easy tier ($+3.23$, $95\%$ CI $[+1.70,+4.77]$),
-straddles zero on mid ($-1.10$) and hard ($+0.65$), and is positive but small when
-pooled ($+1.21$, $95\%$ CI $[+0.29,+2.14]$). The methodology pack thus helps most
+significant and largest on the easy tier (\resSQSLiftEasy{}, $95\%$ CI
+\resSQSCIEasy{}), is significantly \emph{negative} on mid (\resSQSLiftMid{}, $95\%$
+CI \resSQSCIMid{}), straddles zero on hard (\resSQSLiftHard{}, $95\%$ CI
+\resSQSCIHard{}), and is positive but small when
+pooled (\resSQSLiftPooled{}, $95\%$ CI \resSQSCIPooled{}). The methodology pack thus helps most
 where the deal is \emph{winnable} and does not rescue structurally hard deals---the
 opposite of the ``discipline matters most under pressure'' story, and a more honest
 one: a prompt-injected playbook raises the floor on execution but cannot manufacture
-access or budget that the scenario withholds. Mechanically, the pack's effect is
-visible as a rise in economic-buyer engagement (EB-attended rate $30.0\%\to32.8\%$
-pooled) and a marginal MAP-completion gain ($43.6\%\to44.5\%$); models that convert
+access or budget that the scenario withholds. The mid-tier regression sharpens the
+point rather than blunting it: these are the deals where the pack's prescribed
+sequence is long enough to consume turns but the scenario is not permissive enough
+to reward completing it, so process spend displaces progress. Mechanically, the pack's effect is
+visible as a rise in economic-buyer engagement (EB-attended rate
+$\resEBOOB\%\to\resEBPack\%$
+pooled) and a marginal MAP-completion gain ($\resMAPOOB\%\to\resMAPPack\%$); models that convert
 the pack into \emph{behavior} (higher EB and MAP rates) gain, while those that
 convert it only into \emph{vocabulary} do not.
 
@@ -63,9 +73,9 @@ Beyond outcomes, we report the process metrics that SQS is built from: EB-meetin
 attainment, MAP completion, and price integrity. Figure~\ref{fig:behavior} shows the
 per-model behavioral fingerprint, and it tracks the leaderboard almost exactly. The
 single strongest correlate of rank is economic-buyer engagement: \resBestModel{}
-attains an EB meeting with conditional commitment on $71.9\%$ of pack runs and
-confirms $64.4\%$ of MAP dates, whereas the bottom-ranked grok-4.3 reaches the EB on
-only $5.2\%$ of runs and confirms $22.0\%$ of dates. The models that win are the
+attains an EB meeting with conditional commitment on \resBestModelEB{}\% of pack runs and
+confirms \resBestModelMAP{}\% of MAP dates, whereas the bottom-ranked grok-4.3 reaches the EB on
+only \resWorstModelEB{}\% of runs and confirms \resWorstModelMAP{}\% of dates. The models that win are the
 models that earn access and drive a plan; closing power is downstream of process
 discipline, not a substitute for it.
 
@@ -82,11 +92,11 @@ discipline, not a substitute for it.
 \subsection{Price discipline}
 Mean discount conceded is \resDiscountOOB{}\% under OOB and \resDiscountPack{}\%
 under pack---the pack slightly \emph{raises} mean discount and mean price-integrity
-score edges down ($0.706\to0.685$ pooled), because the pack pushes models to engage
+score edges down ($\resPriceIntegrityOOB\to\resPriceIntegrityPack$ pooled), because the pack pushes models to engage
 more aggressively on price-pressured, discount-bait deals rather than walking away
 early. Price behavior is highly model-dependent: the discount-disciplined
 claude-opus-4-8, grok-4.5, and claude-fable-5 hold price-integrity above $0.80$,
-while gemini-3.5-flash collapses to $0.44$, gifting discounts across the episodes
+while gemini-3.5-flash collapses to \resFlashPriceIntegrity{}, gifting discounts across the episodes
 it fails to close (its clean wins, by construction, held price) as noted above.
 
 \subsection{Judge reliability}

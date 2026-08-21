@@ -24,9 +24,11 @@ Two caveats keep this axis honest. First, cost-per-deal divides total spend by t
 number of \emph{clean wins}, and for low-win models that denominator is small (the
 \$\resCostPerDealMax{} figure rests on 11 wins), so the per-deal point estimates
 for weak closers are noisy. We therefore also report the denominator-free
-\textbf{cost-per-run}: pooled across both tracks it spans \$0.39
-(gemini-3.5-flash) to \$23.62 (claude-fable-5) per episode---a $\sim$60$\times$
-spread---with the frontier leader \resFrontierBest{} at \$1.00 per run. Second,
+\textbf{cost-per-run}: pooled across both tracks it spans \$\resCostPerRunMin{}
+(\resCostPerRunMinModel{}) to \$\resCostPerRunMax{} (\resCostPerRunMaxModel{}) per
+episode---a $\sim$\resCostPerRunSpread$\times$
+spread---with the frontier leader \resFrontierBest{} at
+\$\resFrontierBestCostPerRun{} per run. Second,
 list pricing for \texttt{gpt-5.6-sol} and \texttt{grok-4.5} carries the
 provider's adjacent-tier rate pending published prices
 (Appendix~\ref{app:models}). Neither caveat threatens the headline: the

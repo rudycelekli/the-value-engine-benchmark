@@ -18,25 +18,26 @@ cannot be retrofitted to the data; each is now populated against the frozen
 \subsection{Where models fail}
 Figure~\ref{fig:failheat} reports failure-mode incidence by difficulty tier. The
 dominant signatures are diagnostic, not random. The most common failure across the
-grid is a discovery failure---\emph{no pain owner identified} ($85.6\%$ of runs) and
-\emph{shallow implication} ($75.0\%$)---and the second is a stakeholder failure,
-\emph{never reached the economic buyer} ($75.7\%$). Both worsen monotonically with
-tier: never-reached-EB rises $70.4\%\to73.1\%\to90.2\%$ from easy to hard, and
-no-pain-owner rises $78.0\%\to90.2\%\to93.9\%$. Crucially, the easy tier is not
-dominated by capability failures: even on winnable deals, $70\%$ of runs never reach
-the EB and $67\%$ waste a meeting extracting no gated facts---these are
+grid is a discovery failure---\emph{no pain owner identified} (\resFailNoPainOwnerOverall{}\% of runs) and
+\emph{shallow implication} (\resFailShallowImplicationOverall{}\%)---and the second is a stakeholder failure,
+\emph{never reached the economic buyer} (\resFailNeverEBOverall{}\%). Both worsen monotonically with
+tier: never-reached-EB rises $\resFailNeverEBEasy\%\to\resFailNeverEBMid\%\to\resFailNeverEBHard\%$ from easy to hard, and
+no-pain-owner rises $\resFailNoPainOwnerEasy\%\to\resFailNoPainOwnerMid\%\to\resFailNoPainOwnerHard\%$. Crucially, the easy tier is not
+dominated by capability failures: even on winnable deals, \resFailNeverEBEasy{}\% of runs never reach
+the EB and \resFailMeetingWasteEasy{}\% waste a meeting extracting no gated facts---these are
 \emph{discipline} failures, exactly the behaviors the methodology pack targets, and
 they confirm the hypothesis that easy-tier losses are unforced rather than a ceiling
 on model capability. Price failures behave differently: \emph{discount-beyond-tolerance}
-and \emph{price-panic-under-procurement} are near-absent on easy deals but jump to
-$77.6\%$ and $72.8\%$ on the mid tier, where the discount-bait events live.
+and \emph{price-panic-under-procurement} are least common on easy deals
+(\resFailDiscountBeyondEasy{}\% and \resFailPricePanicEasy{}\%) but jump to
+\resFailDiscountBeyondMid{}\% and \resFailPricePanicMid{}\% on the mid tier, where the discount-bait events live.
 
 \subsection{Does the pack transfer into behavior or only language?}
 The central scientific question of the pack track is whether an injected
 methodology changes what a model \emph{does} or only what it \emph{says}. The
 evidence is that transfer into behavior is real but partial. The pack's SQS lift is
 statistically present only where behavioral markers actually move: pooled
-EB-attainment rises $30.0\%\to32.8\%$ and MAP-completion $43.6\%\to44.5\%$, and the
+EB-attainment rises $\resEBOOB\%\to\resEBPack\%$ and MAP-completion $\resMAPOOB\%\to\resMAPPack\%$, and the
 per-tier lift (Table~\ref{tab:lift}) is significant only on the easy tier, where
 those behaviors have room to improve. Models that raise EB and MAP rates under the
 pack gain SQS; models whose EB/MAP behavior is unchanged gain nothing, even though
@@ -46,17 +47,19 @@ are already winnable than into breakthrough on deals gated by access or budget.
 
 \subsection{Difficulty calibration}
 The tiers are ordered as designed. Pooled OOB mean SQS decreases monotonically
-across tiers ($63.3\to56.8\to54.0$) as does clean-win rate ($16.2\%\to4.7\%\to1.2\%$),
+across tiers ($\resTierSQSEasy\to\resTierSQSMid\to\resTierSQSHard$) as does clean-win
+rate ($\resTierCleanEasy\%\to\resTierCleanMid\%\to\resTierCleanHard\%$),
 and the failure gradient above corroborates the ordering mechanically rather than by
 fiat. No tier ordering inverts at the pooled level, indicating the difficulty axis is
 a real gradient and not an artifact of a few idiosyncratic scenarios.
 
 \subsection{Seed variance and matched pairs}
 Buyer stochasticity alone is a rich source of preference pairs. Holding model,
-scenario, and track fixed and varying only the buyer seed, $90$ of the $198$ cells
-($45.5\%$) contain \emph{both} a clean win and a non-win---episodes identical in
+scenario, and track fixed and varying only the buyer seed, \resSeedMixedCells{} of
+the \resSeedCells{} cells
+(\resSeedMixedPct{}\%) contain \emph{both} a clean win and a non-win---episodes identical in
 every controllable dimension that diverged only on buyer sampling. The mean
-intra-cell SQS standard deviation is $11.8$ points. This is direct evidence that the
+intra-cell SQS standard deviation is \resSeedIntraSD{} points. This is direct evidence that the
 seed axis yields the seed-matched win/loss contrasts that preference-based
 post-training consumes, and it justifies the chosen seed depth: with fewer seeds a
 large fraction of these decisive within-cell disagreements would go unobserved.
